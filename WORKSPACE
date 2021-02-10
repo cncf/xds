@@ -1,4 +1,4 @@
-workspace(name = "com_github_cncf_udpa")
+workspace(name = "com_github_cncf_xds")
 
 load("//bazel:repositories.bzl", "udpa_api_dependencies")
 

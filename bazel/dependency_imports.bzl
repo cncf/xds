@@ -18,7 +18,7 @@ def udpa_dependency_imports(go_version = GO_VERSION):
         go = True,
         grpc = True,
         rules_override = {
-            "py_proto_library": "@com_github_cncf_udpa//bazel:api_build_system.bzl",
+            "py_proto_library": "@com_github_cncf_xds//bazel:api_build_system.bzl",
         },
     )
 
