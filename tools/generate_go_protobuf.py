@@ -19,7 +19,7 @@ def generateProtobufs(output):
   for rule in go_protos:
     rule_dir, proto = rule.decode()[2:].rsplit(':', 1)
     input_dir = os.path.join(bazel_bin, rule_dir, 'linux_amd64_stripped',
-                             proto + '%', 'github.com/cncf/udpa/go', rule_dir)
+                             proto + '%', 'github.com/cncf/xds/go', rule_dir)
     input_files = glob.glob(os.path.join(input_dir, '*.go'))
     output_dir = os.path.join(output, rule_dir)
 

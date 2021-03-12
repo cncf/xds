@@ -6,7 +6,7 @@ package udpa_service_orca_v1
 import (
 	context "context"
 	fmt "fmt"
-	v1 "github.com/cncf/udpa/go/udpa/data/orca/v1"
+	v1 "github.com/cncf/xds/go/udpa/data/orca/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
 	duration "github.com/golang/protobuf/ptypes/duration"

@@ -1,4 +1,4 @@
-module github.com/cncf/udpa/go
+module github.com/cncf/xds/go
 
 go 1.11
 
