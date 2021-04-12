@@ -277,7 +277,15 @@ by the following process. Using an example of a URL
    `xds.node.`. The set of `Node`-derived context parameters is specified in the
    bootstrap on a per-resource type basis. The key reflects the `Node` proto3
    field structure, e.g. `xds.node.locality.sub_zone=some_sub_zone`,
-   `xds.node.metadata.bar="a"`, `xds.node.user_agent_version=1.2.3`.
+   `xds.node.metadata.bar="a"`, `xds.node.user_agent_version=1.2.3`. 
+   * Generally, values in the `Node` are converted from their proto3 value
+     to JSON.
+   * Both `xds.node.metadata.X` and
+     `xds.node.user_agent_build_version.metadata.X` permit directly referencing
+     a top-level metadata field `X` in a context parameter key. This does not
+     apply to nested fields in the metadata.
+   * `xds.node.user_agent_build_version.version` yields a string value composed
+     of `major.minor.patch` values, e.g. `"1.2.3"`.
 
 2. Dynamic context parameters are added next. These are free form and at the
    discretion of the client. They can provide client-specific fields such as
