@@ -3,7 +3,7 @@ xdstp:// structured resource naming, caching and federation support.
 * Author(s): Harvey Tuch, Louis Ryan, Mark Roth, Costin Manolache, Matt Klein
 * Approver:
 * Implemented in: <xDS client, ...>
-* Last updated: 2021-03-26
+* Last updated: 2021-04-12
 
 ## Abstract
 
@@ -322,6 +322,10 @@ Two forms of resources collections are described below, *list* and *glob*. These
 different forms reflect the tension between the need for explicit collection
 representation (motivating list collections) and scalability concerns as this
 explicit representation becomes a botleneck (motivating glob collections).
+
+Collections are typically used for LDS, CDS and (planned) LEDS. However, this
+list is not exhaustive and future xDS collection types may be added with no
+change to the transport protocol.
 
 #### List
 
