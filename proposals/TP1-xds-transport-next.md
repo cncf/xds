@@ -279,11 +279,12 @@ by the following process. Using an example of a URL
    field structure, e.g. `xds.node.locality.sub_zone=some_sub_zone`,
    `xds.node.metadata.bar="a"`, `xds.node.user_agent_version=1.2.3`. 
    * Generally, values in the `Node` are converted from their proto3 value
-     to JSON.
+     to JSON following the [canonical
+     transformation](https://developers.google.com/protocol-buffers/docs/proto3#json).
    * Both `xds.node.metadata.X` and
      `xds.node.user_agent_build_version.metadata.X` permit directly referencing
      a top-level metadata field `X` in a context parameter key. This does not
-     apply to nested fields in the metadata.
+     apply to nested fields in the metadata, e.g. `xds.node.metadata.bar`.
    * `xds.node.user_agent_build_version.version` yields a string value composed
      of `major.minor.patch` values, e.g. `"1.2.3"`.
 
