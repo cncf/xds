@@ -223,7 +223,8 @@ to opt into the new naming scheme.
 
 ### URI-based xDS resource names
 
-The following URI schema is proposed for xDS resource names:
+xDS URIs follow a [RFC-3986](https://tools.ietf.org/html/rfc3986) compliant
+schema. The following schema is proposed for xDS resource names:
 
 `xdstp://[{authority}]/{resource type}/{id/*}?{context parameters}{#processing directive,*}`
 
@@ -249,10 +250,11 @@ An example application of the above URI scheme is:
 We distinguish between two forms of `xdstp://` URIs:
 
 * Uniform Resource Locators (URLs) instructing a client on how to locate a given
-  xDS resource. URLs may include processing directives.
+  xDS resource. URLs may include processing directives and [globs](#glob).
 
-* Uniform Resource Names (URNs) referring to a specific xDS resource. URNs do not
-  include processing directives. `xdstp://` URNs provide self-contained cache keys.
+* Uniform Resource Names (URNs) referring to a specific xDS resource. URNs do
+  not include processing directives or [globs](#glob). `xdstp://` URNs provide
+  self-contained cache keys.
 
 #### Proto3 expression
 
@@ -325,7 +327,7 @@ URI context parameter enhancements.
 Two forms of resources collections are described below, *list* and *glob*. These
 different forms reflect the tension between the need for explicit collection
 representation (motivating list collections) and scalability concerns as this
-explicit representation becomes a botleneck (motivating glob collections).
+explicit representation becomes a botleneck (motivating [glob](#glob) collections).
 
 Collections are typically used for LDS, CDS and (planned) LEDS. However, this
 list is not exhaustive and future xDS collection types may be added with no
