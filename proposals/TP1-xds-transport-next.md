@@ -302,7 +302,10 @@ by the following process. Using an example of a URL
    context parameters are then added, e.g. clusters at the client might have
    `{xds.client_feature.lb.least_loaded: true}`. Client feature capabilities
    will be required to be declared with respect to a specific resource type URL.
-   All these attributes will be `xds.client_feature.` prefixed.
+   If a resource type, e.g. `envoy.config.listener.v3.Listener`, can include
+   another resource, e.g. `envoy.config.route.v3.RouteConfiguration`, client
+   features of both resource types must be included in the request. All these
+   attributes will be `xds.client_feature.` prefixed.
 
 5. Finally per-resource type well-known attributes are added, e.g. an on-demand
    listener load might have `{xds.resource.vip: 96.54.3.1}`. These attributes
