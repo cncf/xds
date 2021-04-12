@@ -353,9 +353,9 @@ message CollectionEntry {
   // Inlined resource entry.
   message InlineEntry {
     // Optional name to describe the inlined resource. Resource names must
-    // [a-zA-Z0-9_-\./]+ (TODO(htuch): turn this into a PGV constraint once
-    // finalized, probably should be a RFC3986 pchar). This name allows
-    // reference via the #entry directive in ResourceLocator.
+    // [a-zA-Z0-9_-\./]+. This name allows // reference via the #entry directive
+    // in ResourceLocator. When non-empty, this name must be unique in any give
+    // list collection.
     string name = 1 [(validate.rules).string.pattern = "^[0-9a-zA-Z_\\-\\.~:]+$"];
 
     // The resource's logical version. It is illegal to have the same named xDS
@@ -369,8 +369,8 @@ message CollectionEntry {
   oneof resource_specifier {
     option (validate.required) = true;
 
-    // A resource locator describing how the member resource is to be located.
-    ResourceLocator locator = 1;
+    // A xdstp:// URL describing how the member resource is to be located.
+    string locator = 1;
 
     // The resource is inlined in the list collection.
     InlineEntry inline_entry = 2;
@@ -496,7 +496,7 @@ When the `ConfigSource` adjacent to a resource name matches the URI authority,
 the `ConfigSource` will continue to be used.
 
 When there is no match, the xDS client will fallback to the bootstrap to map
-from authority to `ConfigSource.
+from authority to `ConfigSource`.
 
 
 To support ADS with multiple control planes, the
@@ -526,6 +526,8 @@ semantics by examining the prefix of a resource string.
 Clients are expected to have knowledge ahead of time (via mechanisms not part of
 this proposal, e.g. support documentation) on whether the servers specified in
 the bootstrap supports the new URI conventions.
+
+### Server redirects
 
 The server may issue redirects by including an `xds::core::v3::ResourceLocator`
 in a `Resource` wrapped in the `Any` message. Redirects are only supported for
