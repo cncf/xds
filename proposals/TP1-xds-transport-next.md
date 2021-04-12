@@ -388,6 +388,14 @@ This involves two round-trips. Inlining of resources is supported, which can red
    `[inline_entry: xdstp://some-authority/envoy.config.listener.v3.Listener/bar,
    inline_entry: xdstp://some-authority/envoy.config.listener.v3.Listener/baz].`
 
+Note that in all cases, the context parameters presented in the original request
+must be present in the response. For example, a request for
+`xdstp://some-authority/envoy.config.listener.v3.ListenerCollection/foo?some=thing`, must
+be responded to with a resource named
+`xdstp://some-authority/envoy.config.listener.v3.ListenerCollection/foo`.
+However, individual resources referenced by locator inside the returned list
+collection do not need to have the collection-level context parameters included
+in their naming.
 
 #### Glob
 
@@ -408,6 +416,13 @@ the resource path. Continuing the previous example, this now looks like:
 Since each resource returned is subject to independent update via delta xDS and
 there is no explicit collection directory to update, glob collections are highly
 scalable.
+
+As with list collections, context parameters in the request must be matched in
+responses. A request for
+`xdstp://some-authority/envoy.config.listener.v3.Listener/foo/*?some=thing` will
+match a resource
+`xdstp://some-authority/envoy.config.listener.v3.Listener/foo/bar?some=thing`
+but not `xdstp://some-authority/envoy.config.listener.v3.Listener/foo/bar`.
 
 #### Use cases
 
