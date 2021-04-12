@@ -22,7 +22,7 @@ function as independent cache keys without requiring additional transport
 context. In addition, resource names support a notion of named authority,
 namespace delegation and failover.
 
-An distinction between resource singletons and collections is also included in
+A distinction between resource singletons and collections is also included in
 the transport protocol. This formalizes some of the loose conventions that
 Envoy's use of xDS had established and allows for generalization for use cases
 such as [LEDS](https://github.com/envoyproxy/envoy/issues/10373).  These changes
@@ -290,8 +290,9 @@ by the following process. Using an example of a URL
 
 2. Dynamic context parameters are added next. These are free form and at the
    discretion of the client. They can provide client-specific fields such as
-   `xds.shard_id=1234` and potentially change through the lifetime of an xDS
-   stream.
+   `xds.shard_id=1234`. When a client determines that the value of a dynamic
+   context parameter has changed, it will issue a new request to the server
+   with the updated context parameter value, e.g. `xds.shard_id=1235`.
 
 3. Context parameters from the URL are added next, in the above example
    `xds.bar=baz`.
