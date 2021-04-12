@@ -420,7 +420,11 @@ the resource path. Continuing the previous example, this now looks like:
 
 Since each resource returned is subject to independent update via delta xDS and
 there is no explicit collection directory to update, glob collections are highly
-scalable.
+scalable. For example, consider a collection of 10k resources and the addition
+of a single resource. Glob collections will send the single additional resource. List
+collections requires that the collection directory (now containing 10001
+resource references) to be sent from server to client, as well as the additional
+new resource.
 
 As with list collections, context parameters in the request must be matched in
 responses. A request for
