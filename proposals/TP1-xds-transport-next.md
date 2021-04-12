@@ -392,7 +392,7 @@ Note that in all cases, the context parameters presented in the original request
 must be present in the response. For example, a request for
 `xdstp://some-authority/envoy.config.listener.v3.ListenerCollection/foo?some=thing`, must
 be responded to with a resource named
-`xdstp://some-authority/envoy.config.listener.v3.ListenerCollection/foo`.
+`xdstp://some-authority/envoy.config.listener.v3.ListenerCollection/foo?some=thing`.
 However, individual resources referenced by locator inside the returned list
 collection do not need to have the collection-level context parameters included
 in their naming.
