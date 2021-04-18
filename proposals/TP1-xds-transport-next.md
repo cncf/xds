@@ -423,6 +423,9 @@ the resource path. Continuing the previous example, this now looks like:
    [`xdstp://some-authority/envoy.config.listener.v3.Listener/foo/bar,
    xdstp://some-authority/envoy.config.listener.v3.Listener/foo/baz].`
 
+Note that there is no explicit directory sent enumerating `{bar, baz}`. Rather,
+glob collections provide delta updates directly on directory resources.
+
 Since each resource returned is subject to independent update via delta xDS and
 there is no explicit collection directory to update, glob collections are highly
 scalable. For example, consider a collection of 10k resources and the addition
