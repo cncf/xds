@@ -242,6 +242,7 @@ schema. The following schema is proposed for xDS resource names:
     for [list collections](#list). Resource names must be of the form `[a-zA-Z0-9_-\./]+`.
 
 Multiple directives are comma separated in the fragment component of the URI.
+The same directive may not appear more than once in a given URI.
 
 An example application of the above URI scheme is:
 
@@ -269,7 +270,7 @@ for this encoding is provided at https://github.com/cncf/xds/tree/main/xds/core/
 Two `xdstp://` URNs are considered equivalent if they match component-wise
 modulo context parameter ordering.
 
-## Context parameters
+#### Context parameters
 
 Context parameters in URNs presented by the client to the server will be dervied
 by the following process. Using an example of a URL
@@ -577,9 +578,9 @@ resources:
     … foo's ClusterLoadAssignment payload … 
 ```
 
-### Collection resource requests
+#### Collection resource requests
 
-#### List collections 
+##### List collections
 
 Client bootstrap:
 
@@ -654,7 +655,7 @@ Note that the first resource bar can be referenced in a URI as
 while the second resource is anonymous and cannot be referenced outside the
 collection.
 
-#### Glob collections
+##### Glob collections
 
 Client bootstrap:
 
