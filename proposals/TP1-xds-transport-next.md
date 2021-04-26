@@ -622,7 +622,7 @@ resources:
 The `bar` and `baz` resources are then fetched as per [singleton resource
 requests](#singleton-resource-request).
 
-#### List collections with inlining
+##### List collections with inlining
 
 As with the previous list collection example, but rather than returning a list
 of URLs in the response, the xDS management server sends to the
@@ -703,7 +703,7 @@ redirected to `xdstp://some-authority/envoy.config.listeners.v3.Listener/baz.` T
 context parameters (ingress, client caps) were used to filter down the listener
 set for the client in a given collection (`my-listeners`).
 
-## Alternatives
+#### Alternatives
 
 In this example, a CPaaS wants to specify on-premise control plane resources as
 failovers on network partition.
@@ -742,7 +742,7 @@ resource_names_subscribe:
 - xdstp://some-onprem-authority/envoy.config.endpoint.v3.ClusterLoadAssignment/bar
 ```
 
-## xDS relay proxy
+#### xDS relay proxy
 
 In this example, two clients work with an xDS relay proxy to receive their
 configuration from some canonical xDS server.
