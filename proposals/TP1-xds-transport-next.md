@@ -435,6 +435,10 @@ of a single resource. Glob collections will send the single additional resource
 collection directory (now containing 10001 resource references) to be sent from
 server to client, as well as the additional new resource.
 
+A server may reply with a sentinel `Resource` with no value populated and
+resource name matching the glob collection in returned resources to indicate
+that the collection resource set is currently empty.
+
 As with list collections, context parameters in the request must be matched in
 responses. A request for
 `xdstp://some-authority/envoy.config.listener.v3.Listener/foo/*?some=thing` will
@@ -655,6 +659,9 @@ Note that the first resource bar can be referenced in a URI as
 while the second resource is anonymous and cannot be referenced outside the
 collection.
 
+Inlining may be used at the discretion of the management server as a transport
+optimization (fewer round-trips).
+
 ##### Glob collections
 
 Client bootstrap:
@@ -741,6 +748,9 @@ a new `DeltaDiscoveryRequest` to `some-onprem-authority`:
 resource_names_subscribe:
 - xdstp://some-onprem-authority/envoy.config.endpoint.v3.ClusterLoadAssignment/bar
 ```
+
+It is client-specific how the failover, retry and recovery occurs; a client may
+attempt to probe and restore the original resource URL periodically for example.
 
 #### xDS relay proxy
 
