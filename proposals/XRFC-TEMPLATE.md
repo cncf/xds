@@ -1,4 +1,4 @@
-Title
+<xRFC ID>: Title
 ----
 * Author(s): [Author Name, Co-Author Name ...]
 * Approver:
