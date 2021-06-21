@@ -404,13 +404,17 @@ resources in a collection share a directory structure and a `/*` component is ap
 the resource path. Continuing the previous example, this now looks like:
 
 1. Client requests
-   `xdstp://some-authority/envoy.config.listener.v3.Listener/foo/*.`
+   `xdstp://some-authority/envoy.config.listener.v3.Listener/foo/*`.
 2. Server responds with resources
    [`xdstp://some-authority/envoy.config.listener.v3.Listener/foo/bar,
-   xdstp://some-authority/envoy.config.listener.v3.Listener/foo/baz].`
+   xdstp://some-authority/envoy.config.listener.v3.Listener/foo/baz]`.
 
 Note that there is no explicit directory sent enumerating `{bar, baz}`. Rather,
 glob collections provide delta updates directly on directory resources.
+
+Globs can exist in arbitrary path locations, e.g.
+`xdstp://some-authority/envoy.config.listener.v3.Listener/some/longer/path/*`.
+Multiple globs may be subscribed to in a `DeltaDiscoveryRequest`.
 
 Since each resource returned is subject to independent update via delta xDS and
 there is no explicit collection directory to update, glob collections are highly
