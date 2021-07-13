@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package udpa.type.matcher.v1;
+package xds.type.matcher.v3;
 
 import "google/protobuf/wrappers.proto";
 
 import "validate/validate.proto";
 
-option java_package = "io.envoyproxy.envoy.type.matcher.v3";
+option java_package = "com.github.udpa.xds.type.matcher.v3";
 option java_outer_classname = "RegexProto";
 option java_multiple_files = true;
 

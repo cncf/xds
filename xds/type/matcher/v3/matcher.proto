@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package udpa.type.matcher.v1;
+package xds.type.matcher.v3;
 
-import "udpa/extension/v1/extension.proto";
-import "udpa/type/matcher/v1/string.proto";
+import "xds/core/v3/extension.proto";
+import "xds/type/matcher/v3/string.proto";
 
 import "validate/validate.proto";
 
-option java_package = "io.envoyproxy.envoy.config.common.matcher.v3";
+option java_package = "com.github.udpa.xds.type.matcher.v3";
 option java_outer_classname = "MatcherProto";
 option java_multiple_files = true;
 
@@ -34,7 +34,7 @@ message Matcher {
       Matcher matcher = 1;
 
       // Protocol-specific action to take.
-      extension.v1.TypedExtensionConfig action = 2;
+      core.v3.TypedExtensionConfig action = 2;
     }
   }
 
@@ -48,17 +48,17 @@ message Matcher {
       message SinglePredicate {
         // Protocol-specific specification of input field to match on.
         // [#extension-category: envoy.matching.common_inputs]
-        extension.v1.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
+        core.v3.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
 
         oneof matcher {
           option (validate.required) = true;
 
           // Built-in string matcher.
-          type.matcher.v1.StringMatcher value_match = 2;
+          type.matcher.v3.StringMatcher value_match = 2;
 
           // Extension for custom matching logic.
           // [#extension-category: envoy.matching.input_matchers]
-          extension.v1.TypedExtensionConfig custom_match = 3;
+          core.v3.TypedExtensionConfig custom_match = 3;
         }
       }
 
@@ -104,7 +104,7 @@ message Matcher {
     }
 
     // Protocol-specific specification of input field to match on.
-    extension.v1.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
+    core.v3.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
 
     // Exact or prefix match maps in which to look up the input value.
     // If the lookup succeeds, the match is considered successful, and
@@ -118,7 +118,7 @@ message Matcher {
       MatchMap prefix_match_map = 3;
 
       // Extension for custom matching logic.
-      extension.v1.TypedExtensionConfig custom_match = 4;
+      core.v3.TypedExtensionConfig custom_match = 4;
     }
   }
 
