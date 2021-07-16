@@ -4,7 +4,7 @@ package xds.core.v3;
 
 option java_outer_classname = "ExtensionProto";
 option java_multiple_files = true;
-option java_package = "com.github.udpa.xds.core.v1";
+option java_package = "com.github.udpa.xds.core.v3";
 
 import "validate/validate.proto";
 import "google/protobuf/any.proto";
