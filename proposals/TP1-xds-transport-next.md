@@ -312,7 +312,7 @@ for context parameter values in future URI context parameter enhancements.
 Two forms of resources collections are described below, *list* and *glob*. These
 different forms reflect the tension between the need for explicit collection
 representation (motivating list collections) and scalability concerns as this
-explicit representation becomes a botleneck (motivating [glob](#glob) collections).
+explicit representation becomes a bottleneck (motivating [glob](#glob) collections).
 
 Collections are typically used for LDS, CDS and (planned) LEDS. However, this
 list is not exhaustive and future xDS collection types may be added with no
@@ -424,7 +424,7 @@ collection directory (now containing 10001 resource references) to be sent from
 server to client, as well as the additional new resource.
 
 If no resources are present in the glob collection, the server should reply with a
-`DeltaDiscoveryResponse` in which the glob collection URL is specififed in
+`DeltaDiscoveryResponse` in which the glob collection URL is specified in
 `removed_resources`.
 
 As with list collections, context parameters in the request must be matched in
@@ -502,7 +502,7 @@ repeated ConfigSource xdstp_config_sources = N;
 ```
 
 A client may support only static bootstrap configuration of `ConfigSource` for authority mapping. It is
-expected that relevant authorities are configured in the bootstrap for referencable servers.
+expected that relevant authorities are configured in the bootstrap for referenceable servers.
 
 To support ADS with multiple control planes, the
 [`ApiType`](https://github.com/envoyproxy/envoy/blob/31128e7dc22355876020188bc8feb99304663041/api/envoy/config/core/v3/config_source.proto#L44)
@@ -522,7 +522,7 @@ this proposal, e.g. support documentation) on whether the servers specified in
 the bootstrap supports the new URI conventions.
 
 Examples below are provided for delta xDS, but this proposal does not limit
-usage to delta xDS. We directionally intend for delta xDS to surplant SotW xDS
+usage to delta xDS. We directionally intend for delta xDS to supplant SotW xDS
 over time, the use of inlined entries in list collections allows simple
 management servers that do not wish to perform state tracking to perform
 state-of-the-world updates. This is achieved by sending the entire state, e.g.
