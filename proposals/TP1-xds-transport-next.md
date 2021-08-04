@@ -536,7 +536,7 @@ The server may issue redirects by including the following message
 in a `Resource` wrapped in the `Any` message:
 
 ```
-message Redirect {
+message ResourceLocator {
   string resource_locator = 1;
 }
 ```
