@@ -11,7 +11,7 @@ This xRFC proposes a new mechanism to allow xDS servers to
 dynamically generate the contents of xDS resources for individual
 clients while at the same time preserving cacheability.  Unlike the
 context parameter mechanism that is part of the new xDS naming scheme (see
-[xRFC TP1](https://github.com/cncf/xds/pull/6)), the mechanism described in
+[xRFC TP1](TP1-xds-transport-next.md)), the mechanism described in
 this proposal is visible only to the transport protocol layer, not to the
 data model layer.  This means that if a resource has a parameter that
 affects its contents, that parameter is not part of the resource's name,
@@ -68,13 +68,12 @@ individual clients.  Here are some examples:
   https://cloud.google.com/traffic-director/docs/configure-advanced-traffic-management#config-filtering-metadata
   for an example.)
 
-The new xDS naming scheme described in [xRFC
-TP1](https://github.com/cncf/xds/pull/6) provides a mechanism called
-context parameters, which is intended to move all parameters that affect
-resource contents into the resource name, thus adding cacheability to the
-xDS ecosystem.  However, this approach means that these parameters
-become part of the resource graph on an individual client, which causes
-a number of problems:
+The new xDS naming scheme described in [xRFC TP1](TP1-xds-transport-next.md)
+provides a mechanism called context parameters, which is intended to move all
+parameters that affect resource contents into the resource name, thus adding
+cacheability to the xDS ecosystem.  However, this approach means that these
+parameters become part of the resource graph on an individual client, which
+causes a number of problems:
 - Dynamic context parameters are viral, spreading from a given resource
   to all earlier resources in the resource graph.  For example, if
   multiple variants of an EDS resource are needed, there need to be two
@@ -109,7 +108,7 @@ a number of problems:
   one for each combination of values of the two parameters.
 
 ### Related Proposals:
-* [xRFC TP1: new xDS naming scheme](https://github.com/cncf/xds/pull/6)
+* [xRFC TP1: new xDS naming scheme](TP1-xds-transport-next.md)
 
 ## Proposal
 
@@ -1045,9 +1044,9 @@ the DPDS resource to set constraints to minimize the number of variants:
 ## Rationale
 
 We considered extending the context parameter mechanism from [xRFC
-TP1](https://github.com/cncf/xds/pull/6) to support flexible matching
-semantics, rather that its current exact-match semantics.  However, that
-approach had some down-sides:
+TP1](TP1-xds-transport-next.md) to support flexible matching semantics,
+rather that its current exact-match semantics.  However, that approach had
+some down-sides:
 - It would not have solved the virality problem described in the "Background"
   section above.
 - It would have made the new xDS naming scheme a prerequisite for using
