@@ -569,11 +569,14 @@ of resources.
 
 If the client cannot obtain the configured DPDS resource, it will ignore
 the failure and request the remaining resources with no additional
-constraints.  Control planes can decide how to handle that request; if
-they want the client to fail without the DPDS resource, they can simply
-not return any resource for the name without the expected constraints.
-
-FIXME: is the above still right?  Control plane can't really do that based on the matching rules defined above.
+constraints.  This will likely result in the client sending a request that
+does not include constraints for one of the parameters that is used to
+distinguish different variants of the resource, and as mentioned in
+the [Matching Behavior and Best
+Practices](#matching-behavior-and-best-practices) section above, the
+control plane is free to return any variant of the resource in that
+case.  However, note that the authoritative server cannot control what
+choice is made by caching xDS proxies.
 
 Just like any other xDS resource, a DPDS resource can be updated by the
 control plane at any time.  When that happens, the constraints to be
