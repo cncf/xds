@@ -3,7 +3,7 @@ TP2: Dynamically Generated Cacheable xDS Resources
 * Author(s): markdroth, htuch
 * Approver: htuch
 * Implemented in: <xDS client, ...>
-* Last updated: 2021-08-03
+* Last updated: 2021-08-11
 
 ## Abstract
 
@@ -372,10 +372,6 @@ We advise deployments to avoid ambiguity through the following best practices:
   going to be present.  For example, if clients will send constraints on the
   `env` key requiring the value to be one of `prod`, `test`, or `qa`, then
   you must have each of those three variants of the resource.
-  - Note that servers that can make use of the mechanism described under
-    [Server-Specified Constraints](#server-specified-constraints) below
-    may be able to optimize this in some cases.  See the "Dynamic Route
-    Selection" example below for details.
 - For cases where a constraint may match multiple values (e.g., a
   range constraint), the largest possible matching value is preferred.
   This means that caches (both on clients and on caching xDS proxies)
@@ -510,213 +506,17 @@ server to return the dynamic parameters associated with each resource:
   map<string, string> dynamic_parameters = 8;
 ```
 
-### Server-Specified Constraints
-
-In the "sharding endpoints" and "selecting cluster based on ACL" use-cases,
-the constraints need to be dynamically determined by the xDS server, not by
-the client.  To support this, we introduce a new xDS resource type called
-`DynamicParametersConstraintsMap`, which looks like this:
-
-```proto
-package envoy.config.dynamic_parameters.v3;
-
-message DynamicParameterConstraintsMap {
-  // Key is resource type name (e.g., "envoy.config.cluster.v3.Cluster").
-  map<string, service.discovery.v3.DynamicParameterConstraints> resource_type_constraints =
-      1;
-}
-```
-
-This resource allows the management server to provide the client with a
-set of dynamic parameter constraints to be used for each resource type.
-
-The client will obtain this resource from the server either via ADS or
-via a new xDS API called Dynamic Parameter Discovery Service (DPDS):
-
-```proto
-package envoy.service.dynamic_parameters.v3;
-
-service DynamicParametersDiscoveryService {
-  option (envoy.annotations.resource).type = "envoy.config.dynamic_parameters.v3.DynamicParameters";
-
-  rpc StreamDynamicParameterConstraints(stream discovery.v3.DiscoveryRequest)
-      returns (stream discovery.v3.DiscoveryResponse) {
-  }
-
-  rpc DeltaDynamicParameterConstraints(stream discovery.v3.DeltaDiscoveryRequest)
-      returns (stream discovery.v3.DeltaDiscoveryResponse) {
-  }
-
-  rpc FetchDynamicParameterConstraints(discovery.v3.DiscoveryRequest)
-      returns (discovery.v3.DiscoveryResponse) {
-    option (google.api.http).post = "/v3/discovery:dynamic_parameters";
-    option (google.api.http).body = "*";
-  }
-}
-```
-
-Use of this resource type is optional and will be configured locally on
-the client (e.g., in the bootstrap file).  The client's configuration
-will tell it the name of the DPDS resource to subscribe to and what server
-to obtain it from.  When the new xdstp: naming scheme is in use, the client
-should be able to configure a different DPDS resource to use for each
-authority.
-
-If configured, the client will subscribe to the DPDS resource before
-subscribing to any other type of resource.  It will then use the
-constraints from the DPDS resource when subscribing to all other types
-of resources.
-
-If the client cannot obtain the configured DPDS resource, it will ignore
-the failure and request the remaining resources with no additional
-constraints.  This will likely result in the client sending a request that
-does not include constraints for one of the parameters that is used to
-distinguish different variants of the resource, and as mentioned in
-the [Matching Behavior and Best
-Practices](#matching-behavior-and-best-practices) section above, the
-control plane is free to return any variant of the resource in that
-case.  However, note that the authoritative server cannot control what
-choice is made by caching xDS proxies.
-
-Just like any other xDS resource, a DPDS resource can be updated by the
-control plane at any time.  When that happens, the constraints to be
-used for a given resource type change, which will cause the client to
-unsubscribe from all resources of that type using the old constraints and
-then resubscribe to all resources using the new constraints.  Note that
-this is an eventually consistent model, but the appropriate use of ADS
-or distributed coordination can provide stronger consistency.
-
-#### DPDS Example
-
-For example, let's say that the client is configured such that it will
-use the DPDS resource 
-`xdstp://xds.example.com/envoy.config.context_params.v3.DynamicContextParameters/my_context_params`
-for authority `xds.example.com`.  The client is asked to subscribe to the LDS
-resource
-`xdstp://xds.example.com/envoy.config.listener.v3.Listener/my_listener`.
-The client notices that the it has a DPDS resource configured for the
-authority of this resource (xds.example.com), so it will first subscribe
-to the DPDS resource.  Let's say that it gets back the following
-response:
-
-```textproto
-{resource_type_constraints:[
-  {key:"envoy.config.listener.v3.Listener" value:{
-    key_constraints:[
-      {key:"listener_type" value:{
-        constraints:[{value:"direct"}]
-      }}
-    ]
-  }}
-]}
-```
-
-The client would then use the following constraints when subscribing to
-the LDS resource:
-
-```textproto
-{key_constraints:[
-  {key:"listener_type" value:{
-    constraints:[{value:"direct"}]
-  }}
-]}
-```
-
-Now let's say that the client later gets an update of the DPDS resource
-with the following contents:
-
-```textproto
-{resource_type_constraints:[
-  {key:"envoy.config.listener.v3.Listener" value:{
-    key_constraints:[
-      {key:"listener_type" value:{
-        constraints:[{value:"via_proxy"}]
-      }}
-    ]
-  }}
-]}
-```
-
-This changes the constrains to be used for LDS resources.
-The client would then send a new request that unsubscribes from the
-LDS resource with the old constrains and subscribes to the same resource
-with the new constraints.
-
-#### Non-Cacheability of DPDS
-
-Because this mechanism is intended to be used in cases where the server
-needs to determine the constraints to be used by the client based on
-information not included in the resource locator (e.g., node information,
-client IP, or client credentials), the DPDS resource itself is always
-non-cacheable.  Servers must always set the [`Resource.do_not_cache`
-field](https://github.com/envoyproxy/envoy/blob/371099f4f52f94e60f558561e29ce8852e1091da/api/envoy/service/discovery/v3/discovery.proto#L245)
-when sending this resource.  Clients that use a caching xDS proxy for
-most of their resources will need to obtain this resource directly
-from the authoritative server; when using the new xdstp: naming scheme,
-this can be done by using a different authority in the DPDS resource name.
-
-#### Possible DPDS Implementation
-
-One possible way for clients to implement this is by adding a transparent
-layer between the transport protocol layer and the data model layer.
-
-Let's say that the transport protocol is handled by an XdsClient object
-that handles interaction with the xDS server(s) and takes care of all of
-the client-side caching.  The XdsClient object has an API that allows
-data model code to register a watcher for a particular resource name,
-and the XdsClient will invoke a method on the watcher whenever the
-resource is updated.
-
-The DPDS functionality can be added as a transparent "wrapper" of the
-XdsClient object:
-- When a watch is started on the wrapper object for (e.g.) a Listener
-  resource, if use of DPDS is not configured or the resource name is an
-  old-style resource name, the watch will just be passed down to the real
-  XdsClient without modification.  But if DPDS is in use, then the wrapper
-  will use the real XdsClient to start a watch for the DPDS resource.
-- When the DPDS resource is returned, the wrapper will use it to determine
-  what constraints to use when subscribing to the Listener resource, at
-  which point it will start a watch for the Listener resource on the real
-  XdsClient using those constraints.  Any updates returned by the Listener
-  watcher on the real XdsClient will be passed through to the watcher given
-  to the wrapper by the data model code.
-- Whenever the DPDS resource gets updated, if the constraints for LDS
-  resources have changed, the wrapper will stop the watch for the Listener
-  resource on the real XdsClient that was using the old constraints and
-  start a new watch using the new constraints.  This change will be
-  transparent to the data model code that started the watch on the
-  XdsClient wrapper.
-
-#### Envoy-Specific Details
-
-(This section applies only to Envoy, not to other xDS clients like gRPC.)
-
-In Envoy, RTDS is used before DPDS, so the DPDS resource cannot be used to
-specify constraints for RTDS resources.
-
-The constraints from the DPDS resource will be used to choose the CDS
-resource, which means that DPDS resources will be fetched before CDS
-resources.  This means that the DPDS resource itself cannot be fetched
-from a cluster obtained via CDS; it must either use a static cluster or
-a Google gRPC ApiConfigSource.
-
 ### Migrating From Node Metadata
 
 Today, the equivalent of dynamic parameter constraints is node metadata,
 which can be used by servers to determine the set of resources to send
 for LDS and CDS wildcard subscriptions or to determine the contents of
 other resources (e.g., to select individual routes to be included in an
-RDS resource).  For transition purposes, this mechanism could continue
-to be supported in one of two ways:
-1. Direct translation of node metadata to exact-match constraints.  For
-   example, if the node metadata contains the entry `env=prod`, this
-   would be translated to a constraint `{key_constraints:[{key:"env"
-   value:{constraints:[{value:"prod"}]}}]}`.
-2. Use the mechanism described under [Server-Specified
-   Constraints](#server-specified-constraints) above to convert from node
-   metadata to dynamic parameter constraints.  (Note that this mechanism
-   requires direct access to the authoritative server, because the
-   `DynamicParameterConstraintsMap` resource is not cacheable.)
+RDS resource).  For transition purposes, this mechanism can continue
+to be supported by the client performing direct translation of node
+metadata to exact-match constraints.  For example, if the node metadata
+contains the entry `env=prod`, this would be translated to a constraint
+`{key_constraints:[{key:"env" value:{constraints:[{value:"prod"}]}}]}`.
 
 Any given xDS client may support either or both of these mechanisms.
 
@@ -796,58 +596,29 @@ constraints to RDS as it uses for SRDS.
 
 #### Sharding Endpoints
 
-The client will initially subscribe to the `DynamicParameterConstraintsMap`
-resource to get the dynamic parameter constraints to use for each resource
-type.  The server will send back the following DPDS resource:
+For this use-case, dynamic parameters cannot be used, because the server
+would need to determine which dynamic parameter constraints a given
+client would use, and that decision is inherently non-cacheable.  As a
+result, we will not address this use-case via dynamic parameters;
+instead, the server will supply
+[non-cacheable](https://github.com/envoyproxy/envoy/blob/5e80b8255d267dbd7b128244605e93f9541ccaa5/api/envoy/service/discovery/v3/discovery.proto#L245)
+EDS resources.
 
-```textproto
-{resource_type_constraints:[
-   {key:"envoy.config.cluster.v3.ClusterLoadAssignment" value:{
-    key_constraints:[
-      {key:"subset_id" value:{
-        constraints:[{value:"123"}]
-      }}
-    ]
-  }}
-]}
-```
-
-This tells the client to use the following dynamic parameter constraints
-when subscribing to EDS resources:
-
-```textproto
-{key_constraints:[
-  {key:"subset_id" value:{
-    constraints:[{value:"123"}]
-  }}
-]}
-```
-
-The server can provide a different variant of the EDS resources for each
-client, each with different dynamic parameter constraints (e.g., one client
-would be told to use `shard_id` 123, while another client might be told to
-use `shard_id` 456).
+In the future, we may consider alternative designs that will better
+address this use-case.
 
 #### Selecting Cluster Based on ACL
 
-The client will initially subscribe to the `DynamicParameterConstraintsMap`
-resource to get the dynamic parameters to use for each resource type.  The
-server will send back the following DPDS resource:
+For this use-case, dynamic parameters cannot be used, because the server
+would need to determine which dynamic parameter constraints a given
+client would use, and that decision is inherently non-cacheable.  As a
+result, we will not address this use-case via dynamic parameters;
+instead, the server will supply
+[non-cacheable](https://github.com/envoyproxy/envoy/blob/5e80b8255d267dbd7b128244605e93f9541ccaa5/api/envoy/service/discovery/v3/discovery.proto#L245)
+RDS resources.
 
-```textproto
-{resource_type_constraints:[
-  {key: "envoy.config.cluster.v3.RouteConfiguration" value:{
-    key_constraints:[
-      {key:"use_proxy" value:{
-        constraints:[{value:"true"}]  // or "false", depending on the client
-      }}
-    ]
-  }}
-]}
-```
-
-This tells the client to send a constraint setting the `use_proxy`
-parameter to either true or false when subscribing to the RDS resource.
+In the future, we may consider alternative designs that will better
+address this use-case.
 
 #### Dynamic Route Selection
 
@@ -928,120 +699,6 @@ will be 9 different variants of the resource, even though there are only
     </td>
   </tr>
 
-</table>
-
-Note that a server that does not need to operate with caching xDS proxies
-could optimize this by using the mechanism described in [Server-Specified
-Constraints](#server-specified-constraints) above.  Specifically, it could use
-the DPDS resource to set constraints to minimize the number of variants:
-
-<table>
-  <tr>
-    <th>Node Metadata</th>
-    <th>Dynamic Parameter Constraints from DPDS</th>
-    <th>Dynamic Parameters on Resource</th>
-  </tr>
-
-  <tr>
-    <td>
-      <ul>
-      <li><code>{env=canary,version=v2}</code>
-      <li><code>{env=test,version=v2}</code>
-      <li><code>{env=canary,version=v3}</code>
-      <li><code>{env=test,version=v3}</code>
-      </ul>
-    </td>
-    <td>
-<pre>
-{key_constraints:[
-  {key:"env" value{
-    constraints:[{value:"prod"}]
-    invert:true
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-    invert:true
-  }}
-]}
-</pre>
-    </td>
-    <td>
-      <code>{env=NOT_prod,version=NOT_v1}</code>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <ul>
-      <li><code>{env=prod,version=v2}</code>
-      <li><code>{env=prod,version=v3}</code>
-      </ul>
-    </td>
-    <td>
-<pre>
-{key_constraints:[
-  {key:"env" value{
-    constraints:[{value:"prod"}]
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-    invert:true
-  }}
-]}
-</pre>
-    </td>
-    <td>
-      <code>{env=prod,version=NOT_v1}</code>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <ul>
-      <li><code>{env=canary,version=v1}</code>
-      <li><code>{env=test,version=v1}</code>
-      </ul>
-    </td>
-    <td>
-<pre>
-{key_constraints:[
-  {key:"env" value{
-    constraints:[{value:"prod"}]
-    invert:true
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-  }}
-]}
-</pre>
-    </td>
-    <td>
-      <code>{env=NOT_prod,version=v1}</code>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <ul>
-      <li><code>{env=prod,version=v1}</code>
-      </ul>
-    </td>
-    <td>
-<pre>
-{key_constraints:[
-  {key:"env" value{
-    constraints:[{value:"prod"}]
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-  }}
-]}
-</pre>
-    </td>
-    <td>
-      <code>{env=prod,version=v1}</code>
-    </td>
-  </tr>
 </table>
 
 ## Rationale
