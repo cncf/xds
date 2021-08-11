@@ -42,11 +42,9 @@ individual clients.  Here are some examples:
   case, except that there is a single cluster with a large number of
   endpoints.  The goal is that the xDS server will send different subsets
   of endpoints to different clients, thus avoiding unwanted connections
-  when there are large numbers of both servers and clients.  (At Google,
-  this is referred to as "subsetting", but it's a different feature than
-  the one that Envoy uses that term for.)  In this case, it is desirable
-  for the xDS server to determine the subset of endpoints to assign to
-  each client.
+  when there are large numbers of both servers and clients.  In this case,
+  it is desirable for the xDS server to determine the subset of endpoints
+  to assign to each client (or possibly equivalent class of clients).
 - **Selecting which cluster to send a client to based on an ACL.**  In this
   use-case, there are two different network paths that can be used to
   access the endpoints: one goes directly to the endpoints, with
@@ -133,7 +131,7 @@ they are not required by the client's data model.  (For example, in the
 different variants of the EDS resource, but once a given client has the
 right variant, it will be unique on that client, which means that the
 CDS resource does not need to refer to different EDS resource names on
-different client.)
+a different client.)
 
 It should be noted that caching xDS proxies, unlike "leaf" clients, will
 need to track multiple variants of each resource, since a given caching
@@ -172,20 +170,6 @@ This flexible matching semantic means that there are some cases where
 ambiguity can occur; we define a set of best practices below to prevent
 these cases from occurring in practice.
 
-#### Matching Ambiguity
-
-Flexible matching means that there may be ambiguities when determining
-which resources match which subscriptions.  This section defines the matching
-behavior and a set of best practices for deployments to follow to avoid this
-kind of ambiguity.
-
-To illustrate where this comes up in practice, it is useful to consider
-what happens in transition scenarios, where a deployment initially
-groups its clients on a single key but then wants to add a second key.
-The second key needs to be added both in the constraints on the server
-side and in the clients' configurations, but those two changes cannot
-occur atomically.
-
 For example, let's say that the clients are currently categorized by the
 parameter `env`, whose value is either `prod` or `test`.  The resource
 variants on the server will therefore have the following sets of dymamic
@@ -212,9 +196,24 @@ constraints, depending on whether they are `prod` or `test` clients:
 ]}
 ```
 
-Now the deployment wants to add an additional key called `version`,
-whose value will be either `v1` or `v2`, so that it can further subdivide
-its clients' configs.
+#### Matching Ambiguity
+
+Flexible matching means that there may be ambiguities when determining
+which resources match which subscriptions.  This section defines the matching
+behavior and a set of best practices for deployments to follow to avoid this
+kind of ambiguity.
+
+To illustrate where this comes up in practice, it is useful to consider
+what happens in transition scenarios, where a deployment initially
+groups its clients on a single key but then wants to add a second key.
+The second key needs to be added both in the constraints on the server
+side and in the clients' configurations, but those two changes cannot
+occur atomically.
+
+Consider the above example where the clients are already divided into
+`env=prod` and `env=test`.  Let's say that now the deployment wants to add
+an additional key called `version`, whose value will be either `v1` or `v2`,
+so that it can further subdivide its clients' configs.
 
 If the new key is added on the clients first, then the clients will
 start subscribing with dynamic parameters constraints like the following:
