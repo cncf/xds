@@ -10,6 +10,15 @@ extend google.protobuf.FileOptions {
   StatusAnnotation file_status = 222707719;
 }
 
+extend google.protobuf.MessageOptions {
+  MessageStatusAnnotation message_status = 222707719;
+}
+
+extend google.protobuf.FieldOptions {
+  FieldStatusAnnotation field_status = 222707719;
+}
+
+
 enum PackageVersionStatus {
   // Unknown package version status.
   UNKNOWN = 0;
@@ -31,4 +40,14 @@ message StatusAnnotation {
 
   // The entity belongs to a package with the given version status.
   PackageVersionStatus package_version_status = 2;
+}
+
+message MessageStatusAnnotation {
+  // The entity is work-in-progress and subject to breaking changes.
+  bool work_in_progress = 1;
+}
+
+message FieldStatusAnnotation {
+  // The entity is work-in-progress and subject to breaking changes.
+  bool work_in_progress = 1;
 }

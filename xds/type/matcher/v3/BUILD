@@ -4,6 +4,7 @@ licenses(["notice"]) #Apache 2
 
 udpa_proto_package(
   deps = [
+    "//udpa/annotations:pkg",
     "//xds/core/v3:pkg",
   ]
 )
