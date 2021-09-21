@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package xds.annotations;
+package xds.annotations.v3;
 
 import "google/protobuf/descriptor.proto";
 
