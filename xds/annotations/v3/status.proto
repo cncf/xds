@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package xds.annotations;
+
+import "google/protobuf/descriptor.proto";
+
+// Magic number in this file matches the one used in udpa.annotation.status.
+extend google.protobuf.MessageOptions {
+  MessageStatusAnnotation message_status = 222707719;
+}
+
+extend google.protobuf.FieldOptions {
+  FieldStatusAnnotation field_status = 222707719;
+}
+
+message MessageStatusAnnotation {
+  // The entity is work-in-progress and subject to breaking changes.
+  bool work_in_progress = 1;
+}
+
+message FieldStatusAnnotation {
+  // The entity is work-in-progress and subject to breaking changes.
+  bool work_in_progress = 1;
+}
