@@ -15,7 +15,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,11 +30,8 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
 )
-
-// define the regex for a UUID once up-front
-var _orca_load_report_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 // Validate checks the field values on OrcaLoadReport with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
@@ -44,17 +41,17 @@ func (m *OrcaLoadReport) Validate() error {
 		return nil
 	}
 
-	if m.GetCpuUtilization() > 1 {
+	if val := m.GetCpuUtilization(); val < 0 || val > 1 {
 		return OrcaLoadReportValidationError{
 			field:  "CpuUtilization",
-			reason: "value must be less than or equal to 1",
+			reason: "value must be inside range [0, 1]",
 		}
 	}
 
-	if m.GetMemUtilization() > 1 {
+	if val := m.GetMemUtilization(); val < 0 || val > 1 {
 		return OrcaLoadReportValidationError{
 			field:  "MemUtilization",
-			reason: "value must be less than or equal to 1",
+			reason: "value must be inside range [0, 1]",
 		}
 	}
 
@@ -67,10 +64,10 @@ func (m *OrcaLoadReport) Validate() error {
 
 		// no validation rules for Utilization[key]
 
-		if val > 1 {
+		if val := val; val < 0 || val > 1 {
 			return OrcaLoadReportValidationError{
 				field:  fmt.Sprintf("Utilization[%v]", key),
-				reason: "value must be less than or equal to 1",
+				reason: "value must be inside range [0, 1]",
 			}
 		}
 
