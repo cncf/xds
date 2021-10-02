@@ -4,6 +4,8 @@ package xds.annotations.v3;
 
 import "google/protobuf/descriptor.proto";
 
+option go_package = "github.com/cncf/xds/go/xds/annotations/v3";
+
 // Magic number in this file derived from top 28bit of SHA256 digest of
 // "xds.annotations.v3.status".
 extend google.protobuf.FileOptions {
