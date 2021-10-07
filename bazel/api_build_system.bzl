@@ -40,7 +40,7 @@ def _py_proto_mapping(dep):
 # TODO(htuch): Convert this to native py_proto_library once
 # https://github.com/bazelbuild/bazel/issues/3935 and/or
 # https://github.com/bazelbuild/bazel/issues/2626 are resolved.
-def _udpa_py_proto_library(name, srcs = [], deps = []):
+def _xds_py_proto_library(name, srcs = [], deps = []):
     _py_proto_library(
         name = name + _PY_PROTO_SUFFIX,
         srcs = srcs,
@@ -76,7 +76,7 @@ def py_proto_library(name, deps = []):
         visibility = ["//visibility:public"],
     )
 
-def _udpa_cc_py_proto_library(
+def _xds_cc_py_proto_library(
         name,
         visibility = ["//visibility:private"],
         srcs = [],
@@ -103,19 +103,19 @@ def _udpa_cc_py_proto_library(
         deps = [relative_name],
         visibility = ["//visibility:public"],
     )
-    _udpa_py_proto_library(name, srcs, deps)
+    _xds_py_proto_library(name, srcs, deps)
 
     # Optionally define gRPC services
     if has_services:
         # TODO: neither C++ or Python service generation is supported today, follow the Envoy example to implementthis.
         pass
 
-def udpa_proto_package(srcs = [], deps = [], has_services = False, visibility = ["//visibility:public"]):
+def xds_proto_package(srcs = [], deps = [], has_services = False, visibility = ["//visibility:public"]):
     if srcs == []:
         srcs = native.glob(["*.proto"])
 
     name = "pkg"
-    _udpa_cc_py_proto_library(
+    _xds_cc_py_proto_library(
         name = name,
         visibility = visibility,
         srcs = srcs,
@@ -146,14 +146,25 @@ def udpa_proto_package(srcs = [], deps = [], has_services = False, visibility = 
         ],
     )
 
-def udpa_cc_test(name, **kwargs):
+def xds_cc_test(name, **kwargs):
     native.cc_test(
         name = name,
         **kwargs
     )
 
-def udpa_go_test(name, **kwargs):
+def xds_go_test(name, **kwargs):
     go_test(
         name = name,
         **kwargs
     )
+
+# Old names for backward compatibility.
+# TODO(roth): Remove these once all callers are migrated to the new names.
+def udpa_proto_package(srcs = [], deps = [], has_services = False, visibility = ["//visibility:public"]):
+  xds_proto_package(srcs=srcs, deps=deps, has_services=has_services, visibility=visibility)
+
+def udpa_cc_test(name, **kwargs):
+  xds_cc_test(name, **kwargs)
+
+def udpa_go_test(name, **kwargs):
+  xds_go_test(name, **kwargs)

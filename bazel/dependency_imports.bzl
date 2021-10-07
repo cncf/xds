@@ -7,7 +7,7 @@ load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_depende
 # go version for rules_go
 GO_VERSION = "1.16.6"
 
-def udpa_dependency_imports(go_version = GO_VERSION):
+def xds_dependency_imports(go_version = GO_VERSION):
     protobuf_deps()
     go_rules_dependencies()
     go_register_toolchains(go_version)
@@ -52,3 +52,8 @@ def udpa_dependency_imports(go_version = GO_VERSION):
         sum = "h1:AGJ0Ih4mHjSeibYkFGh1dD9KJ/eOtZ93I6hoHhukQ5Q=",
         version = "v1.40.0",
     )
+
+# Old name for backward compatibility.
+# TODO(roth): Remove this once callers are migrated to the new name.
+def udpa_dependency_imports(go_version = GO_VERSION):
+  xds_dependency_imports(go_version=go_version)
