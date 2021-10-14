@@ -3,7 +3,7 @@ TP2: Dynamically Generated Cacheable xDS Resources
 * Author(s): markdroth, htuch
 * Approver: htuch
 * Implemented in: <xDS client, ...>
-* Last updated: 2021-08-11
+* Last updated: 2021-10-14
 
 ## Abstract
 
@@ -21,50 +21,16 @@ not viral, thus making the mechanism much easier to use.
 
 ## Background
 
-There are many use-cases where a control plane may need to dynamically
-generate the contents of xDS resources to tailor the resources for
-individual clients.  Here are some examples:
-
-- **xDS minor/patch version negotiation.** In this case, each client
-  supports a given minor and patch version, and the server may choose to
-  use newer API features when talking to clients that support newer versions
-  of the API.  (See https://github.com/envoyproxy/envoy/issues/8416 for
-  details.)
-- **Sharding Cluster resources for scalability.**  In this use-case, there
-  are a really large number of clusters, too many for any one client to
-  handle.  The clusters are divided into shards, and each client is given
-  a dynamically changing assignment of which shards to load.  To support
-  this, there needs to be a different variant of the `ClusterCollection`
-  resource for each combination of shards that may be assigned to a given
-  client.  The shard assignments are generally determined dynamically on
-  the client but may change at any time.
-- **Sharding endpoints for scalability.**  This is similar to the previous
-  case, except that there is a single cluster with a large number of
-  endpoints.  The goal is that the xDS server will send different subsets
-  of endpoints to different clients, thus avoiding unwanted connections
-  when there are large numbers of both servers and clients.  In this case,
-  it is desirable for the xDS server to determine the subset of endpoints
-  to assign to each client (or possibly equivalent class of clients).
-- **Selecting which cluster to send a client to based on an ACL.**  In this
-  use-case, there are two different network paths that can be used to
-  access the endpoints: one goes directly to the endpoints, with
-  client-side load balancing, and the other goes via a reverse proxy.
-  The path that goes directly to the endpoints is faster but is
-  access-restricted.  The xDS server needs to check an ACL to determine
-  whether a given client is authorized to directly access the endpoints.
-  If the client is authorized, it will be sent a `RouteConfiguration`
-  pointing to the cluster for those endpoints; otherwise, it will be sent
-  a different variant of the `RouteConfiguration` that points to a cluster
-  containing the reverse proxy endpoint.
-- **Dynamic route selection.**  Every client sends a set of dynamic
-  selection parameters (today, conveyed as node metadata).  The server
-  has a list of routes to configure, but individual routes in the list
-  may be included or excluded based on the client's dynamic selection
-  parameters.  Thus, the server needs to generate a slightly different
-  version of the `RouteConfiguration` for clients based on the parameters
-  they send.  (See
-  https://cloud.google.com/traffic-director/docs/configure-advanced-traffic-management#config-filtering-metadata
-  for an example.)
+There are many use-cases where a control plane may need to
+dynamically generate the contents of xDS resources to tailor the
+resources for individual clients.  One common case is where the
+server has a list of routes to configure, but individual routes in
+the list may be included or excluded based on the client's dynamic
+selection parameters (today, conveyed as node metadata).  Thus,
+the server needs to generate a slightly different version of the
+`RouteConfiguration` for clients based on the parameters they send.  (See
+https://cloud.google.com/traffic-director/docs/configure-advanced-traffic-management#config-filtering-metadata
+for an example.)
 
 The new xDS naming scheme described in [xRFC TP1](TP1-xds-transport-next.md)
 provides a mechanism called context parameters, which is intended to move all
@@ -144,64 +110,127 @@ essentially irrelevant in that case.
 
 With the above property in mind, this document proposes the following
 data structures:
-- **Dynamic parameters**, which are a set of key/value pairs that are part
-  of the cache key for an xDS resource (in addition to the resource name
-  itself).  This provides a mechanism to represent multiple variants of a
-  given resource in a cacheable way.  These parameters are used to identify
-  the specified resource in the transport protocol, but they are not part of
-  the resource name and therefore do not appear as part of the resource graph.
+- **Dynamic parameters**, which are a set of key/value pairs sent by the
+  client when subscribing to a resource.
 - **Dynamic parameter constraints**, which are a set of criteria that
   can be used to determine whether a set of dynamic parameters matches
-  the constraints.  When a client subscribes to a resource, it may
-  specify a set of dynamic parameter constraints, which will be used to
-  select which variant of the resource will be returned by the server.
-  In response to a given subscription request from the client containing
-  a set of dynamic parameter constraints, the server will send a
-  resource whose dynamic parameters match the dynamic parameter
-  constraints in the request.  The client will use the dynamic
-  parameters on the resource to determine which of its subscriptions the
-  resource is associated with.
+  the constraints.  These constraints are part of the cache key for an
+  xDS resource (in addition to the resource name itself) on xDS servers,
+  xDS clients, and xDS caching proxies.  This provides a mechanism to
+  represent multiple variants of a given resource in a cacheable way.
 
-Dynamic parameters, unlike context parameters, will not be
-exact-match-only.  Dynamic parameter constraints will be able to represent
-various types of flexible matching, such as range-based matching (which
-will be used for the "xDS minor/patch version negotiation" use-case).
-This flexible matching semantic means that there are some cases where
-ambiguity can occur; we define a set of best practices below to prevent
-these cases from occurring in practice.
+Both of these data structures are used in the xDS transport protocol,
+but they are not part of the resource name and therefore do not appear as
+part of the resource graph.
+
+When a client subscribes to a resource, it specifies a set of dynamic
+parameters.  In response, the server will send a resource whose dynamic
+parameter constraints match the dynamic parameters in the subscription
+request.  The client will use the dynamic parameter constraints on the
+returned resource to determine which of its subscriptions the resource is
+associated with.
+
+#### Constraints Representation
+
+Dynamic parameter constraints will be represented in protobuf form as follows:
+
+```proto
+message DynamicParameterConstraints {
+  // A list of constraints that may be combined with AND or OR semantics.
+  message ConstraintList {
+    // A constraint for a given key.
+    message Constraint {
+      message Exists {}
+      // The key to match against.
+      string key = 1;
+      // How to match.
+      oneof constraint_type {
+        // Matches this exact value.
+        string value = 2;
+        // Key is present (matches any value except for the key being absent).
+        Exists exists = 3;
+      }
+      // If set to true, the match is inverted -- i.e., the key must NOT
+      // match the specified value.
+      bool invert = 4;
+    }
+
+    enum MatchType {
+      // Default value.
+      MATCH_TYPE_UNSPECIFIED = 0;
+      // Logical AND of constraints.
+      MATCH_TYPE_AND = 1;
+      // Logical OR of constraints.
+      MATCH_TYPE_OR = 2;
+    }
+
+    // A list of key/value constraints.
+    repeated Constraint constraints = 1;
+
+    // How to match the constraints.
+    MatchType match_type = 2;
+  }
+
+  // A list of constraint lists. All constraint lists must match (i.e.,
+  // logical AND semantics).
+  repeated ConstraintList constraints = 1;
+}
+```
+
+#### Matching Behavior
+
+Note that both xDS servers and clients need to evaluate matching between
+a set of dynamic parameters and a set of constraints.  The server does
+this when deciding which variant of a given resource to return for a
+given subscription request.  When the client receives the resource from
+the server, it needs to do the same matching to determine which of its
+subscriptions that resource is associated with.  Therefore, the matching
+behavior becomes an inherent part of the xDS transport protocol.
+
+(In effect, the resource cache in an xDS client is basically the same
+logic as that on an xDS server; the only difference is that in the case
+of a client, the resources in the cache come from an xDS stream instead
+of from an authoritative database.  Similarly, a caching xDS proxy is
+simply an xDS client where the subscriptions come from an incoming xDS
+stream.)
 
 For example, let's say that the clients are currently categorized by the
-parameter `env`, whose value is either `prod` or `test`.  The resource
-variants on the server will therefore have the following sets of dymamic
-parameters:
+parameter `env`, whose value is either `prod` or `test`.  So any given
+client will send one of the following sets of dynamic parameters:
 - `{env=prod}`
 - `{env=test}`
 
-Clients will send one of the following two sets of dynamic parameter
-constraints, depending on whether they are `prod` or `test` clients:
+The resource variants on the server will have the following sets of dynamic
+parameter constraints:
 
 ```textproto
 // For {env=prod}
-{key_constraints:[
-  {key:"env" value:{
-    constraints:[{value:"prod"}]
-  }}
+{constraints:[
+  {
+    constraints:[{key:"env" value:"prod"}]
+    match_type: MATCH_TYPE_AND
+  }
 ]}
 
 // For {env=test}
-{key_constraints:[
-  {key:"env" value:{
-    constraints:[{value:"test"}]
-  }}
+{constraints:[
+  {
+    constraints:[{key:"env" value:"test"}]
+    match_type: MATCH_TYPE_AND
+  }
 ]}
 ```
 
 #### Matching Ambiguity
 
-Flexible matching means that there may be ambiguities when determining
-which resources match which subscriptions.  This section defines the matching
-behavior and a set of best practices for deployments to follow to avoid this
-kind of ambiguity.
+Dynamic parameters, unlike context parameters, will not be
+exact-match-only.  Dynamic parameter constraints will be able to represent
+certain simple types of flexible matching, such as matching an exact
+value or the existance of a key, and simple AND and OR combinations
+of constraints.  This flexible matching semantic means that there may be
+ambiguities when determining which resources match which subscriptions.
+This section defines the matching behavior and a set of best practices for
+deployments to follow to avoid this kind of ambiguity.
 
 To illustrate where this comes up in practice, it is useful to consider
 what happens in transition scenarios, where a deployment initially
@@ -215,147 +244,197 @@ Consider the above example where the clients are already divided into
 an additional key called `version`, whose value will be either `v1` or `v2`,
 so that it can further subdivide its clients' configs.
 
-If the new key is added on the clients first, then the clients will
-start subscribing with dynamic parameters constraints like the following:
+If the new key is added on the server side first, then the server will
+have resource variants with constraints like this:
 
 ```textproto
 // For {env=prod, version=v1}
-{key_constraints:[
-  {key:"env" value:{
-    constraints:[{value:"prod"}]
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-  }}
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" value:"v1"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}
+
+// For {env=prod, version=v2}
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" value:"v2"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
 ]}
 ```
 
-The server or cache has to match that set of constraints against the
-existing sets of dynamic parameters, which do not specify the `version`
-key at all.
+But at this point, the clients are continuing to subscribe without
+specifying this new key.  So the server or cache would not have any way
+to know which of the above variants to use for a subscription specifying
+`{env=prod}` but not specifying `version`.
 
-Conversely, if the new key is added on the server side first, then the
-server will have resource variants with parameters like this:
+Conversely, if the new key is added on the clients first, then the clients
+will start subscribing with dynamic parameters like the following:
 - `{env=prod, version=v1}`
 - `{env=prod, version=v2}`
 - `{env=test, version=v1}`
 - `{env=test, version=v2}`
 
-But at this point, the clients are continuing to subscribe without
-constraints on this new key.  So the server or cache needs to figure out
-(e.g.) which of the first two sets of constraints to use for constraints
-that require `env` to be `prod` but do not specify `version`.
+The server or cache has to match those sets of dynamic parameters against
+the existing sets of dynamic parameter constraints, which do not specify the
+`version` key at all.
 
-We address this transition scenario by allowing the set of constraints
-for a given key to match any resource variant that does not specify that
-key at all.  This allows constraints for new keys to be added on clients
-before the corresponding keys are added on the resources on the server, but
-it does introduce some additional ambiguity into the matching.  For example,
-let's say that the server has the following two variants of a resource:
-- `{env=prod}`
-- `{env=prod, version=v1}`
+We address this transition scenario by allowing a set of constraints
+to match a set of dynamic parameters that includes a key that is not
+specified by the constraints.  This allows new keys to be added on
+clients before the corresponding constraints are added on the resources,
+which we expect to be the common case.  (In general, we expect clients
+to send a lot of keys that may not actually be used by the server, since
+deployments often divide their clients into categories before they have
+a need to differentiate the configs for those categories.)
 
-Now consider what happens if a client subscribes with the following
-constraints:
+As mentioned above, this approach does introduce the possibility of
+matching ambiguity in certain cases, where there may be more than one
+variant of a resource that matches the dynamic parameters specified by
+the client.  If an xDS transport protocol implementation does encounter
+multiple possible matching variants of a resource, its behavior is
+undefined.  In the following sections, we evaluate the cases where that
+can occur and specify how each one will be addressed.
+
+##### Adding a New Key on the Server First
+
+As stated above, we are optimizing for the case where new keys are added
+on clients first, since that is expected to be the common scenario.
+However, there may be cases where it is not feasible to have all clients
+start sending a new key before the server needs to start making use of
+that key.
+
+For example, let's consider the same case as above, where the clients
+are initially sending only the `env` key, and the server now wants to
+introduce the `version` key.  However, let's say that this is in an
+environment where the xDS server is controlled by one team and the clients
+are controlled by various other teams, so it's not feasible to force all
+clients to start sending the new `version` key all at once.  But there
+is one particular client team that is eager to start using the new
+`version` key to differentiate the configs of their clients, and they
+don't want to wait for all of the other client teams to start sending
+the new key.
+
+Consider what happens if the server simply adds a variant of the
+resource with the new key:
 
 ```textproto
-{key_constraints:[
-  {key:"env" value:{
-    constraints:[{value:"prod"}]
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-  }}
+// Existing variant for older clients that are not yet sending the
+// version key.
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}
+
+// New variant intended for clients sending the version key.
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" value:"v1"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
 ]}
 ```
 
-These constraints can match either of the above variants of the resource.
-This situation can be avoided by establishing a best practice that all
-variants of a given resource must have the same set of keys.
+This will work fine for older clients that are not yet sending the
+`version` key, because their dynamic parameters will not match the new
+variant's constraints.  However, newer clients that are sending dynamic
+parameters `{env=prod, version=v1}` will run into ambiguity: those
+parameters can match either of the above variants of the resource.
 
-There is still a possible ambiguity that can occur if a server adds
-multiple variants of a new key that clients are not yet sending.
-For example, let's say that the server has the following two variants
-of a resource:
-- `{env=prod, version=v1}`
-- `{env=prod, version=v2}`
+This situation will be avoided by requiring that **all variants of a
+given resource must specify constraints for the same set of keys**.
 
-Consider what happens if a client subscribes with the following constraints:
+However, in order to make this work for the case where the server starts
+sending the constraint on the new key before all clients are sending it,
+we provide the `exists` matcher, which will allow the server to specify
+a default explicitly for clients that are not yet sending a new key.
+In this example, the server would actually have the following two
+variants:
 
 ```textproto
-{key_constraints:[
-  {key:"env" value:{
-    constraints:[{value:"prod"}]
-  }}
+// Existing variant for older clients that are not yet sending the
+// version key.
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" exists:{} invert:true}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}
+
+// New variant for clients sending the version key.
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" value:"v1"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
 ]}
 ```
 
-These constraints can match either variant of the above resource.
-This can be avoided by establishing a best practice of not adding multiple
-variants of a new parameter until clients are sending the new parameter.
-However, if this does happen, the cache implementation is free to pick
-one of the variants at random.
+This allows maintaining the requirement that all variants of a given
+resource have constraints on the same set of keys, while also allowing
+the server to explicitly provide a result for older clients that do not
+yet send the new key.
 
-So, the expected order of changes for this kind of transition would be:
-1. Change clients to start sending a constraint for `version=v1`.
-2. Add the dynamic parameter `version=v1` to all existing resources.
-3. Create new variants of each resource with `version=v2`.
-4. Change the desired set of clients to send a constraint for
-   `version=v2` instead of `version=v1`.
+##### Variants With Overlapping Constraint Values
 
-##### Alternatives Considered
-
-We could avoid much of the matching ambiguity described above by saying that
-a set of constraints must specify all keys present on the resource in order
-to match.  However, this would mean that if the client starts subscribing
-with a constraint for the new key before the corresponding key is added on
-the resources on the server, then it will fail to match the existing resources.
-In other words, the process would be:
-
-1. Add a variant of all resources on the server side with `version=v1`
-   (in addition to all existing dynamic parameters).
-2. Change clients to start sending constraints with the new key.
-3. When all clients are updated, remove the resource variants that do
-   *not* have the new key.
-
-This will effectively require adding new keys on the server side first,
-which seems like a large burden on users.  It also seems fairly tricky
-for most users to get the exactly correct set of dynamic parameters on
-each resource variant, and if they fail to do it right, they will break
-their existing configuration.
-
-We also considered having the client add the new constraint but mark it
-as optional using an `is_optional` field.  That way, it would match
-resources both before and after the new key is added on the server.
-However, the `is_optional` field would introduce another type of ambiguity
-in matching.  Specifically, let's say that the server has the following
-two variants of the resource:
-- `{env=prod}`
-- `{env=prod, version=v1}`
-
-Now a client subscribes with the following set of constraints:
+There is also a possible ambiguity that can occur if a server provides
+multiple variants of a resource whose constraints for a given key
+overlap in terms of the values they can match.  For example, let's say
+that a server has the following two variants of a resource:
 
 ```textproto
-{key_constraints:[
-  {key:"env" value:{
-    constraints:[{value:"prod"}]
-  }},
-  {key:"version" value:{
-    constraints:[{value:"v1"}]
-    is_optional: true
-  }}
+// Matches {env=prod} or {env=test}.
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"env" value:"test"}
+    ]
+    match_type: MATCH_TYPE_OR
+  }
+]}
+
+// Matches {env=qa} or {env=test}.
+{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"qa"},
+      {key:"env" value:"test"}
+    ]
+    match_type: MATCH_TYPE_OR
+  }
 ]}
 ```
 
-These constraints can match either of the above variants of the resource.
-For authoritative servers, this could be addressed by establishing
-a best practice of not having two variants of a resource that differ
-only by keys that the client will send as optional.  However, this
-requires coordination between client and server, and requires
-machinery on the client to determine when to set the `is_optional` bit.
+Now consider what happens if a client subscribes with dynamic parameters
+`{env=test}`.  Those dynamic parameters can match either of the above
+variants of the resource.
 
-Ultimately, although this approach is more semantically precise, it is
-also considered too rigid and difficult for users to work with.
+This situation will be avoided by requiring that **all variants of a given
+resource must specify non-overlapping constraints for the same set of keys**.
+Control planes must not accept a set of resources that violates this
+requirement.
 
 #### Matching Behavior and Best Practices
 
@@ -363,95 +442,25 @@ We advise deployments to avoid ambiguity through the following best practices:
 - Whenever there are multiple variants of a resource, all variants must
   list the same set of keys.  This allows the server to ignore constraints
   on keys sent by the client that do not affect the choice of variant
-  without causing ambiguity in cache misses.
-- Servers should not create multiple variants of a parameter that is not yet
-  being sent by clients.  If they do, clients that do not send that parameter
-  will get one of the variants at random.
+  without causing ambiguity in cache misses.  Servers may use the
+  `exists` mechanism to provide backward compatibility for clients that
+  are not yet sending a newly added key.
+- The constraints on each variant of a given resource must be mutually
+  exclusive.  For example, if one variant of a resource matches a given key
+  with values "foo" or "bar", and another variant matches that same key
+  with values "bar" or "baz", that would cause ambiguity, because both
+  variants would match the value "bar".
 - There must be a variant of the resource for every value of a key that is
   going to be present.  For example, if clients will send constraints on the
   `env` key requiring the value to be one of `prod`, `test`, or `qa`, then
-  you must have each of those three variants of the resource.
-- For cases where a constraint may match multiple values (e.g., a
-  range constraint), the largest possible matching value is preferred.
-  This means that caches (both on clients and on caching xDS proxies)
-  must attempt to fetch a larger value even if they already have a smaller
-  matching value already present in the cache.  For example, let's say
-  that a cache contains a variant of a resource with the parameter
-  `{shard=3}` and a client subscribes with the following constraints:
-  ```textproto
-  {key_constraints:[
-    {key:"shard" value:{
-      constraints:[
-        {integer_range_list:[
-          {range:{min_value:0 max_value:5}}
-        ]}
-      ]
-    }}
-  ]}
-  ```
-  In this case, the cache must attempt to fetch a resource from the
-  authoritative server with that constraint before falling back to
-  using the one it already has cached, because the preferred value is
-  `{shard=5}`, not `{shard=3}`.
-  - Note: This is not an issue for glob collections, because in that case
-    all matching variants of the resource will be used.
+  you must have each of those three variants of the resource.  (Failure
+  to do this will result in the server acting as if the requested
+  resource does not exist.)
 
-#### API Changes
-
-The API changes necessary to implement this proposal are in
-https://github.com/envoyproxy/envoy/pull/17192.
-
-Dynamic parameter constraints will be represented as follows:
-
-```proto
-// A set of dynamic parameter constraints used to select the variant of
-// a given resource desired by a client. Clients send a set of
-// constraints with each subscription request, and servers respond by
-// sending a resource with a matching set of dynamic parameters.
-message DynamicParameterConstraints {
-  // Constraints for a given key.
-  message KeyConstraints {
-    message Constraint {
-      // A list of one or more integer ranges.
-      // A value is considered to match if it falls in any of the ranges.
-      message IntegerRangeList {
-        // At least one of *min_value* or *max_value* must be set.
-        message Range {
-          // If specified, value may not be less than this.
-          uint64 min_value = 1;
-
-          // If specified, value may not be greater than this.
-          uint64 max_value = 2;
-        }
-
-        repeated Range range = 1;
-      }
-
-      oneof constraint {
-        // The key must have this specific value.
-        string value = 1;
-
-        // The key's value must be integers and within one of the ranges in this list.
-        IntegerRangeList integer_range_list = 2;
-      }
-    }
-
-    // A list of one or more constraints on the value of the key.
-    // All constraints must be met.
-    repeated Constraint constraints = 2;
-  }
-
-  // One entry per key.
-  // Note that if a key has a constraint here, it will place restrictions
-  // on the key's value if the key is present on a variant of the resource.
-  // However, if a key has a constraint here but is not present on the
-  // resource, it will match, regardless of what the constraint says.
-  map<string, KeyConstraints> key_constraints = 1;
-}
-```
+#### Transport Protocol Changes
 
 The following message will be added to represent a subscription to a
-resource by name with associated dynamic parameter constraints:
+resource by name with associated dynamic parameters:
 
 ```proto
 // A specification of a resource used when subscribing or unsubscribing.
@@ -459,22 +468,21 @@ message ResourceLocator {
   // The resource name to subscribe to.
   string name = 1;
 
-  // A set of constraints used to match against the dynamic parameters on the resource. This
-  // allows clients to select between multiple variants of the same resource.
-  DynamicParameterConstraints dynamic_parameter_constraints = 2;
+  // A set of dynamic parameters used to match against the dynamic parameter
+  // constraints on the resource. This allows clients to select between
+  // multiple variants of the same resource.
+  map<string, string> dynamic_parameters = 2;
 }
 ```
 
 The following new field will be added to `DiscoveryRequest`, to allow clients
-to specify constraints when subscribing to a resource:
+to specify dynamic parameters when subscribing to a resource:
 
 ```proto
   // Alternative to resource_names field that allows specifying cache
-  // keys along with each resource name. If this is populated in the
-  // first request for a resource type on a stream, resource_names is ignored
-  // for all subsequent requests for that resource type on that stream.
-  // Clients that populate this field must be able to handle responses
-  // from the server where resources are wrapped in a Resource message.
+  // keys along with each resource name. Clients that populate this field
+  // must be able to handle responses from the server where resources are
+  // wrapped in a Resource message.
   repeated ResourceLocator resource_locators = 7;
 ```
 
@@ -482,17 +490,11 @@ Similarly, the following fields will be added to `DeltaDiscoveryRequest`:
 
 ```proto
   // Alternative to resource_names_subscribe field that allows specifying cache
-  // keys along with each resource name. If this is populated in the
-  // first request for a resource type on a stream, resource_names_subscribe
-  // and resource_names_unsubscribe are ignored for all subsequent requests
-  // for that resource type on that stream.
+  // keys along with each resource name.
   repeated ResourceLocator resource_locators_subscribe = 8;
 
   // Alternative to resource_names_unsubscribe field that allows specifying cache
-  // keys along with each resource name. If resource_locators_subscribe is
-  // populated in the first request for a resource type on a stream,
-  // this field is used instead of resource_named_unsubscribe for all
-  // subsequent requests for that resource type on that stream.
+  // keys along with each resource name.
   repeated ResourceLocator resource_locators_unsubscribe = 9;
 ```
 
@@ -500,9 +502,10 @@ The following field will be added to the `Resource` message, to allow the
 server to return the dynamic parameters associated with each resource:
 
 ```proto
-  // Dynamic parameters associated with this resource. To be used by client-side caches
-  // (including xDS proxies) when matching subscribed resource locators.
-  map<string, string> dynamic_parameters = 8;
+  // Dynamic parameter constraints associated with this resource. To be used
+  // by client-side caches (including xDS proxies) when matching subscribed
+  // resource locators.
+  DynamicParameterConstraints dynamic_parameter_constraints = 8;
 ```
 
 ### Migrating From Node Metadata
@@ -519,132 +522,42 @@ contains the entry `env=prod`, this would be translated to a constraint
 
 Any given xDS client may support either or both of these mechanisms.
 
-### Examples
+### Example
 
 This section shows how the mechanism described in this proposal can be
-used to address each of the use-cases identified in the "Background"
+used to address each the use-case described in the "Background"
 section above.
 
-#### xDS Minor/Patch Version Negotiation
-
-The client will send the following dynamic parameter constraints, which
-indicate the range of versions that it supports:
-
-```textproto
-{key_constraints:[
-  {key:"xds.version.minor" value:{
-    constraints:[
-      {integer_range_list:[
-        {range:{min_value:0 max_value:5}}
-      ]}
-    ]
-  }}
-]}
-```
-
-Let's say that a server has a resource that wants to use a new feature
-introduced in version 3.0.5 for clients that support that version.  It will
-provide two versions of that resource:
-- For clients at version 3.0.5 or higher, a resource with keys
-  `{"xds.version.patch"=5}`.
-- For clients at version 3.0.4 or lower, there will need to be at least one
-  variant of the resource for every possible version range that any client
-  may request, all with the exact same content.  For example:
-  - `{"xds.version.patch"=4}`
-  - `{"xds.version.patch"=3}`
-  - `{"xds.version.patch"=2}`
-  - `{"xds.version.patch"=1}`
-  - `{"xds.version.patch"=0}`
-
-#### Sharding Clusters
-
-In this use-case, the client will have a set of shard ranges determined
-by some client-side code, resulting in a pair of dynamic parameter
-constraints, one for SRDS and another for CDS.  For example, let's
-say that a client should use shard ranges [4-6], [11-15], and [46-90].
-The dynamic parameter constraints for SRDS and CDS would be:
-
-```textproto
-// For SRDS (single resource).
-{key_constraints:[
-  {key:"shards" value:{
-    constraints:[
-      {value:"[4-6],[11-15],[46-90]"}
-    ]
-  }}
-]}
-
-// For CDS (glob collection).
-{key_constraints:[
-  {key:"shards" value:{
-    constraints:[
-      {integer_range_list:[
-        {range:{min_value:4 max_value:6}},
-        {range:{min_value:11 max_value:15}},
-        {range:{min_value:46 max_value:90}}
-      ]}
-    ]
-  }}
-]}
-```
-
-The resulting SRDS resource will tell the client what RDS resources
-to fetch.  The server can either generate different resource names for
-each variant of the RDS resource, or it can choose to apply the same
-constraints to RDS as it uses for SRDS.
-
-#### Sharding Endpoints
-
-For this use-case, dynamic parameters cannot be used, because the server
-would need to determine which dynamic parameter constraints a given
-client would use, and that decision is inherently non-cacheable.  As a
-result, we will not address this use-case via dynamic parameters;
-instead, the server will supply
-[non-cacheable](https://github.com/envoyproxy/envoy/blob/5e80b8255d267dbd7b128244605e93f9541ccaa5/api/envoy/service/discovery/v3/discovery.proto#L245)
-EDS resources.
-
-In the future, we may consider alternative designs that will better
-address this use-case.
-
-#### Selecting Cluster Based on ACL
-
-For this use-case, dynamic parameters cannot be used, because the server
-would need to determine which dynamic parameter constraints a given
-client would use, and that decision is inherently non-cacheable.  As a
-result, we will not address this use-case via dynamic parameters;
-instead, the server will supply
-[non-cacheable](https://github.com/envoyproxy/envoy/blob/5e80b8255d267dbd7b128244605e93f9541ccaa5/api/envoy/service/discovery/v3/discovery.proto#L245)
-RDS resources.
-
-In the future, we may consider alternative designs that will better
-address this use-case.
-
-#### Dynamic Route Selection
-
 Let's say that every client uses two different dynamic selection
-parameters, `env` (which can have one of the values `prod`, `canary`, or
-`test`) and `version` (which can have one of the values `v1`, `v2`, or `v3`).
-Now let's say that there is a RouteConfiguration with one route that should
-be selected via the parameter `env=prod` and another route that should be
-selected via the parameter `version=v1`. Normally, the server will need to
-actually provide the cross-product of these parameter values, so there
-will be 9 different variants of the resource, even though there are only
-4 unique contents for the resource:
+parameters, `env` (which can have one of the values `prod`, `canary`,
+or `test`) and `version` (which can have one of the values `v1`, `v2`,
+or `v3`).  Now let's say that there is a `RouteConfiguration` with one
+route that should be selected via the parameter `env=prod` and another
+route that should be selected via the parameter `version=v1`. Without
+this design, the server would need to actually provide the cross-product
+of these parameter values, so there will be 9 different variants of the
+resource, even though there are only 4 unique contents for the resource.
+However, this design instead allows the server to provide only the 4
+unique variants of the resource, with constraints allowing each client
+to get the appropriate one:
 
 <table>
   <tr>
-    <th>Dynamic Parameters on Resource</th>
+    <th>Dynamic Parameter Constraints on Resource</th>
     <th>Resource Contents</th>
   </tr>
 
   <tr>
     <td>
-      <ul>
-      <li><code>{env=canary,version=v2}</code>
-      <li><code>{env=test,version=v2}</code>
-      <li><code>{env=canary,version=v3}</code>
-      <li><code>{env=test,version=v3}</code>
-      </ul>
+<code>{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod" invert:true},
+      {key:"version" value:"v1" invert:true}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}</code>
     </td>
     <td>
       <ul>
@@ -656,10 +569,15 @@ will be 9 different variants of the resource, even though there are only
 
   <tr>
     <td>
-      <ul>
-      <li><code>{env=prod,version=v2}</code>
-      <li><code>{env=prod,version=v3}</code>
-      </ul>
+<code>{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" value:"v1" invert:true}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}</code>
     </td>
     <td>
       <ul>
@@ -671,10 +589,15 @@ will be 9 different variants of the resource, even though there are only
 
   <tr>
     <td>
-      <ul>
-      <li><code>{env=canary,version=v1}</code>
-      <li><code>{env=test,version=v1}</code>
-      </ul>
+<code>{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod" invert:true},
+      {key:"version" value:"v1"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}</code>
     </td>
     <td>
       <ul>
@@ -686,9 +609,15 @@ will be 9 different variants of the resource, even though there are only
 
   <tr>
     <td>
-      <ul>
-      <li><code>{env=prod,version=v1}</code>
-      </ul>
+<code>{constraints:[
+  {
+    constraints:[
+      {key:"env" value:"prod"},
+      {key:"version" value:"v1"}
+    ]
+    match_type: MATCH_TYPE_AND
+  }
+]}</code>
     </td>
     <td>
       <ul>
@@ -712,6 +641,28 @@ some down-sides:
   the dynamic resource selection mechanism.  (The mechanism described in
   this doc is completely independent of the new xDS naming scheme; it can
   be used with the legacy xDS naming scheme as well.)
+
+We could avoid much of the matching ambiguity described above by saying that
+a set of constraints must specify all keys present in the subscription
+request in order to match.  However, this would mean that if the client
+starts subscribing with a new key before the corresponding constraint is
+added on the resources on the server, then it will fail to match the
+existing resources.  In other words, the process would be:
+
+1. Add a variant of all resources on the server side with a constraint
+   for `version=v1` (in addition to all existing constraints).
+2. Change clients to start sending the new key.
+3. When all clients are updated, remove the resource variants that do
+   *not* have the new key.
+
+This will effectively require adding new keys on the server side first,
+which seems like a large burden on users.  It also seems fairly tricky
+for most users to get the exactly correct set of dynamic parameters on
+each resource variant, and if they fail to do it right, they will break
+their existing configuration.
+
+Ultimately, although this approach is more semantically precise, it is
+also considered too rigid and difficult for users to work with.
 
 ## Implementation
 
