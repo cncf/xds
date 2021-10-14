@@ -631,6 +631,23 @@ to get the appropriate one:
 
 ## Rationale
 
+This section documents limitations and design alternatives that we
+considered.
+
+### Limitation on Enhancing Matching in the Future
+
+One limitation of this design is that, because all xDS transport protocol
+implementations (clients, servers, and caching proxies) need to implement
+this matching behavior, it will be very difficult to add new matching
+behavior in the future.  Doing so will probably require some sort of
+client capability.
+
+Because of this, reviewers of this design are encouraged to carefully
+scrutinize the proposed matching semantics to ensure that they meet our
+expected needs.
+
+### Using Context Parameters
+
 We considered extending the context parameter mechanism from [xRFC
 TP1](TP1-xds-transport-next.md) to support flexible matching semantics,
 rather that its current exact-match semantics.  However, that approach had
@@ -641,6 +658,8 @@ some down-sides:
   the dynamic resource selection mechanism.  (The mechanism described in
   this doc is completely independent of the new xDS naming scheme; it can
   be used with the legacy xDS naming scheme as well.)
+
+### Stricter Matching to Avoid Ambiguity
 
 We could avoid much of the matching ambiguity described above by saying that
 a set of constraints must specify all keys present in the subscription
