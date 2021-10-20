@@ -130,6 +130,14 @@ request.  The client will use the dynamic parameter constraints on the
 returned resource to determine which of its subscriptions the resource is
 associated with.
 
+Dynamic parameters, unlike context parameters, will not be
+exact-match-only.  Dynamic parameter constraints will be able to represent
+certain simple types of flexible matching, such as matching an exact
+value or the existance of a key, and simple AND and OR combinations
+of constraints.  This flexible matching semantic means that there may be
+ambiguities when determining which resources match which subscriptions,
+which are discussed below.
+
 #### Constraints Representation
 
 Dynamic parameter constraints will be represented in protobuf form as follows:
@@ -177,15 +185,27 @@ message DynamicParameterConstraints {
 }
 ```
 
-#### Matching Behavior
+#### Where Matching Is Performed
 
-Note that both xDS servers and clients need to evaluate matching between
-a set of dynamic parameters and a set of constraints.  The server does
-this when deciding which variant of a given resource to return for a
-given subscription request.  When the client receives the resource from
+Both xDS servers and clients need to evaluate matching between a set
+of dynamic parameters and a set of constraints.  The server does this
+when deciding which variant of a given resource to return for a given
+subscription request.  When the client receives the resource from
 the server, it needs to do the same matching to determine which of its
 subscriptions that resource is associated with.  Therefore, the matching
 behavior becomes an inherent part of the xDS transport protocol.
+
+Note that because leaf clients should only ever receive a single variant
+of a given resource, implementations may be tempted to not bother with
+this matching on the client side.  However, that is not true for caching
+xDS proxies; a proxy may have multiple clients that request different
+variants of the same resource.  Because we do not want to get into a
+situation where xDS servers typically do not populate dynamic parameter
+constraints in their responses and then need changes to work with
+caching proxies, this design requires that leaf clients validate that the
+constraints in the response match the requested dynamic parameters.
+This ensures that the wire protocol used by leaf clients and caching xDS
+proxies remains the same.
 
 (In effect, the resource cache in an xDS client is basically the same
 logic as that on an xDS server; the only difference is that in the case
@@ -194,14 +214,16 @@ of from an authoritative database.  Similarly, a caching xDS proxy is
 simply an xDS client where the subscriptions come from an incoming xDS
 stream.)
 
-For example, let's say that the clients are currently categorized by the
-parameter `env`, whose value is either `prod` or `test`.  So any given
-client will send one of the following sets of dynamic parameters:
+#### Example: Basic Dynamic Parameters Usage
+
+Let's say that the clients are currently categorized by the parameter
+`env`, whose value is either `prod` or `test`.  So any given client will
+send one of the following sets of dynamic parameters:
 - `{env=prod}`
 - `{env=test}`
 
-The resource variants on the server will have the following sets of dynamic
-parameter constraints:
+Now let's say that the server has two variants of a given resource, and
+the variants have the following dynamic parameter constraints:
 
 ```textproto
 // For {env=prod}
@@ -221,31 +243,66 @@ parameter constraints:
 ]}
 ```
 
-#### Matching Ambiguity
+When a client subscribes to this resource with dynamic parameters
+`{env=prod}`, the server will return the first variant; when a client
+subscribes to this resource with dynamic parameters `{env=test}`, the
+server will return the second variant.  When the client receives the
+returned resource, it will verify that the dynamic parameters it sent
+match the constraints of the returned resource.
 
-Dynamic parameters, unlike context parameters, will not be
-exact-match-only.  Dynamic parameter constraints will be able to represent
-certain simple types of flexible matching, such as matching an exact
-value or the existance of a key, and simple AND and OR combinations
-of constraints.  This flexible matching semantic means that there may be
-ambiguities when determining which resources match which subscriptions.
-This section defines the matching behavior and a set of best practices for
-deployments to follow to avoid this kind of ambiguity.
+#### Unconstrained Parameters
 
-To illustrate where this comes up in practice, it is useful to consider
-what happens in transition scenarios, where a deployment initially
+Note that clients may send dynamic parameters that are not specified in
+the constraints on the resulting resource.  If a set of constraints does
+not specify any constraint for a given parameter sent by the client, that
+parameter does not prevent the constraints from matching.  This allows
+clients to add new parameters before a server begins using them.
+(In general, we expect clients to send a lot of keys that may not
+actually be used by the server, since deployments often divide their
+clients into categories before they have a need to differentiate the
+configs for those categories.)
+
+Continuing the example above, if the server wanted to sent the same
+contents for a given resource to both `{env=prod}` and `{env=test}` clients,
+it would have only a single variant of that resource, and that variant would
+not have any constraints.  The server would therefore send that variant to
+all clients, and the clients would consider it a match for the constraints
+that they subscribed with.
+
+#### Example: Transition Scenarios
+
+Consider what happens in transition scenarios, where a deployment initially
 groups its clients on a single key but then wants to add a second key.
 The second key needs to be added both in the constraints on the server
 side and in the clients' configurations, but those two changes cannot
 occur atomically.
 
-Consider the above example where the clients are already divided into
+Let's start with the above example where the clients are already divided into
 `env=prod` and `env=test`.  Let's say that now the deployment wants to add
 an additional key called `version`, whose value will be either `v1` or `v2`,
 so that it can further subdivide its clients' configs.
 
-If the new key is added on the server side first, then the server will
-have resource variants with constraints like this:
+The first step is to add the new key on the clients first, so that any
+given client will send one of the following sets of dynamic parameters:
+- `{env=prod, version=v1}`
+- `{env=prod, version=v2}`
+- `{env=test, version=v1}`
+- `{env=test, version=v2}`
+
+At this point, the server still does not have a variant of any resource
+that has constraints for the `version` key; it has only variants that
+differentiate between `env=prod` and `env=test`.  But the addition of
+the new key on the clients will not affect which resource variant is
+sent to each client, because it does not affect the matching.  Clients
+sending `{env=prod, version=v1}` or `{env=prod, version=v2}` will both get
+the resource variant for `env=prod`, and clients sending
+`{env=test, version=v1}` or `{env=test, version=v2}` will both get the
+resource variant for `env=test`.
+
+Once the clients have all been updated to send the new key, then the
+server can be updated to have different resource variants based on the
+`version` key.  For example, it may replace the single resource variant
+for `env=prod` with the following two variants:
 
 ```textproto
 // For {env=prod, version=v1}
@@ -271,40 +328,30 @@ have resource variants with constraints like this:
 ]}
 ```
 
-But at this point, the clients are continuing to subscribe without
-specifying this new key.  So the server or cache would not have any way
-to know which of the above variants to use for a subscription specifying
-`{env=prod}` but not specifying `version`.
+Once that change happens on the server, the clients will start getting
+the correct variant of the resource based on their `version` key.
 
-Conversely, if the new key is added on the clients first, then the clients
-will start subscribing with dynamic parameters like the following:
-- `{env=prod, version=v1}`
-- `{env=prod, version=v2}`
-- `{env=test, version=v1}`
-- `{env=test, version=v2}`
+#### Matching Ambiguity
 
-The server or cache has to match those sets of dynamic parameters against
-the existing sets of dynamic parameter constraints, which do not specify the
-`version` key at all.
-
-We address this transition scenario by allowing a set of constraints
-to match a set of dynamic parameters that includes a key that is not
-specified by the constraints.  This allows new keys to be added on
-clients before the corresponding constraints are added on the resources,
-which we expect to be the common case.  (In general, we expect clients
-to send a lot of keys that may not actually be used by the server, since
-deployments often divide their clients into categories before they have
-a need to differentiate the configs for those categories.)
-
-As mentioned above, this approach does introduce the possibility of
+As mentioned above, this design does introduce the possibility of
 matching ambiguity in certain cases, where there may be more than one
 variant of a resource that matches the dynamic parameters specified by
-the client.  If an xDS transport protocol implementation does encounter
-multiple possible matching variants of a resource, its behavior is
-undefined.  In the following sections, we evaluate the cases where that
-can occur and specify how each one will be addressed.
+the client.
+
+If an xDS transport protocol implementation does encounter multiple
+possible matching variants of a resource, its behavior is undefined.
+In the following sections, we evaluate the cases where that can occur
+and specify how each one will be addressed.
 
 ##### Adding a New Key on the Server First
+
+Consider what would happen in the above transition scenario if we changed
+the server to have multiple variants of a resource differentiated by
+the new `version` key before all of the clients were upgraded to use
+that key.  For clients sending `{env=prod}`, there would be two possible
+matching variants of the resource, one for `version=v1` and another for
+`version=v2`, and there would be no way to determine which variant to
+use for that client.
 
 As stated above, we are optimizing for the case where new keys are added
 on clients first, since that is expected to be the common scenario.
@@ -312,19 +359,18 @@ However, there may be cases where it is not feasible to have all clients
 start sending a new key before the server needs to start making use of
 that key.
 
-For example, let's consider the same case as above, where the clients
-are initially sending only the `env` key, and the server now wants to
-introduce the `version` key.  However, let's say that this is in an
-environment where the xDS server is controlled by one team and the clients
-are controlled by various other teams, so it's not feasible to force all
-clients to start sending the new `version` key all at once.  But there
-is one particular client team that is eager to start using the new
-`version` key to differentiate the configs of their clients, and they
-don't want to wait for all of the other client teams to start sending
-the new key.
+For example, let's say that this transition scenario is occurring in
+an environment where the xDS server is controlled by one team and the
+clients are controlled by various other teams, so it's not feasible to
+force all clients to start sending the new `version` key all at once.
+But there is one particular client team that is eager to start using
+the new `version` key to differentiate the configs of their clients,
+and they don't want to wait for all of the other client teams to start
+sending the new key.
 
 Consider what happens if the server simply adds a variant of the
-resource with the new key:
+resource with the new key, while leaving the original resource variant
+in place:
 
 ```textproto
 // Existing variant for older clients that are not yet sending the
@@ -356,12 +402,13 @@ variant's constraints.  However, newer clients that are sending dynamic
 parameters `{env=prod, version=v1}` will run into ambiguity: those
 parameters can match either of the above variants of the resource.
 
-This situation will be avoided by requiring that **all variants of a
-given resource must specify constraints for the same set of keys**.
+This situation will be avoided via a best practice that all authoritative
+xDS servers should have **all variants of a given resource specify
+constraints for the same set of keys**.
 
-However, in order to make this work for the case where the server starts
-sending the constraint on the new key before all clients are sending it,
-we provide the `exists` matcher, which will allow the server to specify
+In order to make this work for the case where the server starts sending
+the constraint on the new key before all clients are sending it, we
+provide the `exists` matcher, which will allow the server to specify
 a default explicitly for clients that are not yet sending a new key.
 In this example, the server would actually have the following two
 variants:
@@ -431,10 +478,10 @@ Now consider what happens if a client subscribes with dynamic parameters
 `{env=test}`.  Those dynamic parameters can match either of the above
 variants of the resource.
 
-This situation will be avoided by requiring that **all variants of a given
-resource must specify non-overlapping constraints for the same set of keys**.
-Control planes must not accept a set of resources that violates this
-requirement.
+This situation will be avoided via a best practice that all authoritative
+xDS servers should have **all variants of a given resource specify
+non-overlapping constraints for the same set of keys**.  Control planes
+must not accept a set of resources that violates this requirement.
 
 #### Matching Behavior and Best Practices
 
@@ -508,7 +555,29 @@ server to return the dynamic parameters associated with each resource:
   DynamicParameterConstraints dynamic_parameter_constraints = 8;
 ```
 
-### Migrating From Node Metadata
+### Client Configuration
+
+Client configuration is outside of the scope of this design.  However,
+this section lists some considerations for client implementors to take
+into account.
+
+#### Configuring Dynamic Parameters
+
+Each leaf client should have a way of configuring the dynamic parameters
+that it sends.
+
+For old-style resource names (those not using the new `xdstp` URI
+scheme from [xRFC TP1](TP1-xds-transport-next.md)), clients should
+send the same set of dynamic parameters for all resource subscriptions.
+The client's configuration should allow setting these default dynamic
+parameters globally.
+
+For new-style resource names, clients should send the same set of
+dynamic parameters for all resource subscriptions in a given authority.
+The client's configuration should allow setting the dymamic parameters to
+use for each authority.
+
+#### Migrating From Node Metadata
 
 Today, the equivalent of dynamic parameter constraints is node metadata,
 which can be used by servers to determine the set of resources to send
@@ -516,9 +585,7 @@ for LDS and CDS wildcard subscriptions or to determine the contents of
 other resources (e.g., to select individual routes to be included in an
 RDS resource).  For transition purposes, this mechanism can continue
 to be supported by the client performing direct translation of node
-metadata to exact-match constraints.  For example, if the node metadata
-contains the entry `env=prod`, this would be translated to a constraint
-`{key_constraints:[{key:"env" value:{constraints:[{value:"prod"}]}}]}`.
+metadata to dynamic parameters.
 
 Any given xDS client may support either or both of these mechanisms.
 
