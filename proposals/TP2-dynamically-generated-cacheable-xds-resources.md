@@ -87,17 +87,12 @@ observation that resource names are used in two places:
   example, a `RouteConfiguration` refers to individual `Cluster` resources
   by name.
 
-The use-cases for dynamic resource selection share one important property
-that we can take advantage of.  When multiple variants of a given resource
-exist, any given client will only ever use one of those variants at a
-given time.  That means that the parameters that affect which variant
-of the resource is used are required by the transport protocol, but
-they are not required by the client's data model.  (For example, in the
-"sharding endpoints for scalability" use-case, different clients may see
-different variants of the EDS resource, but once a given client has the
-right variant, it will be unique on that client, which means that the
-CDS resource does not need to refer to different EDS resource names on
-a different client.)
+The use-cases that we're aware of for dynamic resource selection have
+an important property that we can take advantage of.  When multiple
+variants of a given resource exist, any given client will only ever use
+one of those variants at a given time.  That means that the parameters
+that affect which variant of the resource is used are required by the
+transport protocol, but they are not required by the client's data model.
 
 It should be noted that caching xDS proxies, unlike "leaf" clients, will
 need to track multiple variants of each resource, since a given caching
