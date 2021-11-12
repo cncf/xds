@@ -125,21 +125,15 @@ message Matcher {
   }
 
   oneof matcher_type {
-    option (validate.required) = true;
-
     // A linear list of matchers to evaluate.
     MatcherList matcher_list = 1;
 
     // A match tree to evaluate.
     MatcherTree matcher_tree = 2;
-
-    // The match to return for all inputs. Setting this effectively short circuits matching and will always return the specified OnMatch.
-    OnMatch always_match = 3;
   }
 
-  // Optional OnMatch to use if the matcher failed.
-  // If specified, the OnMatch is used, and the matcher is considered
-  // to have matched.
-  // If not specified, the matcher is considered not to have matched.
+  // Optional OnMatch to use if no matcher above matched (e.g., if there are no matchers specified
+  // above, or if none of the matches specified above succeeded).
+  // If no matcher above matched and this field is not populated, the match will be considered unsuccessful.
   OnMatch on_no_match = 3;
 }
