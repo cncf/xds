@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
+import "google/protobuf/any.proto";
+
 import "validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
@@ -33,11 +35,22 @@ message RegexMatcher {
   // program size exceeds the warn level threshold.
   message GoogleRE2 {}
 
+  message RegexEngine {
+    // The name of the engine.
+    string name = 1 [(validate.rules).string = {min_bytes: 1}];
+
+    // The typed config for the engine.
+    google.protobuf.Any typed_config = 2 [(validate.rules).any = {required: true}];
+  }
+
   oneof engine_type {
     option (validate.required) = true;
 
     // Google's RE2 regex engine.
-    GoogleRE2 google_re2 = 1 [ (validate.rules).message = {required : true} ];
+    GoogleRE2 google_re2 = 1;
+
+    // Typed regex engine.
+    RegexEngine engine = 3;
   }
 
   // The regex match string. The string must be supported by the configured
