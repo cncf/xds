@@ -4,6 +4,7 @@ package xds.type.matcher.v3;
 
 import "xds/annotations/v3/status.proto";
 import "xds/core/v3/extension.proto";
+import "xds/type/matcher/v3/regex.proto";
 import "xds/type/matcher/v3/string.proto";
 
 import "validate/validate.proto";
@@ -105,6 +106,15 @@ message Matcher {
       map<string, OnMatch> map = 1 [(validate.rules).map = {min_pairs: 1}];
     }
 
+    // A map of regex matchers.
+    message RegexMatchMap {
+      // The regex engine used for the map.
+      type.matcher.v3.RegexMatcher.RegexEngine engine = 1
+          [(validate.rules).message = {required: true}];
+
+      map<string, OnMatch> map = 2 [(validate.rules).map = {min_pairs: 1}];
+    }
+
     // Protocol-specific specification of input field to match on.
     core.v3.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
 
@@ -118,6 +128,8 @@ message Matcher {
 
       // Longest matching prefix wins.
       MatchMap prefix_match_map = 3;
+
+      RegexMatchMap regex_match_map = 5;
 
       // Extension for custom matching logic.
       core.v3.TypedExtensionConfig custom_match = 4;
