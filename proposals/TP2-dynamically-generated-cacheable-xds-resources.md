@@ -121,7 +121,8 @@ part of the resource graph.
 When a client subscribes to a resource, it specifies a set of dynamic
 parameters.  In response, the server will send a resource whose dynamic
 parameter constraints match the dynamic parameters in the subscription
-request.  The client will use the dynamic parameter constraints on the
+request.  A client that subscribes to multiple variants of a resource (such
+as a caching xDS proxy) will use the dynamic parameter constraints on the
 returned resource to determine which of its subscriptions the resource is
 associated with.
 
@@ -180,34 +181,139 @@ message DynamicParameterConstraints {
 }
 ```
 
-#### Where Matching Is Performed
+#### Background: xDS Client and Server Architecture
 
-Both xDS servers and clients need to evaluate matching between a set
-of dynamic parameters and a set of constraints.  The server does this
-when deciding which variant of a given resource to return for a given
-subscription request.  When the client receives the resource from
-the server, it needs to do the same matching to determine which of its
-subscriptions that resource is associated with.  Therefore, the matching
-behavior becomes an inherent part of the xDS transport protocol.
+Before discussing where dynamic parameter matching is performed, it is
+useful to provide some additional background on xDS client and server
+architecture, independent of this design.
 
-Note that because leaf clients should only ever receive a single variant
-of a given resource, implementations may be tempted to not bother with
-this matching on the client side.  However, that is not true for caching
-xDS proxies; a proxy may have multiple clients that request different
-variants of the same resource.  Because we do not want to get into a
-situation where xDS servers typically do not populate dynamic parameter
-constraints in their responses and then need changes to work with
-caching proxies, this design requires that leaf clients validate that the
-constraints in the response match the requested dynamic parameters.
-This ensures that the wire protocol used by leaf clients and caching xDS
-proxies remains the same.
+The xDS transport protocol is fundamentally a mechanism that matches up
+subscriptions provided by a client with resources provided by a server.
+The client controls what it is subscribing to at any given time,
+and the server must send the resources from its database that match the
+currently active subscriptions.
 
-(In effect, the resource cache in an xDS client is basically the same
-logic as that on an xDS server; the only difference is that in the case
-of a client, the resources in the cache come from an xDS stream instead
-of from an authoritative database.  Similarly, a caching xDS proxy is
-simply an xDS client where the subscriptions come from an incoming xDS
-stream.)
+An xDS server may be thought of as containing a database of resources,
+in which each resource has an associated list of clients that are currently
+subscribed to that resource.  Whenever a client subscribes to a resource,
+the server will send the current version of that resource to the client,
+and it will add the client to the list of clients currently subscribed to
+that resource.  Whenever the server receives a new version of that resource
+in its database, it will send the update to all clients that are currently
+subscribed to that resource.  Whenever a client unsubscribes from a
+resource, it is removed from the list of clients subscribed to that
+resource, so that the server knows not to send it subsequent updates for
+that resource.
+
+This same paradigm of matching up subscriptions with resources actually
+applies to the xDS client as well.  Because the xDS transport protocol
+does not require a server to resend a resource unless its contents have
+changed, clients need to cache the most recently seen value locally in
+case they need it again.  In general, the best way to structure an xDS
+transport protocol client is as an API where the caller can start or
+stop subscribing to a given resource at any time, and the xDS client will
+handle the wire-level communication and cache the resources returned by
+the server.  The cache in the xDS client functions very similarly to the
+database in an xDS server: each cache entry contains the current value
+of the resource received from the xDS server and a list of subscribers to
+that resource.  When the xDS client sees the first subscription start for
+a given resource, it will create the cache entry for that resource, add
+the subscriber to the list of subscribers for that resource, and request
+that resource from the xDS server.  When it receives the resource from
+the server, it will store the resource in the cache entry and deliver
+it to all subscribers.  When the xDS client sees a second subscription
+start for the same resource, it will add the new subscriber to the list
+of subscribers for that resource and immediately deliver the cached value
+of the resource to the new subscriber.  Whenever the server sends an
+updated version of the resource, the xDS client will deliver the update
+to all subscribers.  When all subscriptions are stopped, the xDS client
+will unsubscribe from the resource on the wire, so that the xDS server
+knows to stop sending updates for that resource to the client.
+
+In effect, the logic in an xDS client is essentially the same as that in an
+xDS server, with only two differences.  First, subscriptions come from local
+API callers instead of downstream RPC clients.  And second, the database does
+not contain the authoritative source of the resource contents but rather cached
+values obtained from the server, and the database entries are removed when
+the last subscription for a given resource is stopped.
+
+The logic in a caching xDS proxy is also essentially the same as that in an xDS
+server, with only one difference.  Just like an xDS client, the database
+does not contain the authoritative source of the resource contents but
+rather cached values obtained from the server.  However, like an xDS
+server, subscriptions do come from downstream RPC clients rather than local
+API callers.
+
+The following table summarizes this structure:
+
+<table>
+
+  <tr>
+    <th>xDS Node Type</th>
+    <th>Source of Subscriptions</th>
+    <th>Source of Resource Contents</th>
+  </tr>
+
+  <tr>
+    <td>xDS Server</td>
+    <td>downstream xDS clients</td>
+    <td>authoritative data</td>
+  </tr>
+
+  <tr>
+    <td>xDS Client</td>
+    <td>local API callers</td>
+    <td>cached data from upstream xDS server</td>
+  </tr>
+
+  <tr>
+    <td>xDS Caching Proxy</td>
+    <td>downstream xDS clients</td>
+    <td>cached data from upstream xDS server</td>
+  </tr>
+
+</table>
+
+#### Where Dynamic Parameter Matching is Performed
+
+Because of the architecture described above, evaluation of matching between
+a set of dynamic parameters and a set of constraints may need to be
+performed by both xDS servers and xDS clients.
+
+xDS servers that support multiple variants of a resource perform this
+matching when deciding which variant of a given resource to return for a
+given subscription request.  xDS servers that support multiple variants of
+a resource MUST send the dynamic parameter constraints associated with a
+resource variant to the client along with that variant.  Any server
+implementation that fails to do so is in violation of this specification.
+
+xDS caching proxies that support multiple variants of a resource also
+perform this matching when deciding which variant of a given resource to
+return for a given subscription request.  Caching proxies MUST store the
+dynamic parameter constraints obtained from the upstream server along with
+each resource variant, which they will use when deciding which variant of a
+given resource to return for a given subscription request from a downstream
+xDS client.  Caching proxies MUST send those dynamic parameter constraints to
+the downstream client when sending that variant of the resource.
+
+Note this design assumes that a given leaf client will use a fixed set of
+dynamic parameters, typically configured in a local bootstrap file, for all
+subscriptions over its lifetime.  Given that, it is not strictly necessary
+for a leaf client to perform this matching, since it should only ever
+receive a single variant of a given resource, which should always match the
+dynamic parameters it subscribed with.  However, clients MAY perform this
+matching, which may be useful in cases where the same cache implementation
+is used on both a leaf client and a caching proxy.
+
+It is important to note that the dynamic parameter matching behavior becomes
+an inherent part of the xDS transport protocol.  xDS servers that interact
+only with leaf clients may be tempted not to send dynamic parameter
+constraints to the client along with the chosen resource variant, and
+leaf clients may accept that.  However, as soon as that server wants to
+start interacting with a caching proxy or a client that does verify the
+constraints, it will run into problems.  xDS server implementors are
+strongly encouraged not to omit the dynamic parameter constraints in their
+responses.
 
 #### Example: Basic Dynamic Parameters Usage
 
@@ -257,7 +363,7 @@ actually be used by the server, since deployments often divide their
 clients into categories before they have a need to differentiate the
 configs for those categories.)
 
-Continuing the example above, if the server wanted to sent the same
+Continuing the example above, if the server wanted to send the same
 contents for a given resource to both `{env=prod}` and `{env=test}` clients,
 it would have only a single variant of that resource, and that variant would
 not have any constraints.  The server would therefore send that variant to
@@ -277,8 +383,8 @@ Let's start with the above example where the clients are already divided into
 an additional key called `version`, whose value will be either `v1` or `v2`,
 so that it can further subdivide its clients' configs.
 
-The first step is to add the new key on the clients first, so that any
-given client will send one of the following sets of dynamic parameters:
+The first step is to add the new key on the clients, so that any given client
+will send one of the following sets of dynamic parameters:
 - `{env=prod, version=v1}`
 - `{env=prod, version=v2}`
 - `{env=test, version=v1}`
@@ -325,6 +431,14 @@ for `env=prod` with the following two variants:
 
 Once that change happens on the server, the clients will start getting
 the correct variant of the resource based on their `version` key.
+
+Note that in order to avoid causing matching ambiguity, the server must
+handle this kind of change by sending the deletion of the original resource
+variant and the creation of the replacement resource variants in a
+single xDS response.  This will allow the client to atomically apply the
+change to its database.  For any given subscriber, the client should
+present the change as if there was only one variant of the resource and
+that variant had just been updated.
 
 #### Matching Ambiguity
 
@@ -584,11 +698,89 @@ metadata to dynamic parameters.
 
 Any given xDS client may support either or both of these mechanisms.
 
+### Considerations for Implementations
+
+This specification does not prescribe implementation details for xDS
+clients or servers.  However, for illustration purposes, this section
+describes how a naive implementation might be structured.
+
+The database of an xDS server or cache of an xDS client can be thought
+of as a map, keyed by resource type and resource name.  Prior to this
+specification, the value of the map would have been the current value of the
+resource and a list of subscribers that need to be updated when the
+resource changes.  In C++ syntax, the data structure might look like this:
+
+```c++
+// Represents a subscriber (either a downstream xDS client or a local API caller).
+class Subscriber {
+ public:
+  // ...
+};
+
+struct DatabaseEntry {
+  // Current contents of resource.
+  // Whenever this changes, the change will be sent to all subscribers.
+  std::optional<google::protobuf::Any> resource_contents;
+
+  // Current list of subscribers.
+  // Entries are added and removed as subscriptions are started and stopped.
+  std::set<Subscriber*> subscribers;
+};
+
+using Database =
+    std::map<std::string /*resource_type*/,
+             std::map<std::string /*resource_name*/, DatabaseEntry>;
+```
+
+This design does not change the key structure of the map, but it does
+change the structure of the value of the map.  In particular, instead of
+storing a single value for the resource contents, it will need to store
+multiple values, keyed by the associated dynamic parameter constraints.
+And for each subscriber, it will need to store the dynamic parameters that
+the subscriber specified.  In a naive implementation (not optimized at all),
+the modified data structure may look like this:
+
+```c++
+// Represents a subscriber (either a downstream xDS client or a local API caller).
+class Subscriber {
+ public:
+  // ...
+
+  // Returns the dynamic parameters specified for the subscription.
+  DynamicParameters dynamic_parameters() const;
+};
+
+struct DatabaseEntry {
+  // Resource contents for each variant of the resource, keyed by
+  // dynamic parameter constraints.
+  // Whenever a given variant of the resource changes, the change will be
+  // sent to all subscribers whose dynamic parameters match the constraints
+  // of the resource variant that changed.
+  std::map<DynamicParameterConstraints,
+           std::optional<google::protobuf::Any>> resource_contents;
+
+  // Current list of subscribers.
+  // Entries are added and removed as subscriptions are started and stopped.
+  std::set<Subscriber*> subscribers;
+};
+```
+
+When a variant of a resource is updated, the variant is stored in the map
+based on its dynamic parameter constraints.  The implementation will then
+iterate through the list of subscribers, sending the updated resource
+variant and its dynamic parameter constraints to each subscriber whose
+dynamic parameters match those constraints.
+
+A more optimized implementation may instead choose to store a separate list
+of subscribers for each resource variant, thus avoiding the need to perform
+matching for every subscriber upon every update of a resource variant.
+However, this would require moving subscribers from one variant to another
+whenever the dynamic parameters change on the resource variants.
+
 ### Example
 
 This section shows how the mechanism described in this proposal can be
-used to address each the use-case described in the "Background"
-section above.
+used to address the use-case described in the "Background" section above.
 
 Let's say that every client uses two different dynamic selection
 parameters, `env` (which can have one of the values `prod`, `canary`,
