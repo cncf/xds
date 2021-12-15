@@ -8,7 +8,9 @@ trigger:
 
 jobs:
 - job: CI
-  container: envoyproxy/envoy-build-ubuntu@sha256:f0b2453c3587e3297f5caf5e97fbf57c97592c96136209ec13fe2795aae2c896
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: envoyproxy/envoy-build-ubuntu@sha256:b4fe088084579339ae8f7a44af899bbebd86a290af56e5ab7cc85ca99a09499c
   steps:
   - task: CacheBeta@1
     inputs:
