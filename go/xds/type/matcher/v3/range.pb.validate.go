@@ -33,74 +33,6 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on Int64Range with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Int64Range) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Start
-
-	// no validation rules for End
-
-	return nil
-}
-
-// Int64RangeValidationError is the validation error returned by
-// Int64Range.Validate if the designated constraints aren't met.
-type Int64RangeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Int64RangeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Int64RangeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Int64RangeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Int64RangeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Int64RangeValidationError) ErrorName() string { return "Int64RangeValidationError" }
-
-// Error satisfies the builtin error interface
-func (e Int64RangeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sInt64Range.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Int64RangeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Int64RangeValidationError{}
-
 // Validate checks the field values on Int64RangeMatcher with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
@@ -109,20 +41,13 @@ func (m *Int64RangeMatcher) Validate() error {
 		return nil
 	}
 
-	if len(m.GetRanges()) < 1 {
-		return Int64RangeMatcherValidationError{
-			field:  "Ranges",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
-
-	for idx, item := range m.GetRanges() {
+	for idx, item := range m.GetRangeMatchers() {
 		_, _ = idx, item
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Int64RangeMatcherValidationError{
-					field:  fmt.Sprintf("Ranges[%v]", idx),
+					field:  fmt.Sprintf("RangeMatchers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -190,74 +115,6 @@ var _ interface {
 	ErrorName() string
 } = Int64RangeMatcherValidationError{}
 
-// Validate checks the field values on Int32Range with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Int32Range) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Start
-
-	// no validation rules for End
-
-	return nil
-}
-
-// Int32RangeValidationError is the validation error returned by
-// Int32Range.Validate if the designated constraints aren't met.
-type Int32RangeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e Int32RangeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e Int32RangeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e Int32RangeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e Int32RangeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e Int32RangeValidationError) ErrorName() string { return "Int32RangeValidationError" }
-
-// Error satisfies the builtin error interface
-func (e Int32RangeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sInt32Range.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = Int32RangeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = Int32RangeValidationError{}
-
 // Validate checks the field values on Int32RangeMatcher with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
@@ -266,20 +123,13 @@ func (m *Int32RangeMatcher) Validate() error {
 		return nil
 	}
 
-	if len(m.GetRanges()) < 1 {
-		return Int32RangeMatcherValidationError{
-			field:  "Ranges",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
-
-	for idx, item := range m.GetRanges() {
+	for idx, item := range m.GetRangeMatchers() {
 		_, _ = idx, item
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Int32RangeMatcherValidationError{
-					field:  fmt.Sprintf("Ranges[%v]", idx),
+					field:  fmt.Sprintf("RangeMatchers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -347,75 +197,6 @@ var _ interface {
 	ErrorName() string
 } = Int32RangeMatcherValidationError{}
 
-// Validate checks the field values on DoubleRange with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *DoubleRange) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Start
-
-	// no validation rules for End
-
-	return nil
-}
-
-// DoubleRangeValidationError is the validation error returned by
-// DoubleRange.Validate if the designated constraints aren't met.
-type DoubleRangeValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DoubleRangeValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DoubleRangeValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DoubleRangeValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DoubleRangeValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DoubleRangeValidationError) ErrorName() string { return "DoubleRangeValidationError" }
-
-// Error satisfies the builtin error interface
-func (e DoubleRangeValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDoubleRange.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DoubleRangeValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DoubleRangeValidationError{}
-
 // Validate checks the field values on DoubleRangeMatcher with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -424,20 +205,13 @@ func (m *DoubleRangeMatcher) Validate() error {
 		return nil
 	}
 
-	if len(m.GetRanges()) < 1 {
-		return DoubleRangeMatcherValidationError{
-			field:  "Ranges",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
-
-	for idx, item := range m.GetRanges() {
+	for idx, item := range m.GetRangeMatchers() {
 		_, _ = idx, item
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return DoubleRangeMatcherValidationError{
-					field:  fmt.Sprintf("Ranges[%v]", idx),
+					field:  fmt.Sprintf("RangeMatchers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -504,3 +278,303 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DoubleRangeMatcherValidationError{}
+
+// Validate checks the field values on Int64RangeMatcher_RangeMatcher with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Int64RangeMatcher_RangeMatcher) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetRanges()) < 1 {
+		return Int64RangeMatcher_RangeMatcherValidationError{
+			field:  "Ranges",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetRanges() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Int64RangeMatcher_RangeMatcherValidationError{
+					field:  fmt.Sprintf("Ranges[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if v, ok := interface{}(m.GetOnMatch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Int64RangeMatcher_RangeMatcherValidationError{
+				field:  "OnMatch",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// Int64RangeMatcher_RangeMatcherValidationError is the validation error
+// returned by Int64RangeMatcher_RangeMatcher.Validate if the designated
+// constraints aren't met.
+type Int64RangeMatcher_RangeMatcherValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Int64RangeMatcher_RangeMatcherValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Int64RangeMatcher_RangeMatcherValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Int64RangeMatcher_RangeMatcherValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Int64RangeMatcher_RangeMatcherValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Int64RangeMatcher_RangeMatcherValidationError) ErrorName() string {
+	return "Int64RangeMatcher_RangeMatcherValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Int64RangeMatcher_RangeMatcherValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInt64RangeMatcher_RangeMatcher.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Int64RangeMatcher_RangeMatcherValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Int64RangeMatcher_RangeMatcherValidationError{}
+
+// Validate checks the field values on Int32RangeMatcher_RangeMatcher with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Int32RangeMatcher_RangeMatcher) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetRanges()) < 1 {
+		return Int32RangeMatcher_RangeMatcherValidationError{
+			field:  "Ranges",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetRanges() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Int32RangeMatcher_RangeMatcherValidationError{
+					field:  fmt.Sprintf("Ranges[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if v, ok := interface{}(m.GetOnMatch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Int32RangeMatcher_RangeMatcherValidationError{
+				field:  "OnMatch",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// Int32RangeMatcher_RangeMatcherValidationError is the validation error
+// returned by Int32RangeMatcher_RangeMatcher.Validate if the designated
+// constraints aren't met.
+type Int32RangeMatcher_RangeMatcherValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Int32RangeMatcher_RangeMatcherValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Int32RangeMatcher_RangeMatcherValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Int32RangeMatcher_RangeMatcherValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Int32RangeMatcher_RangeMatcherValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Int32RangeMatcher_RangeMatcherValidationError) ErrorName() string {
+	return "Int32RangeMatcher_RangeMatcherValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Int32RangeMatcher_RangeMatcherValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInt32RangeMatcher_RangeMatcher.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Int32RangeMatcher_RangeMatcherValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Int32RangeMatcher_RangeMatcherValidationError{}
+
+// Validate checks the field values on DoubleRangeMatcher_RangeMatcher with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DoubleRangeMatcher_RangeMatcher) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetRanges()) < 1 {
+		return DoubleRangeMatcher_RangeMatcherValidationError{
+			field:  "Ranges",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetRanges() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DoubleRangeMatcher_RangeMatcherValidationError{
+					field:  fmt.Sprintf("Ranges[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if v, ok := interface{}(m.GetOnMatch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DoubleRangeMatcher_RangeMatcherValidationError{
+				field:  "OnMatch",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DoubleRangeMatcher_RangeMatcherValidationError is the validation error
+// returned by DoubleRangeMatcher_RangeMatcher.Validate if the designated
+// constraints aren't met.
+type DoubleRangeMatcher_RangeMatcherValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DoubleRangeMatcher_RangeMatcherValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DoubleRangeMatcher_RangeMatcherValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DoubleRangeMatcher_RangeMatcherValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DoubleRangeMatcher_RangeMatcherValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DoubleRangeMatcher_RangeMatcherValidationError) ErrorName() string {
+	return "DoubleRangeMatcher_RangeMatcherValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DoubleRangeMatcher_RangeMatcherValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDoubleRangeMatcher_RangeMatcher.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DoubleRangeMatcher_RangeMatcherValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DoubleRangeMatcher_RangeMatcherValidationError{}
