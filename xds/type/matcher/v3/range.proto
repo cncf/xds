@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package xds.type.matcher.v3;
+
+import "validate/validate.proto";
+
+option java_package = "com.github.xds.type.matcher.v3";
+option java_outer_classname = "RangeProto";
+option java_multiple_files = true;
+option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
+
+// [#protodoc-title: Range matcher]
+
+// Specifies the int64 start and end of the range using half-open interval
+// semantics [start, end).
+message Int64Range {
+  // start of the range (inclusive)
+  int64 start = 1;
+
+  // end of the range (exclusive)
+  int64 end = 2;
+}
+
+// Specifies a set of ranges for matching an int64 number.
+message Int64RangeMatcher {
+  repeated Int64Range ranges = 1 [(validate.rules).repeated = { min_items: 1 }];
+}
+
+// Specifies the int32 start and end of the range using half-open interval
+// semantics [start, end).
+message Int32Range {
+  // start of the range (inclusive)
+  int32 start = 1;
+
+  // end of the range (exclusive)
+  int32 end = 2;
+}
+
+// Specifies a set of ranges for matching an int32 number.
+message Int32RangeMatcher {
+  repeated Int32Range ranges = 1 [(validate.rules).repeated = { min_items: 1 }];
+}
+
+// Specifies the double start and end of the range using half-open interval
+// semantics [start, end).
+message DoubleRange {
+  // start of the range (inclusive)
+  double start = 1;
+
+  // end of the range (exclusive)
+  double end = 2;
+}
+
+// Specifies a set of ranges for matching a double number.
+message DoubleRangeMatcher {
+  repeated DoubleRange ranges = 1
+      [(validate.rules).repeated = { min_items: 1 }];
+}
