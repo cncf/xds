@@ -6,5 +6,6 @@ xds_proto_package(
   deps = [
     "//xds/annotations/v3:pkg",
     "//xds/core/v3:pkg",
+    "//xds/type/v3:pkg",
   ]
 )
