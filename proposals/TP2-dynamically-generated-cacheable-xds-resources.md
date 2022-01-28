@@ -654,14 +654,40 @@ Similarly, the following fields will be added to `DeltaDiscoveryRequest`:
   repeated ResourceLocator resource_locators_unsubscribe = 9;
 ```
 
+The following message will be added to represent the name of a specific
+variant of a resource:
+
+```proto
+// Specifies a concrete resource name.
+message ResourceName {
+  // The name of the resource.
+  string name = 1;
+
+  // Dynamic parameter constraints associated with this resource. To be used by
+  // client-side caches (including xDS proxies) when matching subscribed
+  // resource locators.
+  DynamicParameterConstraints dynamic_parameter_constraints = 2;
+}
+```
+
 The following field will be added to the `Resource` message, to allow the
 server to return the dynamic parameters associated with each resource:
 
 ```proto
-  // Dynamic parameter constraints associated with this resource. To be used
-  // by client-side caches (including xDS proxies) when matching subscribed
-  // resource locators.
-  DynamicParameterConstraints dynamic_parameter_constraints = 8;
+  // Alternative to the *name* field, to be used when the server supports
+  // multiple variants of the named resource that are differentiated by
+  // dynamic parameter constraints.
+  // Only one of *name* or *resource_name* may be set.
+  ResourceName resource_name = 8;
+```
+
+And finally, the following field will be added to `DeltaDiscoveryResponse`:
+
+```proto
+  // Alternative to removed_resources that allows specifying which variant of
+  // a resource is being removed. This variant must be used for any resource
+  // for which dynamic parameter constraints were sent to the client.
+  repeated ResourceName removed_resource_names = 8;
 ```
 
 ### Client Configuration
