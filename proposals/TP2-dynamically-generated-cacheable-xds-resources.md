@@ -3,7 +3,7 @@ TP2: Dynamically Generated Cacheable xDS Resources
 * Author(s): markdroth, htuch
 * Approver: htuch
 * Implemented in: <xDS client, ...>
-* Last updated: 2021-10-14
+* Last updated: 2022-02-09
 
 ## Abstract
 
@@ -109,10 +109,11 @@ data structures:
   client when subscribing to a resource.
 - **Dynamic parameter constraints**, which are a set of criteria that
   can be used to determine whether a set of dynamic parameters matches
-  the constraints.  These constraints are part of the cache key for an
-  xDS resource (in addition to the resource name itself) on xDS servers,
-  xDS clients, and xDS caching proxies.  This provides a mechanism to
-  represent multiple variants of a given resource in a cacheable way.
+  the constraints.  These constraints are considered part of the unique
+  identifier for an xDS resource (along with the resource name itself)
+  on xDS servers, xDS clients, and xDS caching proxies.  This provides a
+  mechanism to represent multiple variants of a given resource in a
+  cacheable way.
 
 Both of these data structures are used in the xDS transport protocol,
 but they are not part of the resource name and therefore do not appear as
