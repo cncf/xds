@@ -169,6 +169,9 @@ func (m *Matcher_OnMatch) Validate() error {
 			}
 		}
 
+	case *Matcher_OnMatch_ActionName:
+		// no validation rules for ActionName
+
 	default:
 		return Matcher_OnMatchValidationError{
 			field:  "OnMatch",

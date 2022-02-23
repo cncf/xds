@@ -37,6 +37,9 @@ message Matcher {
 
       // Protocol-specific action to take.
       core.v3.TypedExtensionConfig action = 2;
+
+      // Name of the action to take.
+      string action_name = 3;
     }
   }
 
