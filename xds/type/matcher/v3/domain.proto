@@ -19,33 +19,28 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 // Matches a fully qualified server name against a set of possibly overlapping
 // wildcard domain names.
 message ServerNameMatcher {
-  // Specifies an optional list of wildcard domains and a match action.
+  // Specifies an optional list of wildcard domains and a match action. The
+  // wildcard symbol ``*`` must appear at most once as the left-most part of
+  // the domain.
   //
   // The server name will be matched against all wildcard domains starting from
-  // the longest suffix, i.e. ``www.example.com`` will be first matched against
-  // ``www.example.com``, then ``*.example.com``, then ``*.com``. Note that
-  // partial wildcards are not supported, and values like ``*w.example.com``
-  // are invalid.
+  // the longest suffix, i.e. ``www.example.com`` input will be first matched
+  // against ``www.example.com``, then ``*.example.com``, then ``*.com``, then
+  // ``*``. For each wildcard, matching is performed in the order of the
+  // declaration. Note that partial wildcards are not supported, and values
+  // like ``*w.example.com`` are invalid.
   message DomainMatcher {
-    // A non-empty set of wildcard domain names, e.g. ``www.example.com`` or
-    // ``*.com``.
+    // A non-empty set of wildcard domain names, e.g. ``www.example.com``,
+    // ``*.com``, or ``*``.
     repeated string domains = 1 [ (validate.rules).repeated = {min_items : 1} ];
 
     // Match action to apply when the server name matches any of the wildcard
     // domain names.
     Matcher.OnMatch on_match = 2;
-
-    // Indicates whether this match option should be considered when there is a
-    // more specific match. Exclusive matches are not selected whenever a more
-    // specific matcher applies even when the more specific matcher fails to
-    // match its nested match conditions. For example, an exclusive matcher for
-    // ``*.com`` never matches ``www.example.com`` if there is a matcher for
-    // the domain ``*.example.com``. Matchers are selected in the order of
-    // their specificity first (longest common suffix), then the order of
-    // declaration second.
-    bool exclusive = 3;
   }
 
-  // Match a server name by multiple wildcard domain matchers.
+  // Match a server name by multiple wildcard domain matchers. If there are
+  // multiple wildcards matching the server name, the order of declaration is
+  // used to select the first match.
   repeated DomainMatcher domain_matchers = 1;
 }
