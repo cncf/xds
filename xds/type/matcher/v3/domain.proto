@@ -21,7 +21,7 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 message ServerNameMatcher {
   // Specifies an optional list of wildcard domains and a match action. The
   // wildcard symbol ``*`` must appear at most once as the left-most part of
-  // the domain.
+  // the domain. The wildcard does not match an empty string.
   //
   // The server name will be matched against all wildcard domains starting from
   // the longest suffix, i.e. ``www.example.com`` input will be first matched
