@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package xds.type.matcher.v3;
+
+import "xds/annotations/v3/status.proto";
+
+import "validate/validate.proto";
+
+option java_package = "com.github.xds.type.matcher.v3";
+option java_outer_classname = "HttpInputsProto";
+option java_multiple_files = true;
+option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
+
+option (xds.annotations.v3.file_status).work_in_progress = true;
+
+// [#not-implemented-hide:]
+
+// [#protodoc-title: Common HTTP Inputs]
+
+// Match input indicates that matching is done on the set of :ref:`HTTP attributes
+// <https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes>`.
+// The attributes will be exposed via Common Expression Language runtime to associated CEL matcher,
+// or via ``get_property`` ABI method to associated Wasm extension based matcher.
+message HttpCelMatchInput {
+  // [#next-free-field: 7]
+  message Attributes {
+    // Include ``request.*`` attributes.
+    bool request = 1;
+
+    // Include ``response.*`` attributes.
+    // Only available after the request completes.
+    bool response = 2;
+
+    // Include connection attributes: ``connection.*``, ``source.*``, ``destination.*``.
+    // Only available once the downstream connection is established.
+    bool connection = 3;
+
+    // Include ``upstream.*`` attributes.
+    // Only available once the upstream connection is established.
+    bool upstream = 4;
+
+    // Include the data exchanged between filters: `metadata`, `filter_state`.
+    bool metadata = 5;
+
+    // Include extra attributes are available to Wasm extensions.
+    bool wasm = 6;
+  }
+
+  // The attributes to be exposed to the matcher.
+  Attributes attributes = 1 [(validate.rules).message = {required: true}];
+}

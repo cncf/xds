@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package xds.type.matcher.v3;
+
+import "google/api/expr/v1alpha1/checked.proto";
+import "google/api/expr/v1alpha1/syntax.proto";
+
+import "xds/annotations/v3/status.proto";
+
+import "validate/validate.proto";
+
+option java_package = "com.github.xds.type.matcher.v3";
+option java_outer_classname = "CelProto";
+option java_multiple_files = true;
+option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
+
+option (xds.annotations.v3.file_status).work_in_progress = true;
+
+// [#not-implemented-hide:]
+
+// [#protodoc-title: Common Expression Language matcher]
+
+// Performs a match by evaluating a CEL expression against the standardized set of :ref:`HTTP
+// attributes <https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes>`
+// specified via HttpCelMatchInput.
+// The match is ``true``, iff the result of the evaluation is a bool AND true.
+// In all other cases, the match is ``false``, including but not limited to: non-bool types, false,
+// null, int(1), etc.
+message CelMatcher {
+  oneof expression_specifier {
+    option (validate.required) = true;
+
+    // CEL expression in a text form.
+    string cel_expression = 1;
+
+    // Parsed expression in abstract syntax tree (AST) form.
+    google.api.expr.v1alpha1.Expr cel_expression_parsed = 2
+        [(validate.rules).message = {required: true}];
+
+    // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
+    google.api.expr.v1alpha1.CheckedExpr cel_expression_type_checked = 3
+        [(validate.rules).message = {required: true}];
+  }
+}
