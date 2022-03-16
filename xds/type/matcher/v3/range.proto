@@ -27,9 +27,11 @@ message Int64RangeMatcher {
     Matcher.OnMatch on_match = 2;
   }
 
-  // Match a number by a list of number ranges. If multiple ranges contain the
-  // input number, then the first action in this list is taken.
-  repeated RangeMatcher range_matchers = 1;
+  // Match a number by a list of number ranges. If multiple range matchers
+  // contain the input number and match recursively, then the first matcher in
+  // this list is taken.
+  repeated RangeMatcher range_matchers = 1
+      [(validate.rules).repeated = { min_items: 1 }];
 }
 
 // Specifies a set of ranges for matching an int32 number and the associated
@@ -45,9 +47,11 @@ message Int32RangeMatcher {
     Matcher.OnMatch on_match = 2;
   }
 
-  // Match a number by a list of number ranges. If multiple ranges contain the
-  // input number, then the first action in this list is taken.
-  repeated RangeMatcher range_matchers = 1;
+  // Match a number by a list of number ranges. If multiple range matchers
+  // contain the input number and match recursively, then the first matcher in
+  // this list is taken.
+  repeated RangeMatcher range_matchers = 1
+      [(validate.rules).repeated = { min_items: 1 }];
 }
 
 // Specifies a set of ranges for matching a double number and the associated
@@ -63,7 +67,9 @@ message DoubleRangeMatcher {
     Matcher.OnMatch on_match = 2;
   }
 
-  // Match a number by a list of number ranges. If multiple ranges contain the
-  // input number, then the first action in this list is taken.
-  repeated RangeMatcher range_matchers = 1;
+  // Match a number by a list of number ranges. If multiple range matchers
+  // contain the input number and match recursively, then the first matcher in
+  // this list is taken.
+  repeated RangeMatcher range_matchers = 1
+      [(validate.rules).repeated = { min_items: 1 }];
 }
