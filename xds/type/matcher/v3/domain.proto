@@ -24,12 +24,12 @@ message ServerNameMatcher {
   // the domain on a dot border. The wildcard matches one or more non-empty
   // domain parts.
   message DomainMatcher {
-    // A non-empty set of domain names with wildcards, e.g.
+    // A non-empty set of domain names with optional wildcards, e.g.
     // ``www.example.com``, ``*.com``, or ``*``.
     repeated string domains = 1 [ (validate.rules).repeated = {min_items : 1} ];
 
-    // Match action to apply when the server name matches any of the wildcard
-    // domain names in the matcher.
+    // Match action to apply when the server name matches any of the domain
+    // names in the matcher.
     Matcher.OnMatch on_match = 2;
   }
 
@@ -40,7 +40,7 @@ message ServerNameMatcher {
   // the longest suffix, i.e. ``www.example.com`` input will be first matched
   // against ``www.example.com``, then ``*.example.com``, then ``*.com``, then
   // ``*``, until the associated matcher action accepts the input. Note that
-  // partial wildcards are not supported, and values like
-  // ``*w.example.com`` are invalid.
+  // wildcards must be on a dot border, and values like ``*w.example.com`` are
+  // invalid.
   repeated DomainMatcher domain_matchers = 1;
 }
