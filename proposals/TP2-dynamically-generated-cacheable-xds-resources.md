@@ -141,44 +141,37 @@ Dynamic parameter constraints will be represented in protobuf form as follows:
 
 ```proto
 message DynamicParameterConstraints {
-  // A list of constraints that may be combined with AND or OR semantics.
-  message ConstraintList {
-    // A constraint for a given key.
-    message Constraint {
-      message Exists {}
-      // The key to match against.
-      string key = 1;
-      // How to match.
-      oneof constraint_type {
-        // Matches this exact value.
-        string value = 2;
-        // Key is present (matches any value except for the key being absent).
-        Exists exists = 3;
-      }
-      // If set to true, the match is inverted -- i.e., the key must NOT
-      // match the specified value.
-      bool invert = 4;
+  // A single constraint for a given key.
+  message SingleConstraint {
+    message Exists {}
+    // The key to match against.
+    string key = 1;
+    // How to match.
+    oneof constraint_type {
+      // Matches this exact value.
+      string value = 2;
+      // Key is present (matches any value except for the key being absent).
+      Exists exists = 3;
     }
-
-    enum MatchType {
-      // Default value.
-      MATCH_TYPE_UNSPECIFIED = 0;
-      // Logical AND of constraints.
-      MATCH_TYPE_AND = 1;
-      // Logical OR of constraints.
-      MATCH_TYPE_OR = 2;
-    }
-
-    // A list of key/value constraints.
-    repeated Constraint constraints = 1;
-
-    // How to match the constraints.
-    MatchType match_type = 2;
   }
 
-  // A list of constraint lists. All constraint lists must match (i.e.,
-  // logical AND semantics).
-  repeated ConstraintList constraints = 1;
+  message ConstraintList {
+    repeated DynamicParameterConstraints constraints = 1;
+  }
+
+  oneof type {
+    // A single constraint to evaluate.
+    SingleConstraint constraint = 1;
+
+    // A list of constraints to be ORed together.
+    ConstraintList or_constraints = 2;
+
+    // A list of constraints to be ANDed together.
+    ConstraintList and_constraints = 3;
+
+    // The inverse (NOT) of a set of constraints.
+    DynamicParameterConstraints not_constraints = 4;
+  }
 }
 ```
 
@@ -329,20 +322,10 @@ the variants have the following dynamic parameter constraints:
 
 ```textproto
 // For {env=prod}
-{constraints:[
-  {
-    constraints:[{key:"env" value:"prod"}]
-    match_type: MATCH_TYPE_AND
-  }
-]}
+{constraint:{key:"env" value:"prod"}}
 
 // For {env=test}
-{constraints:[
-  {
-    constraints:[{key:"env" value:"test"}]
-    match_type: MATCH_TYPE_AND
-  }
-]}
+{constraint:{key:"env" value:"test"}}
 ```
 
 When a client subscribes to this resource with dynamic parameters
@@ -408,25 +391,15 @@ for `env=prod` with the following two variants:
 
 ```textproto
 // For {env=prod, version=v1}
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" value:"v1"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
+{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {constraint:{key:"version" value:"v1"}}
 ]}
 
 // For {env=prod, version=v2}
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" value:"v2"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
+{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {constraint:{key:"version" value:"v2"}}
 ]}
 ```
 
@@ -485,24 +458,12 @@ in place:
 ```textproto
 // Existing variant for older clients that are not yet sending the
 // version key.
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
-]}
+{constraint:{key:"env" value:"prod"}}
 
 // New variant intended for clients sending the version key.
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" value:"v1"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
+{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {constraint:{key:"version" value:"v1"}}
 ]}
 ```
 
@@ -526,25 +487,17 @@ variants:
 ```textproto
 // Existing variant for older clients that are not yet sending the
 // version key.
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" exists:{} invert:true}
-    ]
-    match_type: MATCH_TYPE_AND
+{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {not_constraint:
+    {constraint:{key:"version" exists:{}}}
   }
 ]}
 
 // New variant for clients sending the version key.
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" value:"v1"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
+{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {constraint:{key:"version" value:"v1"}}
 ]}
 ```
 
@@ -562,25 +515,15 @@ that a server has the following two variants of a resource:
 
 ```textproto
 // Matches {env=prod} or {env=test}.
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"env" value:"test"}
-    ]
-    match_type: MATCH_TYPE_OR
-  }
+{or_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {constraint:{key:"env" value:"test"}}
 ]}
 
 // Matches {env=qa} or {env=test}.
-{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"qa"},
-      {key:"env" value:"test"}
-    ]
-    match_type: MATCH_TYPE_OR
-  }
+{or_constraints:[
+  {constraint:{key:"env" value:"qa"}},
+  {constraint:{key:"env" value:"test"}}
 ]}
 ```
 
@@ -830,13 +773,12 @@ to get the appropriate one:
 
   <tr>
     <td>
-<code>{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod" invert:true},
-      {key:"version" value:"v1" invert:true}
-    ]
-    match_type: MATCH_TYPE_AND
+<code>{and_constraints:[
+  {not_constraints:
+    {constraint:{key:"env" value:"prod"}}
+  },
+  {not_constraints:
+    {constraint:{key:"version" value:"v1"}}
   }
 ]}</code>
     </td>
@@ -850,13 +792,10 @@ to get the appropriate one:
 
   <tr>
     <td>
-<code>{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" value:"v1" invert:true}
-    ]
-    match_type: MATCH_TYPE_AND
+<code>{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {not_constraints:
+    {constraint:{key:"version" value:"v1"}
   }
 ]}</code>
     </td>
@@ -870,14 +809,11 @@ to get the appropriate one:
 
   <tr>
     <td>
-<code>{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod" invert:true},
-      {key:"version" value:"v1"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
+<code>{and_constraints:[
+  {not_constraints:
+    {constraint:{key:"env" value:"prod"}}
+  },
+  {constraint:{key:"version" value:"v1"}}
 ]}</code>
     </td>
     <td>
@@ -890,14 +826,9 @@ to get the appropriate one:
 
   <tr>
     <td>
-<code>{constraints:[
-  {
-    constraints:[
-      {key:"env" value:"prod"},
-      {key:"version" value:"v1"}
-    ]
-    match_type: MATCH_TYPE_AND
-  }
+<code>{and_constraints:[
+  {constraint:{key:"env" value:"prod"}},
+  {constraint:{key:"version" value:"v1"}}
 ]}</code>
     </td>
     <td>
@@ -921,11 +852,30 @@ One limitation of this design is that, because all xDS transport protocol
 implementations (clients, servers, and caching proxies) need to implement
 this matching behavior, it will be very difficult to add new matching
 behavior in the future.  Doing so will probably require some sort of
-client capability.
+client capability.  This will make it feasible to expand this mechanism
+in an environment where all of the caching xDS proxies are under centralized
+control, but it will be quite difficult to deploy those changes in
+environments that depend on distributed third-party caching xDS proxies.
 
 Because of this, reviewers of this design are encouraged to carefully
 scrutinize the proposed matching semantics to ensure that they meet our
 expected needs.
+
+### Complexity of Constraint Expressions
+
+Although the `DynamicParameterConstraints` proto allows specifying
+arbitrarily nested combinations of AND, OR, and NOT expressions, control
+planes do not need to actually support that full arbitrary power.  It is
+possible to limit the sets of supported constraints to (e.g.) a
+simple flat list of AND or OR expressions, which would make it easier
+for a control plane to optimize its implementation.
+
+Simimarly, caching xDS proxies may be able to provide an optimized
+implementation if all of the constraints that they see are limited to
+some subset of the full flexibility allowed by the protocol.  However,
+any general-purpose caching proxy implementation will likely need to
+support a less optimized implementation that does support the full
+flexibility allowed by the protocol.
 
 ### Using Context Parameters
 
