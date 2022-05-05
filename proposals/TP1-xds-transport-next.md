@@ -276,21 +276,6 @@ Context parameters in URNs presented by the client to the server will be
 composed from the following sources. Using an example of a URL
 `xdstp://some-authority/some.type/foo?bar=baz`:
 
-* Static `Node`-derived context parameters. These are prefixed with
-  `xds.node.`. The set of `Node`-derived context parameters is specified in the
-  bootstrap on a per-resource type basis. The key reflects the `Node` proto3
-  field structure, e.g. `xds.node.locality.sub_zone=some_sub_zone`,
-  `xds.node.metadata.bar="a"`, `xds.node.user_agent_version=1.2.3`.
-  * Generally, values in the `Node` are converted from their proto3 value
-    to JSON following the [canonical
-    transformation](https://developers.google.com/protocol-buffers/docs/proto3#json).
-  * Both `xds.node.metadata.X` and
-    `xds.node.user_agent_build_version.metadata.X` permit directly referencing
-    a top-level metadata field `X` in a context parameter key. This does not
-    apply to nested fields in the metadata, e.g. `xds.node.metadata.bar`.
-  * `xds.node.user_agent_build_version.version` yields a string value composed
-    of `major.minor.patch` values, e.g. `"1.2.3"`.
-
 * Context parameters from the URL, in the above example
   `bar=baz`. These must not be in the `xds.*` namespace.
 
@@ -302,7 +287,7 @@ composed from the following sources. Using an example of a URL
   `xds.resource.` prefixed.
 
 An example computed URN following the above example is
-`xdstp://some-authority/some.type/foo?xds.node.metadata.foo=bar&xds.shard_id=1234&bar=baz&xds.client_feature.lb.least_loaded=false&xds.resource.vip=96.54.3.1`.
+`xdstp://some-authority/some.type/foo?bar=baz&xds.resource.vip=96.54.3.1`.
 
 This proposal reserves all prefixes beginning with a non-alphanumeric character
 for context parameter values in future URI context parameter enhancements.
@@ -686,7 +671,7 @@ Client LDS `DeltaDiscoveryRequest` sent to xDS relay proxy (note the use of clie
 
 ```
 resource_names_subscribe:
-- xdstp://some-authority/envoy.config.listeners.v3.Listener/my-listeners/*?xds.node_type=ingress&xds.client_features.envoy.config.no_bind_to_port=true
+- xdstp://some-authority/envoy.config.listeners.v3.Listener/my-listeners/*?node_type=ingress
 ```
 
 xDS management server `DeltaDiscoveryResponse` sent to the client:
@@ -695,12 +680,12 @@ xDS management server `DeltaDiscoveryResponse` sent to the client:
 ```
 resources:
 - version: 1
-  name: xdstp://some-authority/envoy.config.listeners.v3.Listener/my-listeners/foo?xds.node_type=ingress&xds.client_features.envoy.config.no_bind_to_port=true
+  name: xdstp://some-authority/envoy.config.listeners.v3.Listener/my-listeners/foo?node_type=ingress
   resource:
     "@type": type.googleapis.com/envoy.config.listeners.v3.Listener
     … foo's Listener payload … 
 - version: 42
-  name: xdstp://some-authority/envoy.config.listeners.v3.Listener/my-listeners/bar?xds.node_type=ingress&xds.client_features.envoy.config.no_bind_to_port=true
+  name: xdstp://some-authority/envoy.config.listeners.v3.Listener/my-listeners/bar?node_type=ingress
   resource:
     "@type": type.googleapis.com/xds.core.v3.ResourceLocator
     <xdstp://some-authority/envoy.config.listeners.v3.Listener/baz>
