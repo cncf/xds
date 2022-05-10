@@ -14,8 +14,8 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // [#protodoc-title: Common HTTP Inputs]
 
-// Specifies that matching should be performed on the set of `HTTP attributes
-// <https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes>`_.
+// Specifies that matching should be performed on the set of :ref:`HTTP attributes
+// <arch_overview_attributes>`.
 //
 // The attributes will be exposed via `Common Expression Language
 // <https://github.com/google/cel-spec>`_ runtime to associated CEL matcher,
