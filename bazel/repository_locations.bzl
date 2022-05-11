@@ -19,9 +19,9 @@ REPOSITORY_LOCATIONS = dict(
     ),
     com_google_googleapis = dict(
         # TODO(dio): Consider writing a Skylark macro for importing Google API proto.
-        sha256 = "c1969e5b72eab6d9b6cfcff748e45ba57294aeea1d96fd04cd081995de0605c2",
-        strip_prefix = "googleapis-be480e391cc88a75cf2a81960ef79c80d5012068",
-        urls = ["https://github.com/googleapis/googleapis/archive/be480e391cc88a75cf2a81960ef79c80d5012068.tar.gz"],
+        sha256 = "a45019af4d3290f02eaeb1ce10990166978c807cb33a9692141a076ba46d1405",
+        strip_prefix = "googleapis-82944da21578a53b74e547774cf62ed31a05b841",
+        urls = ["https://github.com/googleapis/googleapis/archive/82944da21578a53b74e547774cf62ed31a05b841.tar.gz"],
     ),
     com_google_protobuf = dict(
         sha256 = "52b6160ae9266630adb5e96a9fc645215336371a740e87d411bfb63ea2f268a0",
