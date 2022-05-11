@@ -18,27 +18,51 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // [#not-implemented-hide:]
 
-// [#protodoc-title: Common Expression Language matcher]
+// [#protodoc-title: Common Expression Language matchers]
 
-// Performs a match by evaluating a CEL expression against the standardized set of :ref:`HTTP
-// attributes <https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/advanced/attributes>`
-// specified via HttpCelMatchInput.
+// Performs a match by evaluating a CEL expression against the standardized set of
+// :ref:`HTTP attributes <arch_overview_attributes>` specified via HttpAttributesMatchInput.
+//
 // The match is ``true``, iff the result of the evaluation is a bool AND true.
-// In all other cases, the match is ``false``, including but not limited to: non-bool types, false,
-// null, int(1), etc.
-message CelMatcher {
-  oneof expression_specifier {
+// In all other cases, the match is ``false``, including but not limited to: non-bool types,
+//  ``false``, ``null``,`` int(1)``, etc.
+// [#comment:TODO(sergiitk): Link HttpAttributesMatchInput.]
+// [#comment:TODO(sergiitk): Link to unified matching docs.]
+// [#comment:TODO(sergiitk): Add extension category.]
+message CelBoolMatcher {
+  // Either parsed or checked representation of the CEL program.
+  CelExpression match_expression = 1 [(validate.rules).message = {required: true}];
+}
+
+// // A regex matcher designed for safety when used with untrusted input.
+// Describes how to match a string and then produce a new string using a regular
+// expression and a substitution string.
+//
+// The resulting input string will be all headers for the given key joined by a comma, e.g. if the
+// request contains two ‘foo’ headers with value ‘bar’ and ‘baz’, the input string will be ‘bar,baz’.
+//
+// Performs a match by evaluating a CEL expression against the standardized set of
+// :ref:`HTTP attributes <arch_overview_attributes>` specified via HttpAttributesMatchInput.
+//
+// The match is ``true``, iff the result of the evaluation is a bool AND true.
+// In all other cases, the match is ``false``, including but not limited to: non-bool types,
+//  ``false``, ``null``,`` int(1)``, etc.
+// [#comment:TODO(sergiitk): Link to unified matching docs.]
+// [#comment:TODO(sergiitk): Add extension category.]
+message CelStringMatcher {
+  CelExpression cel_value_extractor = 1 [(validate.rules).message = {required: true}];
+}
+
+// Either parsed or checked representation of the CEL program.
+message CelExpression {
+  oneof expr_specifier {
     option (validate.required) = true;
 
-    // CEL expression in a text form.
-    string cel_expression = 1;
-
     // Parsed expression in abstract syntax tree (AST) form.
-    google.api.expr.v1alpha1.Expr cel_expression_parsed = 2
-        [(validate.rules).message = {required: true}];
+    // [#comment:TODO(sergiitk): Or Expr?]
+    google.api.expr.v1alpha1.ParsedExpr parsed_expr = 1;
 
     // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
-    google.api.expr.v1alpha1.CheckedExpr cel_expression_type_checked = 3
-        [(validate.rules).message = {required: true}];
+    google.api.expr.v1alpha1.CheckedExpr checked_expr = 2;
   }
 }

@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package xds.type.matcher.v3;
+
+import "google/api/expr/v1alpha1/checked.proto";
+import "google/api/expr/v1alpha1/syntax.proto";
+
+import "xds/annotations/v3/status.proto";
+
+import "validate/validate.proto";
+
+option java_package = "com.github.xds.type.v3";
+option java_outer_classname = "CelProto";
+option java_multiple_files = true;
+option go_package = "github.com/cncf/xds/go/xds/type/v3";
+
+option (xds.annotations.v3.file_status).work_in_progress = true;
+
+// [#protodoc-title: Common Expression Language (CEL)]
+
+// Either parsed or checked representation of the CEL program.
+// [#not-implemented-hide:]
+message CelExpression {
+  oneof expr_specifier {
+    option (validate.required) = true;
+
+    // Parsed expression in abstract syntax tree (AST) form.
+    // [#comment:TODO(sergiitk): Or Expr?]
+    google.api.expr.v1alpha1.ParsedExpr parsed_expr = 1;
+
+    // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
+    google.api.expr.v1alpha1.CheckedExpr checked_expr = 2;
+  }
+}
