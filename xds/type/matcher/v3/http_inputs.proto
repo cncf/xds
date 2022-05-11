@@ -3,6 +3,9 @@ syntax = "proto3";
 package xds.type.matcher.v3;
 
 import "xds/annotations/v3/status.proto";
+import "xds/type/v3/cel.proto";
+
+import "validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
 option java_outer_classname = "HttpInputsProto";
@@ -14,14 +17,30 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // [#protodoc-title: Common HTTP Inputs]
 
-// Specifies that matching should be performed on the set of :ref:`HTTP attributes
-// <arch_overview_attributes>`.
+// Specifies that matching will be performed on the set of :ref:`HTTP attributes
+// <arch_overview_attributes>` using `Common Expression Language
+// <https://github.com/google/cel-spec>`_ (CEL) expression.
 //
-// The attributes will be exposed via `Common Expression Language
-// <https://github.com/google/cel-spec>`_ runtime to associated CEL matcher,
-// as well as via ``get_property`` ABI method to associated Wasm extension matcher.
-// [#comment:TODO(sergiitk): Link to unified matching docs.]
+// The resulting input is the result of evaluating the CEL program. The result should be one of the
+// supported types. Refer to the following table for the supported CEL result types, and known
+// compatible matchers.
+//
+// .. list-table::
+//   :widths: 25 75
+//   :header-rows: 1
+//
+//   * - CEL result type
+//     - Compatible Matchers
+//   * - ``string``
+//     - :ref:`StringMatcher <envoy_v3_api_msg_.xds.type.matcher.v3.StringMatcher>`
+//   * - ``bool``
+//     - TBD
+//
+// Refer to :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` documentation
+// for usage details.
 // [#comment:TODO(sergiitk): Add extension category.]
-// [#not-implemented-hide:]
-message HttpAttributesMatchInput {
+// // [#not-implemented-hide:]
+message HttpAttributesCelMatchInput {
+  // CEL expression to evaluate.
+  type.v3.CelExpression expr = 1 [(validate.rules).message = {required: true}];
 }
