@@ -25,7 +25,6 @@ message CelExpression {
     option (validate.required) = true;
 
     // Parsed expression in abstract syntax tree (AST) form.
-    // [#comment:TODO(sergiitk): Or Expr?]
     google.api.expr.v1alpha1.ParsedExpr parsed_expr = 1;
 
     // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
