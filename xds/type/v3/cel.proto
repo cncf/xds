@@ -4,6 +4,7 @@ package xds.type.v3;
 
 import "google/api/expr/v1alpha1/checked.proto";
 import "google/api/expr/v1alpha1/syntax.proto";
+import "google/protobuf/wrappers.proto";
 
 import "xds/annotations/v3/status.proto";
 
@@ -30,4 +31,24 @@ message CelExpression {
     // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
     google.api.expr.v1alpha1.CheckedExpr checked_expr = 2;
   }
+}
+
+// Extracts a string by evaluating a `Common Expression Language
+// <https://github.com/google/cel-spec>`_ (CEL) expression against the standardized set of
+// :ref:`HTTP attributes <arch_overview_attributes>`.
+//
+// .. attention::
+//
+//   Besides CEL evaluation raising an error explicitly, CEL program returning a type other than
+//   the ``string``, or not returning anything, are considered an error as well.
+//
+// [#comment:TODO(sergiitk): Add extension category.]
+message CelExtractString {
+  // The CEL expression used to extract a string from the CEL environment.
+  // the "subject string") that should be replaced.
+  CelExpression expr_extract = 1 [(validate.rules).message = {required: true}];
+
+  // If CEL expression evaluates to an error, this value is be returned to the caller.
+  // If not set, the error is propagated to the caller.
+  google.protobuf.StringValue default_value = 2;
 }
