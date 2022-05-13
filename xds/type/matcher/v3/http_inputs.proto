@@ -3,7 +3,6 @@ syntax = "proto3";
 package xds.type.matcher.v3;
 
 import "xds/annotations/v3/status.proto";
-import "xds/type/v3/cel.proto";
 
 import "validate/validate.proto";
 
@@ -14,38 +13,17 @@ option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
 
 option (xds.annotations.v3.file_status).work_in_progress = true;
 
-
 // [#protodoc-title: Common HTTP Inputs]
 
-// Specifies that matching will be performed on the set of :ref:`HTTP attributes
-// <arch_overview_attributes>` using `Common Expression Language
-// <https://github.com/google/cel-spec>`_ (CEL) expression.
+// Specifies that matching should be performed on the set of :ref:`HTTP attributes
+// <arch_overview_attributes>`.
 //
-// The resulting input is the result of evaluating the CEL program. The result should be one of the
-// supported types. Refer to the following table for the supported CEL result types, and known
-// compatible matchers.
-//
-// .. list-table::
-//   :widths: 25 75
-//   :header-rows: 1
-//
-//   * - CEL result type
-//     - Compatible Matchers
-//   * - ``string``
-//     - :ref:`StringMatcher <envoy_v3_api_msg_.xds.type.matcher.v3.StringMatcher>`
-//   * - ``bool``
-//     - TBD
+// The attributes will be exposed via `Common Expression Language
+// <https://github.com/google/cel-spec>`_ runtime to associated CEL matcher.
 //
 // Refer to :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` documentation
 // for usage details.
 //
-// .. attention::
-//
-//   In case CEL expression raises an error, the result of the evaluation is interpreted
-//   short-circuited "no match". Associated Matcher is not evaluated.
-//
 // [#extension: envoy.matching.inputs.http_attributes]
 message HttpAttributesCelMatchInput {
-  // CEL expression to evaluate.
-  type.v3.CelExpression expr = 1 [(validate.rules).message = {required: true}];
 }
