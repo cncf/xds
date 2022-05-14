@@ -10,9 +10,7 @@ def xds_http_archive(name, locations, **kwargs):
         # This repository has already been defined, probably because the user
         # wants to override the version. Do nothing.
         return
-
-    loc_key = kwargs.pop("repository_key", name)
-    location = locations[loc_key]
+    location = locations[name]
 
     # HTTP tarball at a given URL. Add a BUILD file if requested.
     http_archive(
@@ -22,8 +20,3 @@ def xds_http_archive(name, locations, **kwargs):
         strip_prefix = location.get("strip_prefix", ""),
         **kwargs
     )
-
-# Old name for backward compatibility.
-# TODO(roth): Remove once all callers are changed to use the new name.
-def udpa_http_archive(name, locations, **kwargs):
-  xds_http_archive(name, locations, **kwargs)

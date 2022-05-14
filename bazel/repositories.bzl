@@ -1,33 +1,34 @@
 load(":envoy_http_archive.bzl", "xds_http_archive")
-load(":repository_locations.bzl", "REPOSITORY_LOCATIONS")
+load(":external_deps.bzl", "load_repository_locations")
+load(":repository_locations.bzl", "REPOSITORY_LOCATIONS_SPEC")
+
+REPOSITORY_LOCATIONS = load_repository_locations(REPOSITORY_LOCATIONS_SPEC)
+
+# Use this macro to reference any HTTP archive from bazel/repository_locations.bzl.
+def external_http_archive(name, **kwargs):
+    xds_http_archive(
+        name,
+        locations = REPOSITORY_LOCATIONS,
+        **kwargs
+    )
+
 
 def xds_api_dependencies():
-    xds_http_archive(
-        "bazel_gazelle",
-        locations = REPOSITORY_LOCATIONS,
+    external_http_archive(
+        name = "bazel_gazelle",
     )
-    xds_http_archive(
-        "com_envoyproxy_protoc_gen_validate",
-        locations = REPOSITORY_LOCATIONS,
+    external_http_archive(
+        name = "com_envoyproxy_protoc_gen_validate",
     )
-    xds_http_archive(
+    external_http_archive(
         name = "com_github_grpc_grpc",
-        locations = REPOSITORY_LOCATIONS,
     )
-    xds_http_archive(
+    external_http_archive(
         name = "com_google_googleapis",
-        locations = REPOSITORY_LOCATIONS,
     )
-    xds_http_archive(
-        "com_google_protobuf",
-        locations = REPOSITORY_LOCATIONS,
+    external_http_archive(
+        name = "com_google_protobuf",
     )
-    xds_http_archive(
-        "io_bazel_rules_go",
-        locations = REPOSITORY_LOCATIONS,
+    external_http_archive(
+        name = "io_bazel_rules_go",
     )
-
-# Old name for backward compatibility.
-# TODO(roth): Remove once all callers are updated to use the new name.
-def udpa_api_dependencies():
-  xds_api_dependencies()
