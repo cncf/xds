@@ -13,9 +13,19 @@ def external_http_archive(name, **kwargs):
     )
 
 
-def xds_api_dependencies():
+def _go_deps():
     external_http_archive(
-        name = "bazel_gazelle",
+        name = "io_bazel_rules_go",
+        # TODO(wrowe, sunjayBhatia): remove when Windows RBE supports batch file invocation
+        patch_args = ["-p1"],
+        patches = ["//bazel:rules_go.patch"],
+    )
+    external_http_archive("bazel_gazelle")
+
+def xds_api_dependencies():
+    _go_deps()
+    external_http_archive(
+        name = "bazel_skylib",
     )
     external_http_archive(
         name = "com_envoyproxy_protoc_gen_validate",
@@ -28,7 +38,6 @@ def xds_api_dependencies():
     )
     external_http_archive(
         name = "com_google_protobuf",
-    )
-    external_http_archive(
-        name = "io_bazel_rules_go",
+        patches = ["//bazel:protobuf.patch"],
+        patch_args = ["-p1"],
     )
