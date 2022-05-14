@@ -15,8 +15,8 @@ EXTERNAL_PROTO_IMPORT_BAZEL_DEP_MAP = {
 
 # This maps from the Bazel proto_library target to the Go language binding target for external dependencies.
 EXTERNAL_PROTO_GO_BAZEL_DEP_MAP = {
-    "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@com_google_googleapis//google/api/expr/v1alpha1:expr_go_proto",
-    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@com_google_googleapis//google/api/expr/v1alpha1:expr_go_proto",
+    "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@go_googleapis//google/api/expr/v1alpha1:expr_go_proto",
+    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@go_googleapis//google/api/expr/v1alpha1:expr_go_proto",
 }
 
 # This maps from the Bazel proto_library target to the C++ language binding target for external dependencies.

@@ -60,66 +60,10 @@ func (m *CelExpression) validate(all bool) error {
 	switch m.ExprSpecifier.(type) {
 
 	case *CelExpression_ParsedExpr:
-
-		if all {
-			switch v := interface{}(m.GetParsedExpr()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, CelExpressionValidationError{
-						field:  "ParsedExpr",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, CelExpressionValidationError{
-						field:  "ParsedExpr",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetParsedExpr()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return CelExpressionValidationError{
-					field:  "ParsedExpr",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
+		// no validation rules for ParsedExpr
 
 	case *CelExpression_CheckedExpr:
-
-		if all {
-			switch v := interface{}(m.GetCheckedExpr()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, CelExpressionValidationError{
-						field:  "CheckedExpr",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, CelExpressionValidationError{
-						field:  "CheckedExpr",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetCheckedExpr()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return CelExpressionValidationError{
-					field:  "CheckedExpr",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
+		// no validation rules for CheckedExpr
 
 	default:
 		err := CelExpressionValidationError{

@@ -5,7 +5,7 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_dependencies")
 
 # go version for rules_go
-GO_VERSION = "1.17.5"
+GO_VERSION = "1.18.2"
 
 def xds_dependency_imports(go_version = GO_VERSION):
     protobuf_deps()
@@ -41,6 +41,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
         importpath = "golang.org/x/net",
         sum = "h1:0mm1VjtFUOIlE1SbDlwjYaDxZVDP2S5ou6y0gSgXHu8=",
         version = "v0.0.0-20200226121028-0de0cce0169b",
+        build_file_proto_mode = "disable",
         # project_url = "https://pkg.go.dev/golang.org/x/net",
         # last_update = "2020-02-26"
         # use_category = ["api"],
@@ -51,6 +52,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
         importpath = "golang.org/x/text",
         sum = "h1:cokOdA+Jmi5PJGXLlLllQSgYigAEfHXJAERHVMaCc2k=",
         version = "v0.3.3",
+        build_file_proto_mode = "disable",
         # project_url = "https://pkg.go.dev/golang.org/x/text",
         # last_update = "2021-06-16"
         # use_category = ["api"],
@@ -61,6 +63,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
         importpath = "github.com/spf13/afero",
         sum = "h1:8q6vk3hthlpb2SouZcnBVKboxWQWMDNF38bwholZrJc=",
         version = "v1.3.4",
+        build_file_proto_mode = "disable",
         # project_url = "https://pkg.go.dev/github.com/spf13/afero",
         # last_update = "2021-03-20"
         # use_category = ["api"],
@@ -71,6 +74,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
         importpath = "github.com/lyft/protoc-gen-star",
         sum = "h1:xOpFu4vwmIoUeUrRuAtdCrZZymT/6AkW/bsUWA506Fo=",
         version = "v0.6.0",
+        build_file_proto_mode = "disable",
         # project_url = "https://pkg.go.dev/github.com/lyft/protoc-gen-star",
         # last_update = "2022-03-04"
         # use_category = ["api"],
@@ -81,6 +85,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
         importpath = "github.com/iancoleman/strcase",
         sum = "h1:ux/56T2xqZO/3cP1I2F86qpeoYPCOzk+KF/UH/Ar+lk=",
         version = "v0.0.0-20180726023541-3605ed457bf7",
+        build_file_proto_mode = "disable",
         # project_url = "https://pkg.go.dev/github.com/iancoleman/strcase",
         # last_update = "2020-11-22"
         # use_category = ["api"],
