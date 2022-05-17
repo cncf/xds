@@ -15,8 +15,20 @@ EXTERNAL_PROTO_IMPORT_BAZEL_DEP_MAP = {
 
 # This maps from the Bazel proto_library target to the Go language binding target for external dependencies.
 EXTERNAL_PROTO_GO_BAZEL_DEP_MAP = {
-    "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@com_google_googleapis//google/api/expr/v1alpha1:expr_go_proto",
-    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@com_google_googleapis//google/api/expr/v1alpha1:expr_go_proto",
+    # Note @com_google_googleapis are point to @go_googleapis.
+    # This is done to address //test/build:go_build_test build error:
+    #
+    # link: package conflict error:
+    #   google.golang.org/genproto/googleapis/api/annotations: multiple copies of package passed to linker:
+    #
+    # @go_googleapis//google/api:annotations_go_proto
+    # @com_google_googleapis//google/api:annotations_go_proto
+    #
+    # TODO(https://github.com/bazelbuild/rules_go/issues/1986): update to
+    #    @com_google_googleapis when the bug is resolved. Also see the note to
+    #    go_googleapis in https://github.com/bazelbuild/rules_go/blob/master/go/dependencies.rst#overriding-dependencies
+    "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@go_googleapis//google/api/expr/v1alpha1:expr_go_proto",
+    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@go_googleapis//google/api/expr/v1alpha1:expr_go_proto",
 }
 
 # This maps from the Bazel proto_library target to the C++ language binding target for external dependencies.
