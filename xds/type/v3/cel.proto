@@ -42,7 +42,7 @@ message CelExpression {
 //   Besides CEL evaluation raising an error explicitly, CEL program returning a type other than
 //   the ``string``, or not returning anything, are considered an error as well.
 //
-// [#comment:TODO(sergiitk): Add extension category.]
+// [#comment:TODO(sergiitk): When implemented, add the extension tag.]
 message CelExtractString {
   // The CEL expression used to extract a string from the CEL environment.
   // the "subject string") that should be replaced.
