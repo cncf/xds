@@ -24,6 +24,6 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 // Refer to :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` documentation
 // for usage details.
 //
-// [#extension: envoy.matching.inputs.http_attributes]
+// [#comment:TODO(sergiitk): When implemented, add the extension tag.]
 message HttpAttributesCelMatchInput {
 }
