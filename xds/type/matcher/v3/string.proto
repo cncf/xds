@@ -54,7 +54,7 @@ message StringMatcher {
     string contains = 7 [(validate.rules).string = {min_len: 1}];
 
     // The input string must have the pattern specified here.
-    // Note: empty contains match is not allowed
+    // Note: empty pattern match is not allowed
     //
     // Examples:
     //
