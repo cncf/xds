@@ -94,6 +94,15 @@ func (m *StringMatcher) Validate() error {
 			}
 		}
 
+	case *StringMatcher_Pattern:
+
+		if utf8.RuneCountInString(m.GetPattern()) < 1 {
+			return StringMatcherValidationError{
+				field:  "Pattern",
+				reason: "value length must be at least 1 runes",
+			}
+		}
+
 	default:
 		return StringMatcherValidationError{
 			field:  "MatchPattern",
