@@ -54,11 +54,20 @@ message StringMatcher {
     string contains = 7 [(validate.rules).string = {min_len: 1}];
 
     // The input string must have the pattern specified here.
-    // Note: empty pattern match is not allowed
+    // The space between slashes acts as variable/capture group
+    // but does not have any predefined validation.
+    // The variables names are user defined.
+    //
+    // Empty pattern match is not allowed.
+    //
+    // Note: There is overlap between regex and pattern.
+    // Pattern serves as a better user experience through simplified matching syntax.
     //
     // Examples:
     //
-    // abc/{lang}/{county} matches the value abc/us/eng
+    // abc/{lang}/{county} matches the value abc/eng/us
+    // Note format of: abs/<user-defined-var>/<user-defined-var>
+    // {lang} == "eng" and {country} == "us"
     string pattern = 8 [(validate.rules).string = {min_len: 1}];
   }
 
