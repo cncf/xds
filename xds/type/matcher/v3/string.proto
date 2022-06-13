@@ -54,9 +54,8 @@ message StringMatcher {
     string contains = 7 [(validate.rules).string = {min_len: 1}];
 
     // The input string must have the pattern specified here.
-    // The space between slashes acts as variable/capture group
-    // but does not have any predefined validation.
-    // The variables names are user defined.
+    // A pattern is defined as a set of values between "/"s.
+    // Each value can be a string literal or wildcard (*).
     //
     // Empty pattern match is not allowed.
     //
@@ -65,9 +64,12 @@ message StringMatcher {
     //
     // Examples:
     //
-    // abc/{lang}/{county} matches the value abc/eng/us
-    // Note format of: abs/<user-defined-var>/<user-defined-var>
-    // {lang} == "eng" and {country} == "us"
+    // abc/*/* matches the value abc/eng/us
+    // Note format of: abs/<wildcard-1>/<wildcard-2>
+    // {wildcard-1} == "eng" and {wildcard-2} == "us"
+    //
+    // abc/foo matches the value abc/foo
+    // Note: No wildcard is used for either value "abc" or "foo"
     string pattern = 8 [(validate.rules).string = {min_len: 1}];
   }
 
