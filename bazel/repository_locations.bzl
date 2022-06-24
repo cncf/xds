@@ -7,6 +7,11 @@ REPOSITORY_LOCATIONS = dict(
         sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
         urls = ["https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz"],
     ),
+    com_github_bufbuild_buf = dict(
+        sha256 = "826ad701db09805eb425723ad3ea0c13ce7ca8353d6a1fb473399db915dafdf9",
+        strip_prefix = "buf",
+        urls = ["https://github.com/bufbuild/buf/releases/download/v1.4.0/buf-Linux-x86_64.tar.gz"],
+    ),
     com_envoyproxy_protoc_gen_validate = dict(
         sha256 = "c695fc5a2e5a1b52904cd8a58ce7a1c3a80f7f50719496fd606e551685c01101",
         strip_prefix = "protoc-gen-validate-0.6.1",

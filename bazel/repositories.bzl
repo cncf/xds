@@ -7,6 +7,12 @@ def xds_api_dependencies():
         locations = REPOSITORY_LOCATIONS,
     )
     xds_http_archive(
+        "com_github_bufbuild_buf",
+        locations = REPOSITORY_LOCATIONS,
+        build_file_content = BUF_BUILD_CONTENT,
+        tags = ["manual"],
+    )
+    xds_http_archive(
         "com_envoyproxy_protoc_gen_validate",
         locations = REPOSITORY_LOCATIONS,
     )
@@ -31,3 +37,16 @@ def xds_api_dependencies():
 # TODO(roth): Remove once all callers are updated to use the new name.
 def udpa_api_dependencies():
   xds_api_dependencies()
+
+BUF_BUILD_CONTENT = """
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "buf",
+    srcs = [
+        "@com_github_bufbuild_buf//:bin/buf",
+    ],
+)
+"""

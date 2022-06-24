@@ -2,6 +2,9 @@
 
 set -e
 
+bazel run @com_github_bufbuild_buf//:bin/buf lint -- --path xds
+bazel run @com_github_bufbuild_buf//:bin/buf lint -- --path udpa
+
 bazel test --config=ci //...
 
 rm -rf go/xds go/udpa
