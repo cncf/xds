@@ -475,36 +475,36 @@ func (m *Matcher_MatcherList_Predicate) Validate() error {
 			}
 		}
 
-	case *Matcher_MatcherList_Predicate_OrMatcher:
+	case *Matcher_MatcherList_Predicate_OrPredicates:
 
-		if v, ok := interface{}(m.GetOrMatcher()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetOrPredicates()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Matcher_MatcherList_PredicateValidationError{
-					field:  "OrMatcher",
+					field:  "OrPredicates",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
 			}
 		}
 
-	case *Matcher_MatcherList_Predicate_AndMatcher:
+	case *Matcher_MatcherList_Predicate_AndPredicates:
 
-		if v, ok := interface{}(m.GetAndMatcher()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetAndPredicates()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Matcher_MatcherList_PredicateValidationError{
-					field:  "AndMatcher",
+					field:  "AndPredicates",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
 			}
 		}
 
-	case *Matcher_MatcherList_Predicate_NotMatcher:
+	case *Matcher_MatcherList_Predicate_NotPredicate:
 
-		if v, ok := interface{}(m.GetNotMatcher()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetNotPredicate()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Matcher_MatcherList_PredicateValidationError{
-					field:  "NotMatcher",
+					field:  "NotPredicate",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -811,20 +811,20 @@ func (m *Matcher_MatcherList_Predicate_PredicateList) Validate() error {
 		return nil
 	}
 
-	if len(m.GetPredicate()) < 2 {
+	if len(m.GetList()) < 2 {
 		return Matcher_MatcherList_Predicate_PredicateListValidationError{
-			field:  "Predicate",
+			field:  "List",
 			reason: "value must contain at least 2 item(s)",
 		}
 	}
 
-	for idx, item := range m.GetPredicate() {
+	for idx, item := range m.GetList() {
 		_, _ = idx, item
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return Matcher_MatcherList_Predicate_PredicateListValidationError{
-					field:  fmt.Sprintf("Predicate[%v]", idx),
+					field:  fmt.Sprintf("List[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
