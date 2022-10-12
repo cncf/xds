@@ -66,7 +66,7 @@ message Matcher {
 
       // A list of two or more matchers. Used to allow using a list within a oneof.
       message PredicateList {
-        repeated Predicate predicate = 1 [(validate.rules).repeated = {min_items: 2}];
+        repeated Predicate list = 1 [(validate.rules).repeated = {min_items: 2}];
       }
 
       oneof match_type {
@@ -76,13 +76,13 @@ message Matcher {
         SinglePredicate single_predicate = 1;
 
         // A list of predicates to be OR-ed together.
-        PredicateList or_matcher = 2;
+        PredicateList or_predicates = 2;
 
         // A list of predicates to be AND-ed together.
-        PredicateList and_matcher = 3;
+        PredicateList and_predicates = 3;
 
         // The invert of a predicate
-        Predicate not_matcher = 4;
+        Predicate not_predicate = 4;
       }
     }
 
