@@ -73,6 +73,13 @@ func (m *OrcaLoadReport) Validate() error {
 
 	}
 
+	if m.GetQps() < 0 {
+		return OrcaLoadReportValidationError{
+			field:  "Qps",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
 	return nil
 }
 
