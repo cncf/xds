@@ -73,9 +73,9 @@ func (m *OrcaLoadReport) Validate() error {
 
 	}
 
-	if m.GetQps() < 0 {
+	if m.GetRpsFractional() < 0 {
 		return OrcaLoadReportValidationError{
-			field:  "Qps",
+			field:  "RpsFractional",
 			reason: "value must be greater than or equal to 0",
 		}
 	}
