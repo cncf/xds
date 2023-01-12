@@ -71,7 +71,7 @@ def _xds_py_proto_library(name, srcs = [], deps = []):
 # This defines googleapis py_proto_library. The repository does not provide its definition and requires
 # overriding it in the consuming project (see https://github.com/grpc/grpc/issues/19255 for more details).
 def py_proto_library(name, deps = [], plugin = None):
-    srcs = [dep[:-6] + ".proto" if dep.endswith("_proto")else dep for dep in deps]
+    srcs = [dep[:-6] + ".proto" if dep.endswith("_proto") else dep for dep in deps]
     proto_deps = []
 
     # py_proto_library in googleapis specifies *_proto rules in dependencies.
