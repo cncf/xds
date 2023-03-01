@@ -80,6 +80,15 @@ func (m *OrcaLoadReport) Validate() error {
 		}
 	}
 
+	if m.GetEps() < 0 {
+		return OrcaLoadReportValidationError{
+			field:  "Eps",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
+	// no validation rules for NamedMetrics
+
 	return nil
 }
 
