@@ -64,6 +64,13 @@ message Matcher {
         }
       }
 
+      // Predicate for protocol-specific input.
+      message CustomPredicate {
+        // Extension for custom matching logic. Both input and match config are protocol-specific
+        // and defined by the extension.
+        core.v3.TypedExtensionConfig custom_match = 1 [(validate.rules).message = {required: true}];
+      }
+
       // A list of two or more matchers. Used to allow using a list within a oneof.
       message PredicateList {
         repeated Predicate predicate = 1 [(validate.rules).repeated = {min_items: 2}];
@@ -74,6 +81,9 @@ message Matcher {
 
         // A single predicate to evaluate.
         SinglePredicate single_predicate = 1;
+
+        // A custom predicate to evaluate.
+        CustomPredicate custom_predicate = 5;
 
         // A list of predicates to be OR-ed together.
         PredicateList or_matcher = 2;

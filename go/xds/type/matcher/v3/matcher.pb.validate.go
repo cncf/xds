@@ -475,6 +475,18 @@ func (m *Matcher_MatcherList_Predicate) Validate() error {
 			}
 		}
 
+	case *Matcher_MatcherList_Predicate_CustomPredicate_:
+
+		if v, ok := interface{}(m.GetCustomPredicate()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Matcher_MatcherList_PredicateValidationError{
+					field:  "CustomPredicate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	case *Matcher_MatcherList_Predicate_OrMatcher:
 
 		if v, ok := interface{}(m.GetOrMatcher()).(interface{ Validate() error }); ok {
@@ -802,6 +814,94 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Matcher_MatcherList_Predicate_SinglePredicateValidationError{}
+
+// Validate checks the field values on
+// Matcher_MatcherList_Predicate_CustomPredicate with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Matcher_MatcherList_Predicate_CustomPredicate) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetCustomMatch() == nil {
+		return Matcher_MatcherList_Predicate_CustomPredicateValidationError{
+			field:  "CustomMatch",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetCustomMatch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Matcher_MatcherList_Predicate_CustomPredicateValidationError{
+				field:  "CustomMatch",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// Matcher_MatcherList_Predicate_CustomPredicateValidationError is the
+// validation error returned by
+// Matcher_MatcherList_Predicate_CustomPredicate.Validate if the designated
+// constraints aren't met.
+type Matcher_MatcherList_Predicate_CustomPredicateValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Matcher_MatcherList_Predicate_CustomPredicateValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Matcher_MatcherList_Predicate_CustomPredicateValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Matcher_MatcherList_Predicate_CustomPredicateValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Matcher_MatcherList_Predicate_CustomPredicateValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Matcher_MatcherList_Predicate_CustomPredicateValidationError) ErrorName() string {
+	return "Matcher_MatcherList_Predicate_CustomPredicateValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Matcher_MatcherList_Predicate_CustomPredicateValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMatcher_MatcherList_Predicate_CustomPredicate.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Matcher_MatcherList_Predicate_CustomPredicateValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Matcher_MatcherList_Predicate_CustomPredicateValidationError{}
 
 // Validate checks the field values on
 // Matcher_MatcherList_Predicate_PredicateList with the rules defined in the
