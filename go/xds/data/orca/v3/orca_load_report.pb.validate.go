@@ -41,10 +41,10 @@ func (m *OrcaLoadReport) Validate() error {
 		return nil
 	}
 
-	if val := m.GetCpuUtilization(); val < 0 || val > 1 {
+	if m.GetCpuUtilization() < 0 {
 		return OrcaLoadReportValidationError{
 			field:  "CpuUtilization",
-			reason: "value must be inside range [0, 1]",
+			reason: "value must be greater than or equal to 0",
 		}
 	}
 
