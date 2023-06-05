@@ -89,6 +89,13 @@ func (m *OrcaLoadReport) Validate() error {
 
 	// no validation rules for NamedMetrics
 
+	if m.GetApplicationUtilization() < 0 {
+		return OrcaLoadReportValidationError{
+			field:  "ApplicationUtilization",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
 	return nil
 }
 
