@@ -23,16 +23,28 @@ extend google.protobuf.FieldOptions {
 message FileStatusAnnotation {
   // The entity is work-in-progress and subject to breaking changes.
   bool work_in_progress = 1;
+
+  // The entity is frozen and will not be changed. No any new features
+  // or changes will be added to the entity.
+  bool frozen = 2;
 }
 
 message MessageStatusAnnotation {
   // The entity is work-in-progress and subject to breaking changes.
   bool work_in_progress = 1;
+
+  // The entity is frozen and will not be changed. No any new features
+  // or changes will be added to the entity.
+  bool frozen = 2;
 }
 
 message FieldStatusAnnotation {
   // The entity is work-in-progress and subject to breaking changes.
   bool work_in_progress = 1;
+
+  // The entity is frozen and will not be changed. No any new features
+  // or changes will be added to the entity.
+  bool frozen = 2;
 }
 
 enum PackageVersionStatus {
