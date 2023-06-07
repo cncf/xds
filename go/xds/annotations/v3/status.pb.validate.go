@@ -43,6 +43,8 @@ func (m *FileStatusAnnotation) Validate() error {
 
 	// no validation rules for WorkInProgress
 
+	// no validation rules for Frozen
+
 	return nil
 }
 
@@ -112,6 +114,8 @@ func (m *MessageStatusAnnotation) Validate() error {
 
 	// no validation rules for WorkInProgress
 
+	// no validation rules for Frozen
+
 	return nil
 }
 
@@ -180,6 +184,8 @@ func (m *FieldStatusAnnotation) Validate() error {
 	}
 
 	// no validation rules for WorkInProgress
+
+	// no validation rules for Frozen
 
 	return nil
 }
