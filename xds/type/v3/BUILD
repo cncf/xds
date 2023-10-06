@@ -7,5 +7,7 @@ xds_proto_package(
         "//xds/annotations/v3:pkg",
         "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
         "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto",
+        "@dev_cel//proto/cel/expr:checked_proto",
+        "@dev_cel//proto/cel/expr:syntax_proto",
     ],
 )

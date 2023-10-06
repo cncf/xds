@@ -29,12 +29,16 @@ EXTERNAL_PROTO_GO_BAZEL_DEP_MAP = {
     #    go_googleapis in https://github.com/bazelbuild/rules_go/blob/master/go/dependencies.rst#overriding-dependencies
     "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@go_googleapis//google/api/expr/v1alpha1:expr_go_proto",
     "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@go_googleapis//google/api/expr/v1alpha1:expr_go_proto",
+    "@dev_cel//proto/cel/expr:checked_proto": "@dev_cel//proto/cel/expr:checked_go_proto",
+    "@dev_cel//proto/cel/expr:syntax_proto": "@dev_cel//proto/cel/expr:syntax_go_proto",
 }
 
 # This maps from the Bazel proto_library target to the C++ language binding target for external dependencies.
 EXTERNAL_PROTO_CC_BAZEL_DEP_MAP = {
     "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@com_google_googleapis//google/api/expr/v1alpha1:checked_cc_proto",
     "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@com_google_googleapis//google/api/expr/v1alpha1:syntax_cc_proto",
+    "@dev_cel//proto/cel/expr:checked_proto": "@dev_cel//proto/cel/expr:checked_cc_proto",
+    "@dev_cel//proto/cel/expr:syntax_proto": "@dev_cel//proto/cel/expr:syntax_cc_proto",
 }
 
 # This maps from the Bazel proto_library target to the Python language binding target for external dependencies.
