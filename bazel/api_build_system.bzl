@@ -1,3 +1,4 @@
+# just a test to force the build
 load("@com_envoyproxy_protoc_gen_validate//bazel:pgv_proto_library.bzl", "pgv_cc_proto_library")
 load("@com_google_protobuf//:protobuf.bzl", _py_proto_library = "py_proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
