@@ -1,0 +1,22 @@
+name: buf-pull-request
+on: 
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v4
+      with:
+        go-version-file: go/go.mod
+        cache-dependency-path: go/go.sum
+    - uses: bufbuild/buf-setup-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - run: buf generate --template buf.gen.go.yaml
+    - run: go mod tidy
+      working-directory: go
+    - run: |
+        git add .
+        git diff --name-only --exit-code HEAD -- .
+
