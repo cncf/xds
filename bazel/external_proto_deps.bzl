@@ -36,9 +36,3 @@ EXTERNAL_PROTO_CC_BAZEL_DEP_MAP = {
     "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@com_google_googleapis//google/api/expr/v1alpha1:checked_cc_proto",
     "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@com_google_googleapis//google/api/expr/v1alpha1:syntax_cc_proto",
 }
-
-# This maps from the Bazel proto_library target to the Python language binding target for external dependencies.
-EXTERNAL_PROTO_PY_BAZEL_DEP_MAP = {
-    "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@com_google_googleapis//google/api/expr/v1alpha1:expr_py_proto",
-    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@com_google_googleapis//google/api/expr/v1alpha1:expr_py_proto",
-}

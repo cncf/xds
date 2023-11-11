@@ -3,25 +3,34 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_dependencies")
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
 # go version for rules_go
 GO_VERSION = "1.20.2"
 
 def xds_dependency_imports(go_version = GO_VERSION):
+    rules_proto_dependencies()
+    rules_proto_toolchains()
     protobuf_deps()
     go_rules_dependencies()
     go_register_toolchains(go_version)
     gazelle_dependencies()
     pgv_dependencies()
 
+    # Needed for grpc's @com_github_grpc_grpc//bazel:python_rules.bzl
+    # Used in place of calling grpc_deps() because it needs to be called before
+    # loading `grpc_extra_deps.bzl` - which is not allowed in a method def context.
+    native.bind(
+        name = "protocol_compiler",
+        actual = "@com_google_protobuf//:protoc",
+    )
+
     switched_rules_by_language(
         name = "com_google_googleapis_imports",
         cc = True,
         go = True,
+        python = True,
         grpc = True,
-        rules_override = {
-            "py_proto_library": ["@com_github_cncf_xds//bazel:api_build_system.bzl", "",],
-        },
     )
 
     # These dependencies, like most of the Go in this repository, exist only for the API.
