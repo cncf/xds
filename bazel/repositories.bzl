@@ -23,10 +23,6 @@ def xds_api_dependencies():
         locations = REPOSITORY_LOCATIONS,
     )
     xds_http_archive(
-        name = "dev_cel",
-        locations = REPOSITORY_LOCATIONS,
-    )
-    xds_http_archive(
         "io_bazel_rules_go",
         locations = REPOSITORY_LOCATIONS,
     )
