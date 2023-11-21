@@ -25,15 +25,32 @@ jobs:
     env:
       TEST_TMPDIR: $(Agent.TempDirectory)/tmp
 
-- job: go build
+- job: go_build
   pool:
     vmImage: 'ubuntu-latest'
   steps:
   - task: GoTool@0
+    displayName: "Install Go"
     inputs:
       version: '1.20.2'
 
   - task: Go@0
+    displayName: "go mod download"
+    inputs:
+      customCommand: 'mod'
+      arguments: 'download'
+      workingDirectory: 'go/'
+
+  - task: Go@0
+    displayName: "go mod verify"
+    inputs:
+      customCommand: 'mod'
+      arguments: 'verify'
+      workingDirectory: 'go/'
+
+  - task: Go@0
+    displayName: "go build ./..."
     inputs:
       command: 'build'
+      arguments: './...'
       workingDirectory: 'go/'
