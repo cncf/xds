@@ -37,6 +37,7 @@ jobs:
   - task: Go@0
     displayName: "go mod download"
     inputs:
+      command: 'custom'
       customCommand: 'mod'
       arguments: 'download'
       workingDirectory: 'go/'
@@ -44,6 +45,7 @@ jobs:
   - task: Go@0
     displayName: "go mod verify"
     inputs:
+      command: 'custom'
       customCommand: 'mod'
       arguments: 'verify'
       workingDirectory: 'go/'
