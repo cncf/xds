@@ -3,6 +3,7 @@ module github.com/cncf/xds/go
 go 1.19
 
 require (
+	cel.dev/expr v0.13.0
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
 	github.com/golang/protobuf v1.5.3
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
