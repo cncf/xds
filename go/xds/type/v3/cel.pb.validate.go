@@ -41,6 +41,26 @@ func (m *CelExpression) Validate() error {
 		return nil
 	}
 
+	if v, ok := interface{}(m.GetCelExprParsed()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CelExpressionValidationError{
+				field:  "CelExprParsed",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetCelExprChecked()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CelExpressionValidationError{
+				field:  "CelExprChecked",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.ExprSpecifier.(type) {
 
 	case *CelExpression_ParsedExpr:
@@ -65,12 +85,6 @@ func (m *CelExpression) Validate() error {
 					cause:  err,
 				}
 			}
-		}
-
-	default:
-		return CelExpressionValidationError{
-			field:  "ExprSpecifier",
-			reason: "value is required",
 		}
 
 	}
