@@ -69,12 +69,6 @@ func (m *RegexMatcher) Validate() error {
 			}
 		}
 
-	default:
-		return RegexMatcherValidationError{
-			field:  "EngineType",
-			reason: "value is required",
-		}
-
 	}
 
 	return nil
