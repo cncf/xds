@@ -41,6 +41,13 @@ func (m *Int64RangeMatcher) Validate() error {
 		return nil
 	}
 
+	if len(m.GetRangeMatchers()) < 1 {
+		return Int64RangeMatcherValidationError{
+			field:  "RangeMatchers",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	for idx, item := range m.GetRangeMatchers() {
 		_, _ = idx, item
 
@@ -123,6 +130,13 @@ func (m *Int32RangeMatcher) Validate() error {
 		return nil
 	}
 
+	if len(m.GetRangeMatchers()) < 1 {
+		return Int32RangeMatcherValidationError{
+			field:  "RangeMatchers",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	for idx, item := range m.GetRangeMatchers() {
 		_, _ = idx, item
 
@@ -203,6 +217,13 @@ var _ interface {
 func (m *DoubleRangeMatcher) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if len(m.GetRangeMatchers()) < 1 {
+		return DoubleRangeMatcherValidationError{
+			field:  "RangeMatchers",
+			reason: "value must contain at least 1 item(s)",
+		}
 	}
 
 	for idx, item := range m.GetRangeMatchers() {
