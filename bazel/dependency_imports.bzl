@@ -1,19 +1,23 @@
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
-load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_dependencies")
+load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@rules_buf//buf:repositories.bzl", "rules_buf_dependencies", "rules_buf_toolchains")
+load("@rules_buf//gazelle/buf:repositories.bzl", "gazelle_buf_dependencies")
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
 # go version for rules_go
 GO_VERSION = "1.20.2"
 
 def xds_dependency_imports(go_version = GO_VERSION):
+    rules_buf_dependencies()
+    rules_buf_toolchains(version = "v1.29.0", sha256 = "dc6ab1457f376ba867bd16227d05620a8483248dc9c2d4e52fbcf24cd447938b")
     rules_proto_dependencies()
     rules_proto_toolchains()
     protobuf_deps()
     go_rules_dependencies()
-    go_register_toolchains(go_version)
+    go_register_toolchains(version = go_version)
     gazelle_dependencies()
     pgv_dependencies()
 
@@ -105,9 +109,9 @@ def xds_dependency_imports(go_version = GO_VERSION):
         sum = "h1:AGJ0Ih4mHjSeibYkFGh1dD9KJ/eOtZ93I6hoHhukQ5Q=",
         version = "v1.40.0",
     )
-
+    gazelle_buf_dependencies()
 
 # Old name for backward compatibility.
 # TODO(roth): Remove this once callers are migrated to the new name.
 def udpa_dependency_imports(go_version = GO_VERSION):
-  xds_dependency_imports(go_version=go_version)
+    xds_dependency_imports(go_version = go_version)

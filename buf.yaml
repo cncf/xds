@@ -1,0 +1,11 @@
+version: v1
+name: buf.build/cncf/xds
+breaking:
+  use:
+    - FILE
+deps:
+  - buf.build/envoyproxy/protoc-gen-validate:fab737efbb4b4d03e7c771393708f75594b121e4
+  - buf.build/googleapis/googleapis:28151c0d0a1641bf938a7672c500e01d
+lint:
+  use:
+    - DEFAULT
