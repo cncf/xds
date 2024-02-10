@@ -1,0 +1,22 @@
+{
+  "containerEnv": {
+    "USE_BAZEL_VERSION": "6.3.2"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "BazelBuild.vscode-bazel",
+        "golang.go"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/balazs23/devcontainers-features/bazel:1": {
+      "bazelisk": "v1.19.0"
+    },
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.19"
+    }
+  },
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu"
+}
