@@ -35,9 +35,14 @@ REPOSITORY_LOCATIONS = dict(
             "https://github.com/bazelbuild/rules_go/releases/download/v0.39.1/rules_go-v0.39.1.zip",
         ],
     ),
+    rules_buf = dict(
+        sha256 = "bc2488ee497c3fbf2efee19ce21dceed89310a08b5a9366cc133dd0eb2118498",
+        strip_prefix = "rules_buf-0.2.0",
+        urls = ["https://github.com/bufbuild/rules_buf/archive/refs/tags/v0.2.0.zip"],
+    ),
     rules_proto = dict(
         sha256 = "80d3a4ec17354cccc898bfe32118edd934f851b03029d63ef3fc7c8663a7415c",
         strip_prefix = "rules_proto-5.3.0-21.5",
-        urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.5.tar.gz",],
+        urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.5.tar.gz"],
     ),
 )
