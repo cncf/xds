@@ -34,4 +34,4 @@ def xds_api_dependencies():
 # Old name for backward compatibility.
 # TODO(roth): Remove once all callers are updated to use the new name.
 def udpa_api_dependencies():
-  xds_api_dependencies()
+    xds_api_dependencies()
