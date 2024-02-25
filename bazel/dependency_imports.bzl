@@ -1,8 +1,8 @@
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
-load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_dependencies")
+load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
 # go version for rules_go
@@ -106,8 +106,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
         version = "v1.40.0",
     )
 
-
 # Old name for backward compatibility.
 # TODO(roth): Remove this once callers are migrated to the new name.
 def udpa_dependency_imports(go_version = GO_VERSION):
-  xds_dependency_imports(go_version=go_version)
+    xds_dependency_imports(go_version = go_version)
