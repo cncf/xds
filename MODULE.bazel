@@ -27,6 +27,9 @@ use_repo(
 extension_for_com_google_googleapis = use_extension("//:extension_for_com_google_googleapis.bzl", "extension_for_com_google_googleapis")
 use_repo(extension_for_com_google_googleapis, "com_google_googleapis_imports")
 
+extension_for_com_github_grpc_grpc = use_extension("//:extension_for_com_github_grpc_grpc.bzl", "extension_for_com_github_grpc_grpc")
+use_repo(extension_for_com_github_grpc_grpc, "protocol_compiler")
+
 go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//go:go.mod")
 use_repo(
