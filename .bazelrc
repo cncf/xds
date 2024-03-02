@@ -1,2 +1,2 @@
 build:ci --announce_rc
-common --noenable_bzlmod
+common --enable_bzlmod
