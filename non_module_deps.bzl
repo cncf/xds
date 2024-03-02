@@ -1,7 +1,7 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # -- load statements -- #
 
-def _non_module_deps_impl():
+def _non_module_deps_impl(_):
   http_archive(
     name = "com_envoyproxy_protoc_gen_validate",
     urls = [
