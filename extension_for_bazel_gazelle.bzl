@@ -1,6 +1,6 @@
 load("@bazel_gazelle//internal:go_repository.bzl", "go_repository")
 
-def _extension_for_bazel_gazelle_impl():
+def _extension_for_bazel_gazelle_impl(_):
     go_repository(
         name = "com_github_lyft_protoc_gen_star",
         importpath = "github.com/lyft/protoc-gen-star/v2",
