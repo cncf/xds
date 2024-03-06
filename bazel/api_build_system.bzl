@@ -143,10 +143,10 @@ def xds_go_test(name, **kwargs):
 # Old names for backward compatibility.
 # TODO(roth): Remove these once all callers are migrated to the new names.
 def udpa_proto_package(srcs = [], deps = [], has_services = False, visibility = ["//visibility:public"]):
-  xds_proto_package(srcs=srcs, deps=deps, has_services=has_services, visibility=visibility)
+    xds_proto_package(srcs = srcs, deps = deps, has_services = has_services, visibility = visibility)
 
 def udpa_cc_test(name, **kwargs):
-  xds_cc_test(name, **kwargs)
+    xds_cc_test(name, **kwargs)
 
 def udpa_go_test(name, **kwargs):
-  xds_go_test(name, **kwargs)
+    xds_go_test(name, **kwargs)

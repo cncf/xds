@@ -26,4 +26,4 @@ def xds_http_archive(name, locations, **kwargs):
 # Old name for backward compatibility.
 # TODO(roth): Remove once all callers are changed to use the new name.
 def udpa_http_archive(name, locations, **kwargs):
-  xds_http_archive(name, locations, **kwargs)
+    xds_http_archive(name, locations, **kwargs)
