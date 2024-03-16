@@ -39,38 +39,38 @@ def xds_dependency_imports(go_version = GO_VERSION):
     go_repository(
         name = "com_github_iancoleman_strcase",
         importpath = "github.com/iancoleman/strcase",
-        sum = "h1:05I4QRnGpI0m37iZQRuskXh+w77mr6Z41lwQzuHLwW0=",
-        version = "v0.2.0",
+        sum = "h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=",
+        version = "v0.3.0",
         build_external = "external",
         # project_url = "https://pkg.go.dev/github.com/iancoleman/strcase",
         # last_update = "2020-11-22"
         # use_category = ["api"],
-        # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v1.0.2/dependencies.bzl#L170-L175"
+        # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v1.0.4/dependencies.bzl#L170-L175"
     )
     go_repository(
         name = "org_golang_x_net",
         importpath = "golang.org/x/net",
-        sum = "h1:BONx9s002vGdD9umnlX1Po8vOZmrgH34qlHcD1MfK14=",
-        version = "v0.14.0",
+        sum = "h1:aCL9BSgETF1k+blQaYUBx9hJ9LOGP3gAVemcZlf1Kpo=",
+        version = "v0.20.0",
         build_external = "external",
     )
     go_repository(
         name = "org_golang_x_text",
         importpath = "golang.org/x/text",
-        sum = "h1:k+n5B8goJNdU7hSvEtMUz3d1Q6D/XW4COJSJR6fN0mc=",
-        version = "v0.12.0",
+        sum = "h1:ScX5w1eTa3QqT8oi6+ziP7dTV1S2+ALU0bI+0zXKWiQ=",
+        version = "v0.14.0",
         build_external = "external",
     )
     go_repository(
         name = "com_github_spf13_afero",
         importpath = "github.com/spf13/afero",
-        sum = "h1:j49Hj62F0n+DaZ1dDCvhABaPNSGNkt32oRFxI33IEMw=",
-        version = "v1.9.2",
+        sum = "h1:EaGW2JJh15aKOejeuJ+wpFSHnbd7GE6Wvp3TsNhb6LY=",
+        version = "v1.10.0",
         build_external = "external",
         # project_url = "https://pkg.go.dev/github.com/spf13/afero",
         # last_update = "2021-03-20"
         # use_category = ["api"],
-        # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v1.0.2/dependencies.bzl#L257-L262"
+        # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v1.0.4/dependencies.bzl#L257-L262"
     )
     go_repository(
         name = "com_github_lyft_protoc_gen_star_v2",
@@ -81,13 +81,13 @@ def xds_dependency_imports(go_version = GO_VERSION):
         # project_url = "https://pkg.go.dev/github.com/lyft/protoc-gen-star",
         # last_update = "2023-01-06"
         # use_category = ["api"],
-        # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v1.0.2/dependencies.bzl#L220-L225"
+        # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v1.0.4/dependencies.bzl#L220-L225"
     )
     go_repository(
         name = "org_golang_google_protobuf",
         importpath = "google.golang.org/protobuf",
-        sum = "h1:g0LDEJHgrBl9N9r17Ru3sqWhkIx2NB67okBHPwC7hs8=",
-        version = "v1.31.0",
+        sum = "h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=",
+        version = "v1.32.0",
         build_external = "external",
     )
     go_repository(
