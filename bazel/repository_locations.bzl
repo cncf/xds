@@ -8,9 +8,9 @@ REPOSITORY_LOCATIONS = dict(
         urls = ["https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz"],
     ),
     com_envoyproxy_protoc_gen_validate = dict(
-        sha256 = "27b3202ba6e9eb37dca0f902c8f96b6330670b33d8669ad739f60ab61bdaf296",
-        strip_prefix = "protoc-gen-validate-1.0.2",
-        urls = ["https://github.com/envoyproxy/protoc-gen-validate/archive/refs/tags/v1.0.2.tar.gz"],
+        sha256 = "92e29c2150675ce954c965bcaa559ca944704b75711533cfe03ce541dcf5a1dd",
+        strip_prefix = "protoc-gen-validate-1.0.4",
+        urls = ["https://github.com/envoyproxy/protoc-gen-validate/archive/refs/tags/v1.0.4.tar.gz"],
     ),
     com_github_grpc_grpc = dict(
         sha256 = "916f88a34f06b56432611aaa8c55befee96d0a7b7d7457733b9deeacbc016f99",
