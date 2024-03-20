@@ -9,10 +9,10 @@ package v3
 import (
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
-	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	v1alpha1 "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -110,8 +110,8 @@ type CelExtractString struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ExprExtract  *CelExpression        `protobuf:"bytes,1,opt,name=expr_extract,json=exprExtract,proto3" json:"expr_extract,omitempty"`
-	DefaultValue *wrappers.StringValue `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
+	ExprExtract  *CelExpression          `protobuf:"bytes,1,opt,name=expr_extract,json=exprExtract,proto3" json:"expr_extract,omitempty"`
+	DefaultValue *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
 }
 
 func (x *CelExtractString) Reset() {
@@ -153,7 +153,7 @@ func (x *CelExtractString) GetExprExtract() *CelExpression {
 	return nil
 }
 
-func (x *CelExtractString) GetDefaultValue() *wrappers.StringValue {
+func (x *CelExtractString) GetDefaultValue() *wrapperspb.StringValue {
 	if x != nil {
 		return x.DefaultValue
 	}
@@ -220,11 +220,11 @@ func file_xds_type_v3_cel_proto_rawDescGZIP() []byte {
 
 var file_xds_type_v3_cel_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_xds_type_v3_cel_proto_goTypes = []interface{}{
-	(*CelExpression)(nil),        // 0: xds.type.v3.CelExpression
-	(*CelExtractString)(nil),     // 1: xds.type.v3.CelExtractString
-	(*v1alpha1.ParsedExpr)(nil),  // 2: google.api.expr.v1alpha1.ParsedExpr
-	(*v1alpha1.CheckedExpr)(nil), // 3: google.api.expr.v1alpha1.CheckedExpr
-	(*wrappers.StringValue)(nil), // 4: google.protobuf.StringValue
+	(*CelExpression)(nil),          // 0: xds.type.v3.CelExpression
+	(*CelExtractString)(nil),       // 1: xds.type.v3.CelExtractString
+	(*v1alpha1.ParsedExpr)(nil),    // 2: google.api.expr.v1alpha1.ParsedExpr
+	(*v1alpha1.CheckedExpr)(nil),   // 3: google.api.expr.v1alpha1.CheckedExpr
+	(*wrapperspb.StringValue)(nil), // 4: google.protobuf.StringValue
 }
 var file_xds_type_v3_cel_proto_depIdxs = []int32{
 	2, // 0: xds.type.v3.CelExpression.parsed_expr:type_name -> google.api.expr.v1alpha1.ParsedExpr

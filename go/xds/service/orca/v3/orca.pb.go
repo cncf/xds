@@ -9,12 +9,12 @@ package v3
 import (
 	context "context"
 	v3 "github.com/cncf/xds/go/xds/data/orca/v3"
-	duration "github.com/golang/protobuf/ptypes/duration"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -31,8 +31,8 @@ type OrcaLoadReportRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ReportInterval   *duration.Duration `protobuf:"bytes,1,opt,name=report_interval,json=reportInterval,proto3" json:"report_interval,omitempty"`
-	RequestCostNames []string           `protobuf:"bytes,2,rep,name=request_cost_names,json=requestCostNames,proto3" json:"request_cost_names,omitempty"`
+	ReportInterval   *durationpb.Duration `protobuf:"bytes,1,opt,name=report_interval,json=reportInterval,proto3" json:"report_interval,omitempty"`
+	RequestCostNames []string             `protobuf:"bytes,2,rep,name=request_cost_names,json=requestCostNames,proto3" json:"request_cost_names,omitempty"`
 }
 
 func (x *OrcaLoadReportRequest) Reset() {
@@ -67,7 +67,7 @@ func (*OrcaLoadReportRequest) Descriptor() ([]byte, []int) {
 	return file_xds_service_orca_v3_orca_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *OrcaLoadReportRequest) GetReportInterval() *duration.Duration {
+func (x *OrcaLoadReportRequest) GetReportInterval() *durationpb.Duration {
 	if x != nil {
 		return x.ReportInterval
 	}
@@ -132,7 +132,7 @@ func file_xds_service_orca_v3_orca_proto_rawDescGZIP() []byte {
 var file_xds_service_orca_v3_orca_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_xds_service_orca_v3_orca_proto_goTypes = []interface{}{
 	(*OrcaLoadReportRequest)(nil), // 0: xds.service.orca.v3.OrcaLoadReportRequest
-	(*duration.Duration)(nil),     // 1: google.protobuf.Duration
+	(*durationpb.Duration)(nil),   // 1: google.protobuf.Duration
 	(*v3.OrcaLoadReport)(nil),     // 2: xds.data.orca.v3.OrcaLoadReport
 }
 var file_xds_service_orca_v3_orca_proto_depIdxs = []int32{
