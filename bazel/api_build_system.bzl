@@ -117,14 +117,13 @@ def xds_proto_package(
         visibility = ["//visibility:public"],
         deps = depset([_go_proto_mapping(dep) for dep in deps] + [
             "@com_envoyproxy_protoc_gen_validate//validate:go_default_library",
-            "@com_github_golang_protobuf//ptypes:go_default_library_gen",
             "@go_googleapis//google/api:annotations_go_proto",
             "@go_googleapis//google/rpc:status_go_proto",
-            "@io_bazel_rules_go//proto/wkt:any_go_proto",
-            "@io_bazel_rules_go//proto/wkt:duration_go_proto",
-            "@io_bazel_rules_go//proto/wkt:struct_go_proto",
-            "@io_bazel_rules_go//proto/wkt:timestamp_go_proto",
-            "@io_bazel_rules_go//proto/wkt:wrappers_go_proto",
+            "@org_golang_google_protobuf//types/known/anypb:go_default_library",
+            "@org_golang_google_protobuf//types/known/durationpb:go_default_library",
+            "@org_golang_google_protobuf//types/known/structpb:go_default_library",
+            "@org_golang_google_protobuf//types/known/timestamppb:go_default_library",
+            "@org_golang_google_protobuf//types/known/wrapperspb:go_default_library",
         ]).to_list(),
     )
 
