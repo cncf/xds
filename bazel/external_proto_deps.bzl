@@ -28,7 +28,7 @@ EXTERNAL_PROTO_GO_BAZEL_DEP_MAP = {
     #    @com_google_googleapis when the bug is resolved. Also see the note to
     #    go_googleapis in https://github.com/bazelbuild/rules_go/blob/master/go/dependencies.rst#overriding-dependencies
     "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto": "@org_golang_google_genproto_googleapis_api//expr/v1alpha1",
-    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@org_golang_google_genproto_googleapis_api//expr/v1alpha1",   
+    "@com_google_googleapis//google/api/expr/v1alpha1:syntax_proto": "@org_golang_google_genproto_googleapis_api//expr/v1alpha1",
     "@dev_cel//proto/cel/expr:checked_proto": "@dev_cel//proto/cel/expr:checked_go_proto",
     "@dev_cel//proto/cel/expr:syntax_proto": "@dev_cel//proto/cel/expr:syntax_go_proto",
 }
