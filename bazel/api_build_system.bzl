@@ -102,9 +102,9 @@ def xds_proto_package(
         has_services = has_services,
     )
 
-    compilers = ["@io_bazel_rules_go//proto:go_proto", "//bazel:pgv_plugin_go"]
+    compilers = ["@io_bazel_rules_go//proto:go_proto", "@com_envoyproxy_protoc_gen_validate//bazel/go:pgv_plugin_go"]
     if has_services:
-        compilers = ["@io_bazel_rules_go//proto:go_grpc", "//bazel:pgv_plugin_go"]
+        compilers = ["@io_bazel_rules_go//proto:go_grpc", "@com_envoyproxy_protoc_gen_validate//bazel/go:pgv_plugin_go"]
 
     # Because RBAC proro depends on googleapis syntax.proto and checked.proto,
     # which share the same go proto library, it causes duplicative dependencies.
