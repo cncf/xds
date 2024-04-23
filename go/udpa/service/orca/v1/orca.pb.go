@@ -7,11 +7,7 @@
 package v1
 
 import (
-	context "context"
 	v1 "github.com/cncf/xds/go/udpa/data/orca/v1"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
@@ -183,111 +179,4 @@ func file_udpa_service_orca_v1_orca_proto_init() {
 	file_udpa_service_orca_v1_orca_proto_rawDesc = nil
 	file_udpa_service_orca_v1_orca_proto_goTypes = nil
 	file_udpa_service_orca_v1_orca_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// OpenRcaServiceClient is the client API for OpenRcaService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type OpenRcaServiceClient interface {
-	StreamCoreMetrics(ctx context.Context, in *OrcaLoadReportRequest, opts ...grpc.CallOption) (OpenRcaService_StreamCoreMetricsClient, error)
-}
-
-type openRcaServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewOpenRcaServiceClient(cc grpc.ClientConnInterface) OpenRcaServiceClient {
-	return &openRcaServiceClient{cc}
-}
-
-func (c *openRcaServiceClient) StreamCoreMetrics(ctx context.Context, in *OrcaLoadReportRequest, opts ...grpc.CallOption) (OpenRcaService_StreamCoreMetricsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_OpenRcaService_serviceDesc.Streams[0], "/udpa.service.orca.v1.OpenRcaService/StreamCoreMetrics", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &openRcaServiceStreamCoreMetricsClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type OpenRcaService_StreamCoreMetricsClient interface {
-	Recv() (*v1.OrcaLoadReport, error)
-	grpc.ClientStream
-}
-
-type openRcaServiceStreamCoreMetricsClient struct {
-	grpc.ClientStream
-}
-
-func (x *openRcaServiceStreamCoreMetricsClient) Recv() (*v1.OrcaLoadReport, error) {
-	m := new(v1.OrcaLoadReport)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-// OpenRcaServiceServer is the server API for OpenRcaService service.
-type OpenRcaServiceServer interface {
-	StreamCoreMetrics(*OrcaLoadReportRequest, OpenRcaService_StreamCoreMetricsServer) error
-}
-
-// UnimplementedOpenRcaServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedOpenRcaServiceServer struct {
-}
-
-func (*UnimplementedOpenRcaServiceServer) StreamCoreMetrics(*OrcaLoadReportRequest, OpenRcaService_StreamCoreMetricsServer) error {
-	return status.Errorf(codes.Unimplemented, "method StreamCoreMetrics not implemented")
-}
-
-func RegisterOpenRcaServiceServer(s *grpc.Server, srv OpenRcaServiceServer) {
-	s.RegisterService(&_OpenRcaService_serviceDesc, srv)
-}
-
-func _OpenRcaService_StreamCoreMetrics_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(OrcaLoadReportRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(OpenRcaServiceServer).StreamCoreMetrics(m, &openRcaServiceStreamCoreMetricsServer{stream})
-}
-
-type OpenRcaService_StreamCoreMetricsServer interface {
-	Send(*v1.OrcaLoadReport) error
-	grpc.ServerStream
-}
-
-type openRcaServiceStreamCoreMetricsServer struct {
-	grpc.ServerStream
-}
-
-func (x *openRcaServiceStreamCoreMetricsServer) Send(m *v1.OrcaLoadReport) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-var _OpenRcaService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "udpa.service.orca.v1.OpenRcaService",
-	HandlerType: (*OpenRcaServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "StreamCoreMetrics",
-			Handler:       _OpenRcaService_StreamCoreMetrics_Handler,
-			ServerStreams: true,
-		},
-	},
-	Metadata: "udpa/service/orca/v1/orca.proto",
 }
