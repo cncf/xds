@@ -28,6 +28,11 @@ bazel_dep(
     repo_name = "com_google_protobuf",
 )
 bazel_dep(
+    name = "protoc-gen-validate",
+    version = "1.0.4",
+    repo_name = "com_envoyproxy_protoc_gen_validate",
+)
+bazel_dep(
     name = "rules_go",
     version = "0.46.0",
     repo_name = "io_bazel_rules_go",
