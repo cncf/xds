@@ -7,8 +7,8 @@ REPOSITORY_LOCATIONS = dict(
         ],
     ),
     bazel_skylib = dict(
-        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
-        urls = ["https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz"],
+        sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
+        urls = ["https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz"],
     ),
     com_envoyproxy_protoc_gen_validate = dict(
         sha256 = "92e29c2150675ce954c965bcaa559ca944704b75711533cfe03ce541dcf5a1dd",
@@ -29,9 +29,9 @@ REPOSITORY_LOCATIONS = dict(
         ],
     ),
     com_google_protobuf = dict(
-        sha256 = "8242327e5df8c80ba49e4165250b8f79a76bd11765facefaaecfca7747dc8da2",
-        strip_prefix = "protobuf-3.21.5",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.21.5.zip"],
+        sha256 = "c72840a5081484c4ac20789ea5bb5d5de6bc7c477ad76e7109fda2bc4e630fe6",
+        strip_prefix = "protobuf-3.21.7",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.21.7.zip"],
     ),
     dev_cel = dict(
         sha256 = "3ee09eb69dbe77722e9dee23dc48dc2cd9f765869fcf5ffb1226587c81791a0b",
@@ -46,8 +46,8 @@ REPOSITORY_LOCATIONS = dict(
         ],
     ),
     rules_proto = dict(
-        sha256 = "80d3a4ec17354cccc898bfe32118edd934f851b03029d63ef3fc7c8663a7415c",
-        strip_prefix = "rules_proto-5.3.0-21.5",
-        urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.5.tar.gz"],
+        sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
+        strip_prefix = "rules_proto-5.3.0-21.7",
+        urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz"],
     ),
 )

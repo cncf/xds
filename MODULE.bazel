@@ -1,0 +1,53 @@
+module(
+    name = "xds",
+    version = "0.0.0",
+)
+
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.4.1",
+)
+bazel_dep(
+    name = "cel-spec",
+    version = "0.15.0",
+    repo_name = "dev_cel",
+)
+bazel_dep(
+    name = "gazelle",
+    version = "0.34.0",
+    repo_name = "bazel_gazelle",
+)
+bazel_dep(
+    name = "grpc",
+    version = "1.56.3",
+    repo_name = "com_github_grpc_grpc",
+)
+bazel_dep(
+    name = "protobuf",
+    version = "23.1",
+    repo_name = "com_google_protobuf",
+)
+bazel_dep(
+    name = "rules_go",
+    version = "0.46.0",
+    repo_name = "io_bazel_rules_go",
+)
+bazel_dep(
+    name = "rules_proto",
+    version = "5.3.0-21.7",
+)
+
+# -- bazel_dep definitions -- #
+go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
+go_sdk.download(version = "1.20.2")
+
+go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//go:go.mod")
+use_repo(
+    go_deps,
+	"dev_cel_expr",
+	"com_github_envoyproxy_protoc_gen_validate",
+	"org_golang_google_genproto_googleapis_api",
+	"org_golang_google_grpc",
+	"org_golang_google_protobuf",
+)
