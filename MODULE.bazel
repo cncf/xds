@@ -64,8 +64,9 @@ go_sdk.download(version = "1.20.2")
 go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//go:go.mod")
 use_repo(
-    go_deps,
+    go_deps, 
 	"org_golang_google_genproto_googleapis_api",
+	"org_golang_google_genproto_googleapis_rpc",
 	"org_golang_google_grpc",
 	"org_golang_google_protobuf",
 )
