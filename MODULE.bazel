@@ -42,7 +42,17 @@ bazel_dep(
     version = "5.3.0-21.7",
 )
 
-# -- bazel_dep definitions -- #
+non_module_dependencies = use_extension("//:extensions.bzl", "non_module_dependencies")
+use_repo(
+    non_module_dependencies,
+    "com_google_googleapis",
+)
+
+googleapis_ext = use_extension("//:googleapis_ext.bzl", "googleapis_ext")
+use_repo(
+    googleapis_ext,
+    "com_google_googleapis_imports",
+)
 go_sdk = use_extension("@io_bazel_rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.download(version = "1.20.2")
 
