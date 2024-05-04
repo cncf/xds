@@ -65,7 +65,6 @@ go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//go:go.mod")
 use_repo(
     go_deps,
-	"com_github_envoyproxy_protoc_gen_validate",
 	"org_golang_google_genproto_googleapis_api",
 	"org_golang_google_grpc",
 	"org_golang_google_protobuf",
