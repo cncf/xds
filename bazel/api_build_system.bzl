@@ -24,7 +24,6 @@ _COMMON_PROTO_DEPS = [
     "@com_google_protobuf//:timestamp_proto",
     "@com_google_protobuf//:wrappers_proto",
     "@com_google_googleapis//google/api:http_proto",
-    "@com_google_googleapis//google/api:annotations_proto",
     "@com_google_googleapis//google/rpc:status_proto",
     "@com_envoyproxy_protoc_gen_validate//validate:validate_proto",
 ]
@@ -63,7 +62,6 @@ def _xds_cc_py_proto_library(
         cc_deps = [_cc_proto_mapping(dep) for dep in deps] + [
             "@com_google_googleapis//google/api:http_cc_proto",
             "@com_google_googleapis//google/api:httpbody_cc_proto",
-            "@com_google_googleapis//google/api:annotations_cc_proto",
             "@com_google_googleapis//google/rpc:status_cc_proto",
         ],
         deps = [relative_name],
@@ -117,8 +115,6 @@ def xds_proto_package(
         visibility = ["//visibility:public"],
         deps = depset([_go_proto_mapping(dep) for dep in deps] + [
             "@com_envoyproxy_protoc_gen_validate//validate:go_default_library",
-            "@org_golang_google_genproto_googleapis_api//annotations:annotations",
-            "@org_golang_google_genproto_googleapis_rpc//status:status",
             "@org_golang_google_protobuf//types/known/anypb:go_default_library",
             "@org_golang_google_protobuf//types/known/durationpb:go_default_library",
             "@org_golang_google_protobuf//types/known/structpb:go_default_library",
