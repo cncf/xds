@@ -18,6 +18,6 @@ option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
 // Refer to :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` documentation
 // for usage details.
 //
-// [[#extension-category: envoy.matching.inputs.cel_data_input]
+// [#extension-category: envoy.matching.inputs.cel_data_input]
 message HttpAttributesCelMatchInput {
 }
