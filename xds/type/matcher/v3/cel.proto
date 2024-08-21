@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
-import "xds/annotations/v3/status.proto";
 import "xds/type/v3/cel.proto";
 
 import "validate/validate.proto";
