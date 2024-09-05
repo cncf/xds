@@ -26,6 +26,7 @@ option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
 // Refer to :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` documentation
 // for usage details.
 //
+// [#comment: envoy.matching.matchers.cel_matcher]
 message CelMatcher {
   // Either parsed or checked representation of the CEL program.
   type.v3.CelExpression expr_match = 1 [(validate.rules).message = {required: true}];
