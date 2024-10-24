@@ -224,7 +224,7 @@ report in one of the formats listed above.
 A sidecar, e.g. Envoy or some other in-container proxy process, can inject the inline ORCA header
 at response completion.
 
-![Sidecar Integration Diagram](./orca-spec-sidecar.svg)
+![Sidecar Integration Diagram](./orca-spec-sidecar.jpg)
 
 The advantage of a sidecar model is that the application requires no modification as in the example
 service A above. A disadvantage of this approach is that it requires changes to how DPLB operators
