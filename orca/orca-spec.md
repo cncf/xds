@@ -150,7 +150,7 @@ message OrcaLoadReport {
 With inline (per-request) reporting, load reports will be
 attached to the response headers or trailers of an HTTP/gRPC stream.
 
-The name of the header is endpoint-load-metrics and could include load reports in different formats,
+The name of the header is `endpoint-load-metrics` and could include load reports in different formats,
 which are determined by the prefix word of the header value.
 
 ### Binary Protobuf
@@ -170,15 +170,15 @@ Comma separated key-value pairs in endpoint-load-metrics. This is a flattened
 representation of OrcaLoadReport, with the map fields elided into the top level scope by prepending
 the ‘<map_name>.’:
 
-```
-endpoint-load-metrics: TEXT cpu_utilization=0.3, mem_utilization=0.8, rps_fractional=10.0, eps=1,
-named_metrics.custom_metric_util=0.4 JSON The JSON encoding of OrcaLoadReport:
-```
+`endpoint-load-metrics: TEXT cpu_utilization=0.3, mem_utilization=0.8, rps_fractional=10.0, eps=1,
+named_metrics.custom_metric_util=0.4`
 
-```
-endpoint-load-metrics: JSON {“cpu_utilization”: 0.3, “mem_utilization”: 0.8, “rps_fractional”: 10.0,
-“eps”: 1, “named_metrics”: {“custom-metric-util”: 0.4}}.
-```
+### JSON
+
+The JSON encoding of OrcaLoadReport:
+
+`endpoint-load-metrics: JSON {“cpu_utilization”: 0.3, “mem_utilization”: 0.8, “rps_fractional”: 10.0,
+“eps”: 1, “named_metrics”: {“custom-metric-util”: 0.4}}`
 
 ## Out-of-Band (OOB)
 
