@@ -253,13 +253,16 @@ This method will combine the core metrics such as CPU and Memory (computed by th
 together with the extra application-specific metrics, compute the inline ORCA response header. The
 application will then be responsible for including this in its response.
 
-# Known implementations
+# Known DPLB Implementations
 
 ## gRPC
-TODO: Add links to gRPC implementation
+TODO: [Repository]()
+
+[Design](https://github.com/grpc/proposal/blob/master/A51-custom-backend-metrics.md)
 
 ## Envoy
 
-Envoy implementation is discussed on the github, described in the design doc and implemented in
-orca\_parser.h.
+[Repository](https://github.com/envoyproxy/envoy/tree/main/source/common/orca)
+
+[Design](http://docs/document/d/1gb_2pcNnEzTgo1EJ6w1Ol7O-EH-O_Ysu5o215N9MTAg?tab=t.0#heading=h.do9yfa1wlpk8)
 
