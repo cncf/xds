@@ -159,17 +159,17 @@ which are determined by the prefix word of the header value.
 ### Binary Protobuf
 
 For Protocol Buffers aware code, this will be a binary serialized base64 encoded OrcaLoadReport
-protobuf in endpoint-load-metrics header with BIN prefix:
+protobuf in `endpoint-load-metrics` header with BIN prefix:
 
 `endpoint-load-metrics: BIN CZqZmZmZmbk/MQAAAAAAAABAQg4KA2ZvbxGamZmZmZm5P0IOCgNiYXIRmpmZmZmZyT8=`
 
-It could also be specified in the endpoint-load-metrics-bin header without BIN prefix:
+It could also be specified in the `endpoint-load-metrics-bin` header without BIN prefix:
 
 `endpoint-load-metrics-bin: CZqZmZmZmbk/MQAAAAAAAABAQg4KA2ZvbxGamZmZmZm5P0IOCgNiYXIRmpmZmZmZyT8=`
 
 ### Native HTTP
 
-Comma separated key-value pairs in endpoint-load-metrics. This is a flattened
+Comma separated key-value pairs in `endpoint-load-metrics`. This is a flattened
 representation of OrcaLoadReport, with the map fields elided into the top level scope by prepending
 the ‘<map_name>.’:
 
@@ -217,8 +217,8 @@ The definition for this service can be found at
 https://github.com/cncf/xds/blob/main/xds/service/orca/v3/orca.proto.
 
 Alternatively, an HTTP endpoint can be exposed by the load reporting server. A GET or HEAD request
-to this endpoint will return a response with the endpoint-load-metrics header that contains the load
-report in one of the formats listed above.
+to this endpoint will return a response with the `endpoint-load-metrics` header that contains the
+load report in one of the formats listed above.
 
 # ORCA Integration Considerations
 
