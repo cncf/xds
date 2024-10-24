@@ -5,6 +5,9 @@ Last Updated: Oct 24, 2024
 
 Harvey Tuch, Mark Roth, Misha Efimov, Andres Guedez
 
+*NOTE: this is the formal ORCA specification based on Harvey's [original
+proposal](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0#heading=h.xgjl2srtytjt).*
+
 # Overview
 
 Simple load balancing decisions can be made by taking into account local or global
@@ -211,7 +214,7 @@ message OrcaLoadReportRequest {
 ```
 
 The definition for this service can be found at
-https://github.com/cncf/xds/blob/eded343319d09f30032952beda9840bbd3dcf7ac/xds/service/orca/v3/orca.proto.
+https://github.com/cncf/xds/blob/main/xds/service/orca/v3/orca.proto.
 
 Alternatively, an HTTP endpoint can be exposed by the load reporting server. A GET or HEAD request
 to this endpoint will return a response with the endpoint-load-metrics header that contains the load
