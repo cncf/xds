@@ -93,7 +93,7 @@ balancer to the corresponding management server.
 Without prescribing wire format, the following protobuf schema provides the data model for ORCA
 reports:
 
-See https://github.com/cncf/xds/blob/main/xds/data/orca/v3/orca\_load\_report.proto for the source
+See https://github.com/cncf/xds/blob/main/xds/data/orca/v3/orca_load_report.proto for the source
 of truth.
 
 ```
