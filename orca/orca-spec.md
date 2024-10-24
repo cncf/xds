@@ -224,6 +224,8 @@ report in one of the formats listed above.
 A sidecar, e.g. Envoy or some other in-container proxy process, can inject the inline ORCA header
 at response completion.
 
+![Sidecar Integration Diagram](./orca-spec-sidecar.jpg)
+
 The advantage of a sidecar model is that the application requires no modification as in the example
 service A above. A disadvantage of this approach is that it requires changes to how DPLB operators
 operationally manage their backends, introducing a binary that will require upgrades and version
@@ -237,6 +239,8 @@ custom metrics. This enables the sidecar to collect additional telemetry data fo
 
 The application will link in a library for ORCA that will assist with generating the inline response
 header.
+
+![Library Integration Diagram](./orca-spec-library.jpg)
 
 This will require DPLB operators to modify their applications to call the ORCA library and inject
 the results into the HTTP response.
