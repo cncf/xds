@@ -274,5 +274,5 @@ TODO: [Repository]()
 |Date|Description|
 |----|-----------|
 |Oct 25, 2024|Updated specification in this document.|
-|April 16, 2019|Original
-[specification](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0) proposed to the Envoy community.|
+|April 16, 2019|Original [specification](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0) proposed to the Envoy community.|
+
