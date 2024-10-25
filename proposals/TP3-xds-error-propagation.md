@@ -1,9 +1,9 @@
 TP3: xds-error-propagation
 ----
-* Author(s): anramach
+* Author(s): Anirudh Ramachandra
 * Approvers: htuch, markdroth, adisuissa
 * Implemented in: <xDS client, ...>
-* Last updated: [YYYY-MM-DD]
+* Last updated: 2024-10-25
 
 ## Abstract
 
@@ -11,7 +11,7 @@ This proposal introduces enhancements to the [xDS transport protocol](https://ww
 
 The objective of this proposal is to suggest a way for clients to receive feedback from xDS Management Servers in case of partial/drastic failures without closing any streams or connections.
 
-This proposal includes a new field for each subscribed Resource, called `ResourceError`. This field will provide detailed information for resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the user. 
+This proposal includes a new field for each subscribed Resource, called `ResourceError`. This field will provide detailed information for resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the application. 
 
 ## Background
 
@@ -71,40 +71,34 @@ message DeltaDiscoveryResponse {
 ```
 
 ### Protocol Behavior
-The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application. 
-
-With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
+The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application. With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
 
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. 
 
 ### Wildcard Resources
 
-It is possible to subscribe to all resources by a client using a wildcard or “” resource name.The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
+It is possible to subscribe to all resources by a client using a wildcard or "" resource name. The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
 
 1. For errors associated with wildcard("" for legacy or "*") and for xDS-TP glob collections; the control plane `error_details` resource name will match the relevant wildcard request("" or "*" or xDS-TP glob collections). This can be used by the control plane to indicate an error with the collection as a whole.
 2. For errors associated with specific individual resources that match the glob,
-    - The resource name should be the specific resource name associated with the error 
-            OR
-    - The control could just not use this mechanism for wildcard subscriptions, because if the client doesn't have permission to access a resource, then it probably shouldn't be considered to match the wildcard subscription to begin with.
+    * The resource name should be the specific resource name associated with the error  OR
+    * The control could just not use this mechanism for wildcard subscriptions, because if the client doesn't have permission to access a resource, then it probably shouldn't be considered to match the wildcard subscription to begin with.
 
 ## Rationale
 
-This section documents limitations and design alternatives that were considered.
+The major alternative to this proposal is to use Wrapped Resources by using Resource Containers defined in https://www.envoyproxy.io/docs/envoy/latest/xds/core/v3/resource.proto#xds-core-v3-resource. 
 
 ### Wrapped Resources
 
-The major alternative to this proposal is to use Wrapped Resources. 
+ xDS resource containers are the default protos used for the Incremental xDS protocol and is controlled via the client feature `xds.config.supports-resource-in-sotw` for SoTW. 
 
-xDS supports passing resources via a wrapped Resource Container. This is the default for the Incremental xDS protocol and is controlled via the client feature `xds.config.supports-resource-in-sotw` for SoTW. 
-
-In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field currently is protobuf.Any. This enables us to designate the resource as either a `ResourceError` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
+In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field is a protobuf.Any. This enables us to designate the resource as either a `ResourceError` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
 
 #### Backward Compatibility
 
-To avoid possible confusion with this behavior, it will be protected with a client feature similar to  `supports-resource-in-sotw`  called `supports-resource-error-unwrapping`. 
+To avoid possible confusion with this behavior, it must be protected with a client feature similar to `supports-resource-in-sotw` called `supports-resource-error-unwrapping`. 
 
 Note: This should also be documented here: https://www.envoyproxy.io/docs/envoy/latest/api/client_features#currently-defined-client-features
-
 
 #### Why not this approach?
 
@@ -115,7 +109,7 @@ This approach has two major drawbacks compared to the chosen approach:
 
 ## Implementation
 
-This will probably be implemented in gRPC before Envoy
+This will probably be implemented in gRPC before Envoy.
 
 ## Open issues (if applicable)
 
@@ -123,6 +117,6 @@ This will probably be implemented in gRPC before Envoy
 
 Currently, the xDS protocol does not provide a clear mechanism for partial NACKs i.e. a way for the client to accept some of the resources that are sent by the management server.
 
-There have been few discussions of this behavior mainly https://github.com/grpc/proposal/blob/master/A46-xds-nack-semantics-improvement.md and https://github.com/envoyproxy/envoy/issues/32880. Currently clients have a general behavior of accepting certain resources even if they are NACKed but this information is not clearly communicated via the xDS protocol.
+There have been few discussions of this behavior mainly in https://github.com/grpc/proposal/blob/master/A46-xds-nack-semantics-improvement.md and https://github.com/envoyproxy/envoy/issues/32880. Currently clients have a general behavior of accepting certain resources even if they are NACKed but this information is not clearly communicated via the xDS protocol.
 
 Eventually using a similar field as this proposal gives us an opportunity to fix this issue in xDS for both the client and the management server, as the DiscoveryRequest could also use the new message `ResourceError` to provide explicit details about the resources not accepted. 
