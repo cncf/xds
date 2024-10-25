@@ -1,6 +1,6 @@
 TP3: xds-error-propagation
 ----
-* Author(s): Anirudh Ramachandra
+* Author(s): anicr7
 * Approvers: htuch, markdroth, adisuissa
 * Implemented in: <xDS client, ...>
 * Last updated: 2024-10-25
@@ -15,7 +15,7 @@ This proposal includes a new field for each subscribed Resource, called `Resourc
 
 ## Background
 
-A frequent use case for xDS involves client subscription to multiple resources from the xDS management server. Currently, if the xDS management server cannot provide a subset of these resources, the client experiences a complete loss of visibility. This can occur for various reasons, including but not limited to potential permission issues. This lack of granularity in the response can lead to significant operational challenges. 
+A frequent use case for xDS involves client subscription to multiple resources from the xDS management server. Currently, if the xDS management server cannot provide a subset of these resources, the client experiences a complete loss of visibility. This can occur for various reasons, including but not limited to potential permission issues. This lack of granularity in the response can pose significant operational challenges. 
 
 The xDS protocol does have a way for xDS clients to NACK responses back from the xDS Management server. The NACK response also contains an `error_detail` field which the Management Server can use to extract further information about the rejection. But this NACK’ing mechanism is restricted to the client i.e. there is no way for Management Server to actually convey a notification(Ex: unavailability, permission issues etc) regarding some or all the resource requests that are being subscribed by the client. This eventually leads to the client timeouts which, although it conveys an error back to the application, it misses the actual context for the issue. In most cases the xDS Management Servers might not even be accessible for the applications to debug these issues without escalation. 
 
@@ -90,7 +90,7 @@ The major alternative to this proposal is to use Wrapped Resources by using Reso
 
 ### Wrapped Resources
 
- xDS resource containers are the default protos used for the Incremental xDS protocol and is controlled via the client feature `xds.config.supports-resource-in-sotw` for SoTW. 
+ xDS resource containers are the default protos used for the Incremental xDS protocol and it's usage in SoTW is controlled via the client feature `xds.config.supports-resource-in-sotw`. 
 
 In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field is a protobuf.Any. This enables us to designate the resource as either a `ResourceError` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
 
