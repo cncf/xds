@@ -11,13 +11,13 @@ This proposal introduces enhancements to the [xDS transport protocol](https://ww
 
 The objective of this proposal is to suggest a way for clients to receive feedback from xDS Management Servers in case of partial/drastic failures without closing any streams or connections.
 
-This proposal includes a new field for each subscribed Resource, called `ResourceError`. This field will provide detailed information for resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the application. 
+This proposal includes a new field for each subscribed Resource, called `ResourceError` which will provide detailed information for resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the application. 
 
 ## Background
 
-A frequent use case for xDS involves client subscription to multiple resources from the xDS management server. Currently, if the xDS management server cannot provide a subset of these resources, the client experiences a complete loss of visibility. This can occur for various reasons, including but not limited to potential permission issues. This lack of granularity in the response can pose significant operational challenges. 
+A frequent use case for xDS involves client subscription to multiple resources from the management server. Currently, if the xDS management server cannot provide a subset of these resources, the client experiences a complete loss of visibility. This can occur for various reasons, including but not limited to potential permission issues. This lack of granularity in the response can pose significant operational challenges for general client observability or debugging. 
 
-The xDS protocol does have a way for xDS clients to NACK responses back from the xDS Management server. The NACK response also contains an `error_detail` field which the Management Server can use to extract further information about the rejection. But this NACK’ing mechanism is restricted to the client i.e. there is no way for Management Server to actually convey a notification(Ex: unavailability, permission issues etc) regarding some or all the resource requests that are being subscribed by the client. This eventually leads to the client timeouts which, although it conveys an error back to the application, it misses the actual context for the issue. In most cases the xDS Management Servers might not even be accessible for the applications to debug these issues without escalation. 
+The xDS protocol does have a way for xDS clients to NACK responses back from the xDS Management server. The NACK response also contains an `error_detail` field which the Management Server can use to extract further information about the rejection. But this NACK’ing mechanism is restricted to the client i.e. there is no way for Management Server to actually convey a notification(Ex: unavailability, permission issues etc) regarding some or all the resource requests that are being subscribed by the client. This eventually leads to the client timeouts which, although it conveys an error back to the application, it misses the actual context for the issue. In most cases the xDS Management Servers might not even be accessible for the client applications to debug these issues without escalation. 
 
 ### Related Proposals:
 
@@ -90,7 +90,7 @@ The major alternative to this proposal is to use Wrapped Resources by using Reso
 
 ### Wrapped Resources
 
- xDS resource containers are the default protos used for the Incremental xDS protocol and it's usage in SoTW is controlled via the client feature `xds.config.supports-resource-in-sotw`. 
+xDS resource containers are the default protos used for the Incremental xDS protocol and it's usage in SoTW is controlled via the client feature `xds.config.supports-resource-in-sotw`. 
 
 In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field is a protobuf.Any. This enables us to designate the resource as either a `ResourceError` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
 
