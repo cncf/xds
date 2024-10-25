@@ -5,8 +5,8 @@ Last Updated: Oct 24, 2024
 
 Harvey Tuch, Mark Roth, Misha Efimov, Andres Guedez
 
-*NOTE: this is the formal ORCA specification based on Harvey's [original
-proposal](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0#heading=h.xgjl2srtytjt).*
+*NOTE: this is a continously updated ORCA specification based on Harvey's [original
+specification](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0#heading=h.xgjl2srtytjt).*
 
 # Overview
 
@@ -269,3 +269,10 @@ TODO: [Repository]()
 
 [Design](http://docs/document/d/1gb_2pcNnEzTgo1EJ6w1Ol7O-EH-O_Ysu5o215N9MTAg?tab=t.0#heading=h.do9yfa1wlpk8)
 
+# Change History
+
+|Date|Description|
+|----|-----------|
+|Oct 25, 2024|Updated specification in this document.|
+|April 16, 2019|Original
+[specification](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0) proposed to the Envoy community.|
