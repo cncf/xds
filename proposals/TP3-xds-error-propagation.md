@@ -11,18 +11,13 @@ This proposal introduces enhancements to the [xDS transport protocol](https://ww
 
 The objective of this proposal is to suggest a way for clients to receive feedback from xDS Management Servers in case of partial/drastic failures without closing any streams or connections.
 
-This proposal includes a new field for each subscribed Resource, called ResourceError. This field will provide detailed information resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the user. 
-
+This proposal includes a new field for each subscribed Resource, called `ResourceError`. This field will provide detailed information for resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the user. 
 
 ## Background
 
 A frequent use case for xDS involves client subscription to multiple resources from the xDS management server. Currently, if the xDS management server cannot provide a subset of these resources, the client experiences a complete loss of visibility. This can occur for various reasons, including but not limited to potential permission issues. This lack of granularity in the response can lead to significant operational challenges. 
 
-The xDS protocol does have a way for Envoy/gRPC to NACK responses back from the xDS Management server. The NACK response also contains an error_detail which the Management Server can use to extract further information about the rejection. But this NACK’ing mechanism is restricted to the client i.e. there is no way for Management Server to actually convey a notification(Ex: unavailability, permission issues etc) regarding some or all the resource requests that are being subscribed by the client.
-
-This eventually leads to the client timeouts which, although it conveys an error back to the application, it misses the actual context for the issue. In most cases the xDS Management Servers might not even be accessible for the applications to debug these issues without escalation. 
-
-
+The xDS protocol does have a way for xDS clients to NACK responses back from the xDS Management server. The NACK response also contains an `error_detail` field which the Management Server can use to extract further information about the rejection. But this NACK’ing mechanism is restricted to the client i.e. there is no way for Management Server to actually convey a notification(Ex: unavailability, permission issues etc) regarding some or all the resource requests that are being subscribed by the client. This eventually leads to the client timeouts which, although it conveys an error back to the application, it misses the actual context for the issue. In most cases the xDS Management Servers might not even be accessible for the applications to debug these issues without escalation. 
 
 ### Related Proposals:
 
@@ -86,12 +81,11 @@ The xDS Management server is only expected to return the error message once rath
 
 It is possible to subscribe to all resources by a client using a wildcard or “” resource name.The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
 
-For errors associated with wildcard(“” for legacy or “*”) and for xDS-TP glob collections; the control plane error_details resource name will match the relevant wildcard request(“” or “*” or xDS-TP glob collections). This can be used by the control plane to indicate an error with the collection as a whole.
-For errors associated with specific individual resources that match the glob,
-The resource name should be the specific resource name associated with the error 
-OR
-The control could just not use this mechanism for wildcard subscriptions, because if the client doesn't have permission to access a resource, then it probably shouldn't be considered to match the wildcard subscription to begin with.
-
+1. For errors associated with wildcard("" for legacy or "*") and for xDS-TP glob collections; the control plane `error_details` resource name will match the relevant wildcard request("" or "*" or xDS-TP glob collections). This can be used by the control plane to indicate an error with the collection as a whole.
+2. For errors associated with specific individual resources that match the glob,
+    - The resource name should be the specific resource name associated with the error 
+            OR
+    - The control could just not use this mechanism for wildcard subscriptions, because if the client doesn't have permission to access a resource, then it probably shouldn't be considered to match the wildcard subscription to begin with.
 
 ## Rationale
 
@@ -101,13 +95,13 @@ This section documents limitations and design alternatives that were considered.
 
 The major alternative to this proposal is to use Wrapped Resources. 
 
-xDS supports passing resources via a wrapped Resource Container. This is the default for the Incremental xDS protocol and is controlled via the client feature xds.config.supports-resource-in-sotw for SoTW. 
+xDS supports passing resources via a wrapped Resource Container. This is the default for the Incremental xDS protocol and is controlled via the client feature `xds.config.supports-resource-in-sotw` for SoTW. 
 
 In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field currently is protobuf.Any. This enables us to designate the resource as either a `ResourceError` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
 
 #### Backward Compatibility
 
-To avoid possible confusion with this behavior, it will be protected with a client feature similar to  supports-resource-in-sotw  called supports-resource-error-unwrapping. 
+To avoid possible confusion with this behavior, it will be protected with a client feature similar to  `supports-resource-in-sotw`  called `supports-resource-error-unwrapping`. 
 
 Note: This should also be documented here: https://www.envoyproxy.io/docs/envoy/latest/api/client_features#currently-defined-client-features
 
@@ -116,9 +110,8 @@ Note: This should also be documented here: https://www.envoyproxy.io/docs/envoy/
 
 This approach has two major drawbacks compared to the chosen approach:
 
-This alternative would not work for non-wrapped resources
-It introduces a backwards compatibility issue, which adding a new field wouldn’t have as clients would just ignore them. 
-
+* This alternative would not work for non-wrapped resources
+* It introduces a backwards compatibility issue, which adding a new field wouldn’t have as clients would just ignore them. 
 
 ## Implementation
 
