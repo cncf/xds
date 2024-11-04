@@ -7,7 +7,7 @@ TP3: xds-error-propagation
 
 ## Abstract
 
-This proposal introduces enhancements to the [xDS transport protocol](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol), focusing on improved debugging and observability. Specifically, it outlines a mechanism for the control plane to communicate error information directly to xDS clients.
+This proposal introduces a mechanism for the xDS control plane to communicate errors to clients in cases where the control plane is unable to send a resource that the client has subscribed to (e.g., because the resource does not exist or because the client lacks permission for the resource), thus improving debuggability. In addition, this also provides a mechanism in the [SotW protocol variants](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol#variants-of-the-xds-transport-protocol) for the control plane to explicitly tell the client that a resource does not exist, without the client needing to wait for a [15-second does-not-exist timeout](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol#knowing-when-a-requested-resource-does-not-exist), similar to what already exists in the incremental protocol variants.
 
 The objective of this proposal is to suggest a way for clients to receive feedback from xDS Management Servers in case of partial/drastic failures without closing any streams or connections.
 
@@ -15,9 +15,10 @@ This proposal includes a new field for each subscribed Resource, called `Resourc
 
 ## Background
 
-A frequent use case for xDS involves client subscription to multiple resources from the management server. Currently, if the xDS management server cannot provide a subset of these resources, the client experiences a complete loss of visibility. This can occur for various reasons, including but not limited to potential permission issues. This lack of granularity in the response can pose significant operational challenges for general client observability or debugging. 
+In cases where the xDS control plane is unable to send a resource that the client has subscribed to (e.g., because the resource does not exist or because the client lacks permission for the resource), the control plane does not have a good mechanism for conveying the cause of the error to the client. The only existing mechanism for conveying a specific error message to a client is for the control plane to close the entire xDS stream with a non-OK status. However, this is often undesirable behavior, because a problem with a single resource will also stop the client from receiving updates from other, unrelated resources.
+Therefore, most control planes are forced to simply act as if the resource does not exist. In this situation, the client does not know why the control plane was unable to send the resource, so it cannot report useful information to human operators (e.g., via logs or request failure messages), which makes debugging challenging.
 
-The xDS protocol does have a way for xDS clients to NACK responses back from the xDS Management server. The NACK response also contains an `error_detail` field which the Management Server can use to extract further information about the rejection. But this NACK’ing mechanism is restricted to the client i.e. there is no way for Management Server to actually convey a notification(Ex: unavailability, permission issues etc) regarding some or all the resource requests that are being subscribed by the client. This eventually leads to the client timeouts which, although it conveys an error back to the application, it misses the actual context for the issue. In most cases the xDS Management Servers might not even be accessible for the client applications to debug these issues without escalation. 
+Note that while the incremental protocol variants can explicitly indicate to the client that a subscribed resource does not exist, the SotW protocol variants require the client to use a 15-second does-not-exist timeout. This adds an unnecessary delay before the client can react to the error. It has also led to cases where control plane slowness has caused clients to incorrectly react as if a resource does not exist.
 
 ### Related Proposals:
 
@@ -73,7 +74,7 @@ message DeltaDiscoveryResponse {
 ### Protocol Behavior
 The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application. With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
 
-The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. 
+The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed resource in every response. 
 
 ### Wildcard Resources
 
