@@ -112,11 +112,3 @@ This approach has two major drawbacks compared to the chosen approach:
 This will probably be implemented in gRPC before Envoy.
 
 ## Open issues (if applicable)
-
-### Possible improvements to NACKs
-
-Currently, the xDS protocol does not provide a clear mechanism for partial NACKs i.e. a way for the client to accept some of the resources that are sent by the management server.
-
-There have been few discussions of this behavior mainly in https://github.com/grpc/proposal/blob/master/A46-xds-nack-semantics-improvement.md and https://github.com/envoyproxy/envoy/issues/32880. Currently clients have a general behavior of accepting certain resources even if they are NACKed but this information is not clearly communicated via the xDS protocol.
-
-Eventually using a similar field as this proposal gives us an opportunity to fix this issue in xDS for both the client and the management server, as the DiscoveryRequest could also use the new message `ResourceError` to provide explicit details about the resources not accepted. 
