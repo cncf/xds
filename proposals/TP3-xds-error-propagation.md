@@ -77,9 +77,9 @@ The xDS Management server is only expected to return the error message once rath
 
 ### Wildcard Resources
 
-It is possible to subscribe to all resources by a client using a wildcard or "" resource name. The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
+It is possible to subscribe to all resources by a client using a wildcard or "" resource name or a [global collection](https://github.com/cncf/xds/blob/main/proposals/TP1-xds-transport-next.md). The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
 
-1. For errors associated with wildcard("" for legacy or "*") and for xDS-TP glob collections; the control plane `error_details` resource name will match the relevant wildcard request("" or "*" or xDS-TP glob collections). This can be used by the control plane to indicate an error with the collection as a whole.
+1. For errors associated with wildcard("" for legacy or `*`) and for xDS-TP glob collections; the control plane `error_details` resource name will match the relevant wildcard request("" or `*` or xDS-TP glob collections). This can be used by the control plane to indicate an error with the collection as a whole.
 2. For errors associated with specific individual resources that match the glob,
     * The resource name should be the specific resource name associated with the error  OR
     * The control could just not use this mechanism for wildcard subscriptions, because if the client doesn't have permission to access a resource, then it probably shouldn't be considered to match the wildcard subscription to begin with.
