@@ -21,7 +21,7 @@ The xDS protocol does have a way for xDS clients to NACK responses back from the
 
 ### Related Proposals:
 
-N/A
+* [TP1-xds-transport-next.md](https://github.com/cncf/xds/blob/main/proposals/TP1-xds-transport-next.md)
 
 ## Proposal
 
