@@ -1,7 +1,7 @@
 TP3: xds-error-propagation
 ----
 * Author(s): anicr7
-* Approvers: htuch, markdroth, adisuissa
+* Approvers: markdroth, adisuissa
 * Implemented in: <xDS client, ...>
 * Last updated: 2024-10-25
 
