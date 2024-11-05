@@ -77,7 +77,7 @@ All client are eventually expected to use this additional field to obtain notifi
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
 resource in every response. 
 
-As currently the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response.
+As the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients for backward compatibility. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response.
 
 ### Wildcard Resources
 
