@@ -72,9 +72,12 @@ message DeltaDiscoveryResponse {
 ```
 
 ### Protocol Behavior
-The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application. With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
+All client are eventually expected to use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application(i.e. fail a data plane request with a useful error message instead of a timeout). With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
 
-The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed resource in every response. 
+The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
+resource in every response. 
+
+As currently the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response.
 
 ### Wildcard Resources
 
