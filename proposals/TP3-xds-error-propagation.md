@@ -22,7 +22,7 @@ Note that while the incremental protocol variants can explicitly indicate to the
 
 ### Related Proposals:
 
-* [TP1-xds-transport-next.md](https://github.com/cncf/xds/blob/main/proposals/TP1-xds-transport-next.md)
+* [TP1-xds-transport-next.md](TP1-xds-transport-next.md)
 
 ## Proposal
 
@@ -72,16 +72,16 @@ message DeltaDiscoveryResponse {
 ```
 
 ### Protocol Behavior
-All client are eventually expected to use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application(i.e. fail a data plane request with a useful error message instead of a timeout). With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
+Clients that support this mechanism will use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application(i.e. fail a data plane request with a useful error message instead of a timeout). With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
 
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
 resource in every response. 
 
 As the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients for backward compatibility. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response.
 
-### Wildcard Resources
+### Wildcard Resources and Glob Collections
 
-It is possible to subscribe to all resources by a client using a wildcard or "" resource name or a [global collection](https://github.com/cncf/xds/blob/main/proposals/TP1-xds-transport-next.md). The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
+For legacy wildcard subscriptions or [glob collections](TP1-xds-transport-next.md#glob), the control plane is responsible for deciding which resources are included in the subscription. The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
 
 1. For errors associated with wildcard("" for legacy or `*`) and for xDS-TP glob collections; the control plane `error_details` resource name will match the relevant wildcard request("" or `*` or xDS-TP glob collections). This can be used by the control plane to indicate an error with the collection as a whole.
 2. For errors associated with specific individual resources that match the glob,
