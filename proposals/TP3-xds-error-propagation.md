@@ -57,10 +57,7 @@ string version_info = 1;
 // notifications in case of unavailability, permissions errors 
 // without the client having to wait for the `config fetch` timeout.
 repeated ResourceError resource_errors = N;
-
-// NEW FIELD
-// For non-existing resources.
-repeated ResourceName removed_resources = N;
+...
 }
 
 message DeltaDiscoveryResponse {
@@ -72,14 +69,20 @@ message DeltaDiscoveryResponse {
 ```
 
 ### Protocol Behavior
-Clients that support this mechanism will use this additional field to obtain notification for resources the xDS Management server couldn’t procure. The xDS client should cancel any resource timers once this message is received and convey the error message to the application(i.e. fail a data plane request with a useful error message instead of a timeout). With the addition of this field, when a client receives an explicit error or does-not-exist indicator from the management server, it should react the same way it would have if its does-not-exist timer fired. 
+Clients that support this mechanism will use this additional field to obtain error information for resources that the xDS server couldn’t provide. When this message is received, the xDS client should cancel any resource timers for the indicated resource. The client should then handle the error based on the status code, as follows (using RFC-2119 terminology):
+
+The following codes will be interpretted by clients as transient failures, meaning that the client MUST continue to use previously cached versions of the resource if it has them: UNAVAILABLE, INTERNAL, UNKNOWN.
+
+The following codes will be interpretted by clients as data errors, which the client MAY handle by dropping any previously cached resource: NOT_FOUND, PERMISSION_DENIED
+The behavior for any other status code is undefined. Data planes SHOULD treat these as transient failures, but future xRFCs may impose additional semantics on them.
+Note that an error with status code NOT_FOUND will be interpreted to mean that the resource does not exist. The client should handle this case exactly the same way that it would if the does-not-exist timer fired or if it receives removed_resources or removed_resource_names in the incremental protocol variant.
 
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
 resource in every response. 
 
 As the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients for backward compatibility. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response.
 
-### Wildcard Resources and Glob Collections
+### Wildcard Subscriptions and Glob Collections
 
 For legacy wildcard subscriptions or [glob collections](TP1-xds-transport-next.md#glob), the control plane is responsible for deciding which resources are included in the subscription. The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
 
