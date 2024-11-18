@@ -71,10 +71,9 @@ message DeltaDiscoveryResponse {
 ### Protocol Behavior
 Clients that support this mechanism will use this additional field to obtain error information for resources that the xDS server couldn’t provide. When this message is received, the xDS client should cancel any resource timers for the indicated resource. The client should then handle the error based on the status code, as follows (using RFC-2119 terminology):
 
-The following codes will be interpretted by clients as transient failures, meaning that the client MUST continue to use previously cached versions of the resource if it has them: UNAVAILABLE, INTERNAL, UNKNOWN.
-
-The following codes will be interpretted by clients as data errors, which the client MAY handle by dropping any previously cached resource: NOT_FOUND, PERMISSION_DENIED
-The behavior for any other status code is undefined. Data planes SHOULD treat these as transient failures, but future xRFCs may impose additional semantics on them.
+  * The following codes will be interpretted by clients as transient failures, meaning that the client MUST continue to use previously cached versions of the resource if it has them: UNAVAILABLE, INTERNAL, UNKNOWN.
+  * The following codes will be interpretted by clients as data errors, which the client MAY handle by dropping any previously cached resource: NOT_FOUND, PERMISSION_DENIED
+  * The behavior for any other status code is undefined. Data planes SHOULD treat these as transient failures, but future xRFCs may impose additional semantics on them.
 Note that an error with status code NOT_FOUND will be interpreted to mean that the resource does not exist. The client should handle this case exactly the same way that it would if the does-not-exist timer fired or if it receives removed_resources or removed_resource_names in the incremental protocol variant.
 
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
