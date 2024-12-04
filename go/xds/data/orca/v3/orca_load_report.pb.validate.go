@@ -68,10 +68,10 @@ func (m *OrcaLoadReport) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if val := m.GetMemUtilization(); val < 0 || val > 1 {
+	if m.GetMemUtilization() < 0 {
 		err := OrcaLoadReportValidationError{
 			field:  "MemUtilization",
-			reason: "value must be inside range [0, 1]",
+			reason: "value must be greater than or equal to 0",
 		}
 		if !all {
 			return err
@@ -97,10 +97,10 @@ func (m *OrcaLoadReport) validate(all bool) error {
 
 			// no validation rules for Utilization[key]
 
-			if val := val; val < 0 || val > 1 {
+			if val < 0 {
 				err := OrcaLoadReportValidationError{
 					field:  fmt.Sprintf("Utilization[%v]", key),
-					reason: "value must be inside range [0, 1]",
+					reason: "value must be greater than or equal to 0",
 				}
 				if !all {
 					return err
