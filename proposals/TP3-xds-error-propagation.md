@@ -11,7 +11,7 @@ This proposal introduces a mechanism for the xDS control plane to communicate er
 
 The objective of this proposal is to suggest a way for clients to receive feedback from xDS Management Servers in case of partial/drastic failures without closing any streams or connections.
 
-This proposal includes a new field for each subscribed Resource, called `ResourceError` which will provide detailed information for resource specific issues. The client must use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the application. 
+This proposal includes a new field for each subscribed Resource, called `ResourceError` which will provide detailed information for resource specific issues. The client may use this additional field to obtain notification for resources the xDS Management server couldn’t procure and provide necessary notification to the application. 
 
 ## Background
 
