@@ -78,18 +78,16 @@ Clients that support this mechanism will use this additional field to obtain err
 Note that an error with status code NOT_FOUND will be interpreted to mean that the resource does not exist. The client should handle this case exactly the same way that it would if the does-not-exist timer fired or if it receives removed_resources or removed_resource_names in the incremental protocol variant.
 
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
-resource in every response. 
+resource in every response. The set of resources with errors and the set of valid resources must not intersect. 
 
-As the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients for backward compatibility. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response.
+As the clients don't look at this field right now, the xDS management server must assume the responses remain valid for older clients for backward compatibility. For example, in the SotW variant, LDS and CDS are required to send all subscribed resources in every response, which means that if a control plane wants to send an update for one of these resource types that indicates an error with a particular resource, it must still include all of the subscribed resources that it can return in that response. 
 
 ### Wildcard Subscriptions and Glob Collections
 
 For [glob collections](TP1-xds-transport-next.md#glob), the control plane is responsible for deciding which resources are included in the subscription. The control plane in this case can provide error details for two different use cases. One when the issue is with the glob itself or later on when the issue is specific to individual resources. 
 
 1. For errors associated with xDS-TP glob collections; the control plane `error_details` resource name will match the relevant xDS-TP glob collection. This can be used by the control plane to indicate an error with the collection as a whole.
-2. For errors associated with specific individual resources that match the glob,
-    * The resource name should be the specific resource name associated with the error  OR
-    * The control could just not use this mechanism for wildcard subscriptions, because if the client doesn't have permission to access a resource, then it probably shouldn't be considered to match the wildcard subscription to begin with.
+2. For errors associated with specific individual resources that match the glob; the resource name should be the specific resource name associated with the error.
 
 This mechanism currently doesn't support wildcard subscriptions at the moment, though it can be modified in the future if needed. 
 
@@ -101,7 +99,7 @@ The major alternative to this proposal is to use Wrapped Resources by using Reso
 
 xDS resource containers are the default protos used for the Incremental xDS protocol and it's usage in SoTW is controlled via the client feature `xds.config.supports-resource-in-sotw`. 
 
-In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field is a protobuf.Any. This enables us to designate the resource as either a `ResourceError` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
+In this proposal the error information is directly passed as part of the resource field in the Resource Container, using the artifact that the field is a protobuf.Any. This enables us to designate the resource as either a `google.rpc.Status` if the xDS management server encountered problems, or as the actual `Resource` if no errors occurred. 
 
 #### Backward Compatibility
 
