@@ -3,7 +3,7 @@ TP3: xds-error-propagation
 * Author(s): anicr7
 * Approvers: markdroth, adisuissa
 * Implemented in: <xDS client, ...>
-* Last updated: 2024-10-25
+* Last updated: 2024-12-12
 
 ## Abstract
 
@@ -26,7 +26,7 @@ Note that while the incremental protocol variants can explicitly indicate to the
 
 ## Proposal
 
-The proposal introduces two new fields to the DiscoveryResponse proto. The first, `resource_errors`, will detail Resource-specific errors and be included in both SotW and Incremental xDS protocols. The second, `removed_resources`, will specifically identify resources that no longer exist, addressing a current gap in the SotW protocol's signaling capabilities. 
+The proposal introduces a new field to the DiscoveryResponse/DeltaDiscoveryResponse proto. This new field `resource_errors` will detail Resource-specific errors and be included in both SotW and Incremental xDS protocols. 
 
 ```textproto
 // New Proto Message
@@ -68,6 +68,23 @@ message DeltaDiscoveryResponse {
 }
 ```
 
+A corresponding new field will also be added to CSDS which should be treated the same as `CLIENT_NACKED` but also indicates a server error received via `resource_errors`.
+
+```
+service ClientStatusDiscoveryService {
+
+  // Config status from a client-side view.
+  enum ClientConfigStatus {
+    ...
+
+    // NEW FIELD
+    // Should be treated basically the same as `CLIENT_NACKED`.
+    // Provides the previously cached version of the resource but also indicates a server error that was recieved using resource_errors field.
+    CLIENT_RECEIVED_ERROR = 4;
+  }
+}
+```
+
 ### Protocol Behavior
 Clients that support this mechanism will use this additional field to obtain error information for resources that the xDS server couldn’t provide. When this message is received, the xDS client should cancel any resource timers for the indicated resource. The client should then handle the error based on the status code, as follows (using [RFC-2119](https://datatracker.ietf.org/doc/html/rfc2119) terminology):
 
@@ -75,7 +92,7 @@ Clients that support this mechanism will use this additional field to obtain err
   * The following codes will be interpretted by clients as data errors, which the client MAY handle by dropping any previously cached resource: NOT_FOUND, PERMISSION_DENIED
   * The behavior for any other status code is undefined. Data planes SHOULD treat these as transient failures, but future xRFCs may impose additional semantics on them.
 
-Note that an error with status code NOT_FOUND will be interpreted to mean that the resource does not exist. The client should handle this case exactly the same way that it would if the does-not-exist timer fired or if it receives removed_resources or removed_resource_names in the incremental protocol variant.
+Note that an error with status code NOT_FOUND will be interpreted to mean that the resource does not exist. The client should handle this case exactly the same way that it would if the does-not-exist timer fired.
 
 The xDS Management server is only expected to return the error message once rather than throughout for future responses. The client is expected to remember the error message until either a new error message is returned or the resource is returned. This includes LDS and CDS where the control plane is required to send every subscribed 
 resource in every response. The set of resources with errors and the set of valid resources must not intersect. 
