@@ -78,8 +78,9 @@ service ClientStatusDiscoveryService {
     ...
 
     // NEW FIELD
-    // Should be treated basically the same as `CLIENT_NACKED`.
-    // Provides the previously cached version of the resource but also indicates a server error that was recieved using resource_errors field.
+    // Client received an error from the control plane. The attached config
+    // dump is the most recent accepted one. If no config is accepted yet,
+    // the attached config dump will be empty.
     CLIENT_RECEIVED_ERROR = 4;
   }
 }
