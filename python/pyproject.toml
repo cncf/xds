@@ -1,19 +1,20 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = [
+    "setuptools>=42",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "xds"
-authors = []
 version = "0.1.0"
-description = "generated python libraries for xds protos"
-license = { file = "LICENSE" }
-classifiers = ["License :: OSI Approved :: MIT License"]
-dependencies = ["protobuf >=5.29.1", "protoc-gen-validate"]
+description = "xds Protocol Buffer Messages"
+requires-python = ">=3.7"  # Or the appropriate minimum Python version
+dependencies = [
+    "protobuf==5.29.1"
+]
 
-[project.urls]
-Home = "https://github.com/cncf/xds"
+[project.optional-dependencies]
 
-[tool.flit.metadata]
-module = "xds"
-requires-python = ">=3.7"
+[tool.setuptools.packages.find]
+where = ["."] 
