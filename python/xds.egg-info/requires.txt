@@ -1,2 +1,0 @@
-protobuf==5.29.1
-protoc-gen-validate

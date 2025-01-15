@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: xds
-Version: 0.1.0
-Summary: xds Protocol Buffer Messages
-Requires-Python: >=3.7
-License-File: LICENSE
-Requires-Dist: protobuf==5.29.1
-Requires-Dist: protoc-gen-validate
