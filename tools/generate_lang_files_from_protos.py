@@ -4,42 +4,33 @@ from subprocess import check_output
 import glob
 import os
 import shutil
+from language_config import GoConfig, PythonConfig, LanguageConfig
 
 workspace = check_output(["bazel", "info", "workspace"]).decode().strip()
-SUPPORTED_LANGUAGES = ["go", "python"]
+LANG_CONFIGS = {config.language: config for config in [GoConfig(), PythonConfig()]}
 
-
-def generate_lang_files_from_protos(language: str):
+def generate_lang_files_from_protos(language_config: LanguageConfig):
+    language = language_config.language
+    print(f"Generating proto code in language {language}")
     output = os.path.join(workspace, language)
     bazel_bin = check_output(["bazel", "info", "bazel-bin"]).decode().strip()
 
     protos = check_output(
-            [
-                "bazel",
-                "query",
-                {"go":'kind("go_proto_library", ...)',
-                 "python":'kind("py_proto_library", ...)'}[language]
-            ]
-        ).split()
+        [
+            "bazel",
+            "query",
+            language_config.bazel_query_kind,
+        ]
+    ).split()
     output_dir = f"github.com/cncf/xds/{language}"
     check_output(["bazel", "build", "-c", "fastbuild"] + protos)
-    print(protos)
+    print(f"Found {len(protos)} bazel rules to generate code")
     for rule in protos:
         rule_dir = rule.decode()[2:].rsplit(":")[0]
-        print("rule ", rule, rule_dir)
-        input_dir = {
-            "go": os.path.join(
-                bazel_bin, rule_dir, "pkg_go_proto_", "github.com/cncf/xds/go", rule_dir
-            ),
-            "python": os.path.join(bazel_bin, rule_dir),
-        }[language]
-        input_files = {
-            "go": glob.glob(os.path.join(input_dir, "*.go")),
-            "python": glob.glob(os.path.join(input_dir, "*_pb2.py")),
-        }[language]
-        
+        input_dir = language_config.get_input_dir(bazel_bin, rule_dir)
+        input_files = glob.glob(os.path.join(input_dir, language_config.generated_file_pattern))    
         output_dir = os.path.join(output, rule_dir)
-
+        print(f"Moving {len(input_files)} generated files from {input_dir} to output_dir {output_dir}")
         # Ensure the output directory exists
         os.makedirs(output_dir, 0o755, exist_ok=True)
         for generated_file in input_files:
@@ -48,5 +39,5 @@ def generate_lang_files_from_protos(language: str):
 
 
 if __name__ == "__main__":
-    for language in SUPPORTED_LANGUAGES:
-        generate_lang_files_from_protos(language=language)
+    for config in LANG_CONFIGS.values():
+        generate_lang_files_from_protos(language_config=config)
