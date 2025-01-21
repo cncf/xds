@@ -6,7 +6,7 @@ bazel test --config=ci //...
 
 rm -rf go/xds go/udpa
 
-tools/generate_go_protobuf.py
+tools/generate_lang_files_from_protos.py
 
 git add go/xds go/udpa
 
