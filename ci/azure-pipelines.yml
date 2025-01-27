@@ -40,7 +40,6 @@ jobs:
       command: 'custom'
       customCommand: 'mod'
       arguments: 'download'
-      workingDirectory: 'go/'
 
   - task: Go@0
     displayName: "go mod verify"
@@ -48,11 +47,11 @@ jobs:
       command: 'custom'
       customCommand: 'mod'
       arguments: 'verify'
-      workingDirectory: 'go/'
 
   - task: Go@0
     displayName: "go build ./..."
+    env:
+      CGO_ENABLED: 0
     inputs:
       command: 'build'
       arguments: '-v ./...'
-      workingDirectory: 'go/'

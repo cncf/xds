@@ -4,11 +4,12 @@ set -e
 
 bazel test --config=ci //...
 
-rm -rf go/xds go/udpa
+find xds/ -name *.go -type f -exec rm -rf {} \;
+find udpa/ -name *.go -type f -exec rm -rf {} \;
 
 tools/generate_lang_files_from_protos.py
 
-git add go/xds go/udpa
+git add xds udpa
 
 echo "If this check fails, apply following diff:"
 git diff HEAD

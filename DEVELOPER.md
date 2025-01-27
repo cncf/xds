@@ -6,5 +6,5 @@ Run the following command to update the generated files and commit them with you
 
 ```sh
 bazel build //...
-tools/generate_go_protobuf.py
+tools/generate_lang_files_from_protos.py
 ```
