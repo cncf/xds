@@ -12,7 +12,10 @@ LANG_CONFIGS = {config.language: config for config in [GoConfig(), PythonConfig(
 def generate_lang_files_from_protos(language_config: LanguageConfig):
     language = language_config.language
     print(f"Generating proto code in language {language}")
-    output = os.path.join(workspace, language)
+    if language == "go":
+        output = workspace
+    else:
+        output = os.path.join(workspace, language)
     bazel_bin = check_output(["bazel", "info", "bazel-bin"]).decode().strip()
 
     protos = check_output(
