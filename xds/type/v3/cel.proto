@@ -47,6 +47,11 @@ message CelExpression {
   //
   // If set, takes precedence over ``cel_expr_parsed``.
   cel.expr.CheckedExpr cel_expr_checked = 4;
+
+  // Expression in abstract syntax tree (AST) form.
+  //
+  // If set, takes precedence over ``cel_expr_parsed`` and ``cel_expr_checked``.
+  string expression = 5 [(validate.rules).string = {min_len: 1}];
 }
 
 // Extracts a string by evaluating a `Common Expression Language

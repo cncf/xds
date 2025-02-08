@@ -115,6 +115,17 @@ func (m *CelExpression) validate(all bool) error {
 		}
 	}
 
+	if utf8.RuneCountInString(m.GetExpression()) < 1 {
+		err := CelExpressionValidationError{
+			field:  "Expression",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	switch v := m.ExprSpecifier.(type) {
 	case *CelExpression_ParsedExpr:
 		if v == nil {
