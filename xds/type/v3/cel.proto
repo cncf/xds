@@ -40,12 +40,13 @@ message CelExpression {
 
   // Parsed expression in abstract syntax tree (AST) form.
   //
-  // If ``cel_expr_checked`` is set, this field is not used.
+  // If ``cel_expr_checked`` or ``expression`` is set, this field is not used.
   cel.expr.ParsedExpr cel_expr_parsed = 3;
 
   // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
   //
   // If set, takes precedence over ``cel_expr_parsed``.
+  // If ``expression`` is set, this field is not used.
   cel.expr.CheckedExpr cel_expr_checked = 4;
 
   // Expression in abstract syntax tree (AST) form.
