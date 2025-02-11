@@ -49,9 +49,10 @@ message CelExpression {
   cel.expr.CheckedExpr cel_expr_checked = 4;
 
   // Expression in abstract syntax tree (AST) form.
+  // This's useful when there's no control plane(e.g. XDS from file).
   //
   // If set, takes precedence over ``cel_expr_parsed`` and ``cel_expr_checked``.
-  string expression = 5 [(validate.rules).string = {min_len: 1}];
+  string expression = 5;
 }
 
 // Extracts a string by evaluating a `Common Expression Language
