@@ -47,6 +47,11 @@ message CelExpression {
   //
   // If set, takes precedence over ``cel_expr_parsed``.
   cel.expr.CheckedExpr cel_expr_checked = 4;
+
+  // Unparsed expression in string form.
+  //
+  // If set, takes precedence over ``cel_expr_parsed`` and ``cel_expr_checked``.
+  string cel_expr_string = 5;
 }
 
 // Extracts a string by evaluating a `Common Expression Language
