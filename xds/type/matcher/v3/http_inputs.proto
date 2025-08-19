@@ -20,4 +20,9 @@ option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
 //
 // [#comment: envoy.matching.inputs.cel_data_input]
 message HttpAttributesCelMatchInput {
+  // When set to true, indicates the HTTP data input should return
+  // MoreDataMightBeAvailable until it reaches end-of-stream. This can result
+  // in the CEL expression being reevaluated during each phase if it required
+  // data that was not present when it was previously evaluated.
+  bool return_more_data_available_until_end_of_stream = 1;
 }

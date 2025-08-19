@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n%xds/type/matcher/v3/http_inputs.proto\x12\x13xds.type.matcher.v3\"\x1d\n\x1bHttpAttributesCelMatchInputB_\n\x1e\x63om.github.xds.type.matcher.v3B\x0fHttpInputsProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n%xds/type/matcher/v3/http_inputs.proto\x12\x13xds.type.matcher.v3\"U\n\x1bHttpAttributesCelMatchInput\x12\x36\n.return_more_data_available_until_end_of_stream\x18\x01 \x01(\x08\x42_\n\x1e\x63om.github.xds.type.matcher.v3B\x0fHttpInputsProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,5 +33,5 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\036com.github.xds.type.matcher.v3B\017HttpInputsProtoP\001Z*github.com/cncf/xds/go/xds/type/matcher/v3'
   _globals['_HTTPATTRIBUTESCELMATCHINPUT']._serialized_start=62
-  _globals['_HTTPATTRIBUTESCELMATCHINPUT']._serialized_end=91
+  _globals['_HTTPATTRIBUTESCELMATCHINPUT']._serialized_end=147
 # @@protoc_insertion_point(module_scope)

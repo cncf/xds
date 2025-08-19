@@ -57,6 +57,8 @@ func (m *HttpAttributesCelMatchInput) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for ReturnMoreDataAvailableUntilEndOfStream
+
 	if len(errors) > 0 {
 		return HttpAttributesCelMatchInputMultiError(errors)
 	}
