@@ -6,7 +6,7 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 
 # go version for rules_go
-GO_VERSION = "1.20.2"
+GO_VERSION = "1.24.5"
 
 def xds_dependency_imports(go_version = GO_VERSION):
     rules_proto_dependencies()
