@@ -28,7 +28,7 @@ from xds.core.v3 import resource_locator_pb2 as xds_dot_core_dot_v3_dot_resource
 from validate import validate_pb2 as validate_dot_validate__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\"xds/core/v3/collection_entry.proto\x12\x0bxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\"xds/core/v3/resource_locator.proto\x1a\x17validate/validate.proto\"\x93\x02\n\x0f\x43ollectionEntry\x12/\n\x07locator\x18\x01 \x01(\x0b\x32\x1c.xds.core.v3.ResourceLocatorH\x00\x12@\n\x0cinline_entry\x18\x02 \x01(\x0b\x32(.xds.core.v3.CollectionEntry.InlineEntryH\x00\x1ar\n\x0bInlineEntry\x12*\n\x04name\x18\x01 \x01(\tB\x1c\xfa\x42\x19r\x17\x32\x15^[0-9a-zA-Z_\\-\\.~:]+$\x12\x0f\n\x07version\x18\x02 \x01(\t\x12&\n\x08resource\x18\x03 \x01(\x0b\x32\x14.google.protobuf.AnyB\x19\n\x12resource_specifier\x12\x03\xf8\x42\x01\x42\\\n\x16\x63om.github.xds.core.v3B\x14\x43ollectionEntryProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\"xds/core/v3/collection_entry.proto\x12\x0bxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\"xds/core/v3/resource_locator.proto\x1a\x17validate/validate.proto\"\xc3\x02\n\x0f\x43ollectionEntry\x12\x38\n\x07locator\x18\x01 \x01(\x0b\x32\x1c.xds.core.v3.ResourceLocatorH\x00R\x07locator\x12M\n\x0cinline_entry\x18\x02 \x01(\x0b\x32(.xds.core.v3.CollectionEntry.InlineEntryH\x00R\x0binlineEntry\x1a\x8b\x01\n\x0bInlineEntry\x12\x30\n\x04name\x18\x01 \x01(\tB\x1c\xfa\x42\x19r\x17\x32\x15^[0-9a-zA-Z_\\-\\.~:]+$R\x04name\x12\x18\n\x07version\x18\x02 \x01(\tR\x07version\x12\x30\n\x08resource\x18\x03 \x01(\x0b\x32\x14.google.protobuf.AnyR\x08resourceB\x19\n\x12resource_specifier\x12\x03\xf8\x42\x01\x42\\\n\x16\x63om.github.xds.core.v3B\x14\x43ollectionEntryProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -41,7 +41,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_COLLECTIONENTRY'].oneofs_by_name['resource_specifier']._loaded_options = None
   _globals['_COLLECTIONENTRY'].oneofs_by_name['resource_specifier']._serialized_options = b'\370B\001'
   _globals['_COLLECTIONENTRY']._serialized_start=173
-  _globals['_COLLECTIONENTRY']._serialized_end=448
-  _globals['_COLLECTIONENTRY_INLINEENTRY']._serialized_start=307
-  _globals['_COLLECTIONENTRY_INLINEENTRY']._serialized_end=421
+  _globals['_COLLECTIONENTRY']._serialized_end=496
+  _globals['_COLLECTIONENTRY_INLINEENTRY']._serialized_start=330
+  _globals['_COLLECTIONENTRY_INLINEENTRY']._serialized_end=469
 # @@protoc_insertion_point(module_scope)

@@ -31,7 +31,7 @@ from xds.annotations.v3 import status_pb2 as xds_dot_annotations_dot_v3_dot_stat
 from validate import validate_pb2 as validate_dot_validate__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x15xds/type/v3/cel.proto\x12\x0bxds.type.v3\x1a&google/api/expr/v1alpha1/checked.proto\x1a%google/api/expr/v1alpha1/syntax.proto\x1a\x16\x63\x65l/expr/checked.proto\x1a\x15\x63\x65l/expr/syntax.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\x17validate/validate.proto\"\x9e\x02\n\rCelExpression\x12?\n\x0bparsed_expr\x18\x01 \x01(\x0b\x32$.google.api.expr.v1alpha1.ParsedExprB\x02\x18\x01H\x00\x12\x41\n\x0c\x63hecked_expr\x18\x02 \x01(\x0b\x32%.google.api.expr.v1alpha1.CheckedExprB\x02\x18\x01H\x00\x12-\n\x0f\x63\x65l_expr_parsed\x18\x03 \x01(\x0b\x32\x14.cel.expr.ParsedExpr\x12/\n\x10\x63\x65l_expr_checked\x18\x04 \x01(\x0b\x32\x15.cel.expr.CheckedExpr\x12\x17\n\x0f\x63\x65l_expr_string\x18\x05 \x01(\tB\x10\n\x0e\x65xpr_specifier\"\x83\x01\n\x10\x43\x65lExtractString\x12:\n\x0c\x65xpr_extract\x18\x01 \x01(\x0b\x32\x1a.xds.type.v3.CelExpressionB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x12\x33\n\rdefault_value\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValueBP\n\x16\x63om.github.xds.type.v3B\x08\x43\x65lProtoP\x01Z\"github.com/cncf/xds/go/xds/type/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x15xds/type/v3/cel.proto\x12\x0bxds.type.v3\x1a&google/api/expr/v1alpha1/checked.proto\x1a%google/api/expr/v1alpha1/syntax.proto\x1a\x16\x63\x65l/expr/checked.proto\x1a\x15\x63\x65l/expr/syntax.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\x17validate/validate.proto\"\xe5\x02\n\rCelExpression\x12K\n\x0bparsed_expr\x18\x01 \x01(\x0b\x32$.google.api.expr.v1alpha1.ParsedExprB\x02\x18\x01H\x00R\nparsedExpr\x12N\n\x0c\x63hecked_expr\x18\x02 \x01(\x0b\x32%.google.api.expr.v1alpha1.CheckedExprB\x02\x18\x01H\x00R\x0b\x63heckedExpr\x12<\n\x0f\x63\x65l_expr_parsed\x18\x03 \x01(\x0b\x32\x14.cel.expr.ParsedExprR\rcelExprParsed\x12?\n\x10\x63\x65l_expr_checked\x18\x04 \x01(\x0b\x32\x15.cel.expr.CheckedExprR\x0e\x63\x65lExprChecked\x12&\n\x0f\x63\x65l_expr_string\x18\x05 \x01(\tR\rcelExprStringB\x10\n\x0e\x65xpr_specifier\"\x9e\x01\n\x10\x43\x65lExtractString\x12G\n\x0c\x65xpr_extract\x18\x01 \x01(\x0b\x32\x1a.xds.type.v3.CelExpressionB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01R\x0b\x65xprExtract\x12\x41\n\rdefault_value\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValueR\x0c\x64\x65\x66\x61ultValueBP\n\x16\x63om.github.xds.type.v3B\x08\x43\x65lProtoP\x01Z\"github.com/cncf/xds/go/xds/type/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -46,7 +46,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CELEXTRACTSTRING'].fields_by_name['expr_extract']._loaded_options = None
   _globals['_CELEXTRACTSTRING'].fields_by_name['expr_extract']._serialized_options = b'\372B\005\212\001\002\020\001'
   _globals['_CELEXPRESSION']._serialized_start=255
-  _globals['_CELEXPRESSION']._serialized_end=541
-  _globals['_CELEXTRACTSTRING']._serialized_start=544
-  _globals['_CELEXTRACTSTRING']._serialized_end=675
+  _globals['_CELEXPRESSION']._serialized_end=612
+  _globals['_CELEXTRACTSTRING']._serialized_start=615
+  _globals['_CELEXTRACTSTRING']._serialized_end=773
 # @@protoc_insertion_point(module_scope)

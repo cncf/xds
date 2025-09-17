@@ -27,7 +27,7 @@ from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb
 from validate import validate_pb2 as validate_dot_validate__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16xds/core/v3/cidr.proto\x12\x0bxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\"h\n\tCidrRange\x12\x1f\n\x0e\x61\x64\x64ress_prefix\x18\x01 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01\x12:\n\nprefix_len\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueB\x08\xfa\x42\x05*\x03\x18\x80\x01\x42V\n\x16\x63om.github.xds.core.v3B\x0e\x43idrRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16xds/core/v3/cidr.proto\x12\x0bxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\"\x82\x01\n\tCidrRange\x12.\n\x0e\x61\x64\x64ress_prefix\x18\x01 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01R\raddressPrefix\x12\x45\n\nprefix_len\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueB\x08\xfa\x42\x05*\x03\x18\x80\x01R\tprefixLenBV\n\x16\x63om.github.xds.core.v3B\x0e\x43idrRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -39,6 +39,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CIDRRANGE'].fields_by_name['address_prefix']._serialized_options = b'\372B\004r\002\020\001'
   _globals['_CIDRRANGE'].fields_by_name['prefix_len']._loaded_options = None
   _globals['_CIDRRANGE'].fields_by_name['prefix_len']._serialized_options = b'\372B\005*\003\030\200\001'
-  _globals['_CIDRRANGE']._serialized_start=129
-  _globals['_CIDRRANGE']._serialized_end=233
+  _globals['_CIDRRANGE']._serialized_start=130
+  _globals['_CIDRRANGE']._serialized_end=260
 # @@protoc_insertion_point(module_scope)

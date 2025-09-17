@@ -28,7 +28,7 @@ from xds.type.matcher.v3 import matcher_pb2 as xds_dot_type_dot_matcher_dot_v3_d
 from validate import validate_pb2 as validate_dot_validate__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cxds/type/matcher/v3/ip.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x16xds/core/v3/cidr.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\xe2\x01\n\tIPMatcher\x12\x45\n\x0erange_matchers\x18\x01 \x03(\x0b\x32-.xds.type.matcher.v3.IPMatcher.IPRangeMatcher\x1a\x8d\x01\n\x0eIPRangeMatcher\x12\x30\n\x06ranges\x18\x01 \x03(\x0b\x32\x16.xds.core.v3.CidrRangeB\x08\xfa\x42\x05\x92\x01\x02\x08\x01\x12\x36\n\x08on_match\x18\x02 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatch\x12\x11\n\texclusive\x18\x03 \x01(\x08\x42\x66\n\x1e\x63om.github.xds.type.matcher.v3B\x0eIPMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cxds/type/matcher/v3/ip.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x16xds/core/v3/cidr.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\x8d\x02\n\tIPMatcher\x12T\n\x0erange_matchers\x18\x01 \x03(\x0b\x32-.xds.type.matcher.v3.IPMatcher.IPRangeMatcherR\rrangeMatchers\x1a\xa9\x01\n\x0eIPRangeMatcher\x12\x38\n\x06ranges\x18\x01 \x03(\x0b\x32\x16.xds.core.v3.CidrRangeB\x08\xfa\x42\x05\x92\x01\x02\x08\x01R\x06ranges\x12?\n\x08on_match\x18\x02 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatchR\x07onMatch\x12\x1c\n\texclusive\x18\x03 \x01(\x08R\texclusiveBf\n\x1e\x63om.github.xds.type.matcher.v3B\x0eIPMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -39,7 +39,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_IPMATCHER_IPRANGEMATCHER'].fields_by_name['ranges']._loaded_options = None
   _globals['_IPMATCHER_IPRANGEMATCHER'].fields_by_name['ranges']._serialized_options = b'\372B\005\222\001\002\010\001'
   _globals['_IPMATCHER']._serialized_start=171
-  _globals['_IPMATCHER']._serialized_end=397
-  _globals['_IPMATCHER_IPRANGEMATCHER']._serialized_start=256
-  _globals['_IPMATCHER_IPRANGEMATCHER']._serialized_end=397
+  _globals['_IPMATCHER']._serialized_end=440
+  _globals['_IPMATCHER_IPRANGEMATCHER']._serialized_start=271
+  _globals['_IPMATCHER_IPRANGEMATCHER']._serialized_end=440
 # @@protoc_insertion_point(module_scope)

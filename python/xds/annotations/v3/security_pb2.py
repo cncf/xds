@@ -26,7 +26,7 @@ from xds.annotations.v3 import status_pb2 as xds_dot_annotations_dot_v3_dot_stat
 from google.protobuf import descriptor_pb2 as google_dot_protobuf_dot_descriptor__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n!xds/annotations/v3/security.proto\x12\x12xds.annotations.v3\x1a\x1fxds/annotations/v3/status.proto\x1a google/protobuf/descriptor.proto\"o\n\x17\x46ieldSecurityAnnotation\x12*\n\"configure_for_untrusted_downstream\x18\x01 \x01(\x08\x12(\n configure_for_untrusted_upstream\x18\x02 \x01(\x08:_\n\x08security\x12\x1d.google.protobuf.FieldOptions\x18\xa7\x96\x9d/ \x01(\x0b\x32+.xds.annotations.v3.FieldSecurityAnnotationB3Z)github.com/cncf/xds/go/xds/annotations/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n!xds/annotations/v3/security.proto\x12\x12xds.annotations.v3\x1a\x1fxds/annotations/v3/status.proto\x1a google/protobuf/descriptor.proto\"\xaf\x01\n\x17\x46ieldSecurityAnnotation\x12K\n\"configure_for_untrusted_downstream\x18\x01 \x01(\x08R\x1f\x63onfigureForUntrustedDownstream\x12G\n configure_for_untrusted_upstream\x18\x02 \x01(\x08R\x1d\x63onfigureForUntrustedUpstream:i\n\x08security\x12\x1d.google.protobuf.FieldOptions\x18\xa7\x96\x9d/ \x01(\x0b\x32+.xds.annotations.v3.FieldSecurityAnnotationR\x08securityB3Z)github.com/cncf/xds/go/xds/annotations/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,6 +34,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'xds.annotations.v3.security
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z)github.com/cncf/xds/go/xds/annotations/v3\322\306\244\341\006\002\010\001'
-  _globals['_FIELDSECURITYANNOTATION']._serialized_start=124
-  _globals['_FIELDSECURITYANNOTATION']._serialized_end=235
+  _globals['_FIELDSECURITYANNOTATION']._serialized_start=125
+  _globals['_FIELDSECURITYANNOTATION']._serialized_end=300
 # @@protoc_insertion_point(module_scope)

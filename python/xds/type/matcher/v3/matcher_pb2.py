@@ -27,7 +27,7 @@ from xds.type.matcher.v3 import string_pb2 as xds_dot_type_dot_matcher_dot_v3_do
 from validate import validate_pb2 as validate_dot_validate__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n!xds/type/matcher/v3/matcher.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a xds/type/matcher/v3/string.proto\x1a\x17validate/validate.proto\"\x96\x0e\n\x07Matcher\x12@\n\x0cmatcher_list\x18\x01 \x01(\x0b\x32(.xds.type.matcher.v3.Matcher.MatcherListH\x00\x12@\n\x0cmatcher_tree\x18\x02 \x01(\x0b\x32(.xds.type.matcher.v3.Matcher.MatcherTreeH\x00\x12\x39\n\x0bon_no_match\x18\x03 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatch\x1a\x97\x01\n\x07OnMatch\x12/\n\x07matcher\x18\x01 \x01(\x0b\x32\x1c.xds.type.matcher.v3.MatcherH\x00\x12\x33\n\x06\x61\x63tion\x18\x02 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigH\x00\x12\x15\n\rkeep_matching\x18\x03 \x01(\x08\x42\x0f\n\x08on_match\x12\x03\xf8\x42\x01\x1a\xb9\x07\n\x0bMatcherList\x12Q\n\x08matchers\x18\x01 \x03(\x0b\x32\x35.xds.type.matcher.v3.Matcher.MatcherList.FieldMatcherB\x08\xfa\x42\x05\x92\x01\x02\x08\x01\x1a\xb2\x05\n\tPredicate\x12^\n\x10single_predicate\x18\x01 \x01(\x0b\x32\x42.xds.type.matcher.v3.Matcher.MatcherList.Predicate.SinglePredicateH\x00\x12V\n\nor_matcher\x18\x02 \x01(\x0b\x32@.xds.type.matcher.v3.Matcher.MatcherList.Predicate.PredicateListH\x00\x12W\n\x0b\x61nd_matcher\x18\x03 \x01(\x0b\x32@.xds.type.matcher.v3.Matcher.MatcherList.Predicate.PredicateListH\x00\x12I\n\x0bnot_matcher\x18\x04 \x01(\x0b\x32\x32.xds.type.matcher.v3.Matcher.MatcherList.PredicateH\x00\x1a\xd3\x01\n\x0fSinglePredicate\x12:\n\x05input\x18\x01 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x12\x39\n\x0bvalue_match\x18\x02 \x01(\x0b\x32\".xds.type.matcher.v3.StringMatcherH\x00\x12\x39\n\x0c\x63ustom_match\x18\x03 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigH\x00\x42\x0e\n\x07matcher\x12\x03\xf8\x42\x01\x1a`\n\rPredicateList\x12O\n\tpredicate\x18\x01 \x03(\x0b\x32\x32.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\x08\xfa\x42\x05\x92\x01\x02\x08\x02\x42\x11\n\nmatch_type\x12\x03\xf8\x42\x01\x1a\xa1\x01\n\x0c\x46ieldMatcher\x12O\n\tpredicate\x18\x01 \x01(\x0b\x32\x32.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x12@\n\x08on_match\x18\x02 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatchB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x1a\xe5\x03\n\x0bMatcherTree\x12:\n\x05input\x18\x01 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x12L\n\x0f\x65xact_match_map\x18\x02 \x01(\x0b\x32\x31.xds.type.matcher.v3.Matcher.MatcherTree.MatchMapH\x00\x12M\n\x10prefix_match_map\x18\x03 \x01(\x0b\x32\x31.xds.type.matcher.v3.Matcher.MatcherTree.MatchMapH\x00\x12\x39\n\x0c\x63ustom_match\x18\x04 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigH\x00\x1a\xaf\x01\n\x08MatchMap\x12Q\n\x03map\x18\x01 \x03(\x0b\x32:.xds.type.matcher.v3.Matcher.MatcherTree.MatchMap.MapEntryB\x08\xfa\x42\x05\x9a\x01\x02\x08\x01\x1aP\n\x08MapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x33\n\x05value\x18\x02 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatch:\x02\x38\x01\x42\x10\n\ttree_type\x12\x03\xf8\x42\x01\x42\x0e\n\x0cmatcher_typeB\\\n\x1e\x63om.github.xds.type.matcher.v3B\x0cMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n!xds/type/matcher/v3/matcher.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a xds/type/matcher/v3/string.proto\x1a\x17validate/validate.proto\"\x9b\x10\n\x07Matcher\x12M\n\x0cmatcher_list\x18\x01 \x01(\x0b\x32(.xds.type.matcher.v3.Matcher.MatcherListH\x00R\x0bmatcherList\x12M\n\x0cmatcher_tree\x18\x02 \x01(\x0b\x32(.xds.type.matcher.v3.Matcher.MatcherTreeH\x00R\x0bmatcherTree\x12\x44\n\x0bon_no_match\x18\x03 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatchR\tonNoMatch\x1a\xb6\x01\n\x07OnMatch\x12\x38\n\x07matcher\x18\x01 \x01(\x0b\x32\x1c.xds.type.matcher.v3.MatcherH\x00R\x07matcher\x12;\n\x06\x61\x63tion\x18\x02 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigH\x00R\x06\x61\x63tion\x12#\n\rkeep_matching\x18\x03 \x01(\x08R\x0ckeepMatchingB\x0f\n\x08on_match\x12\x03\xf8\x42\x01\x1a\xb6\x08\n\x0bMatcherList\x12[\n\x08matchers\x18\x01 \x03(\x0b\x32\x35.xds.type.matcher.v3.Matcher.MatcherList.FieldMatcherB\x08\xfa\x42\x05\x92\x01\x02\x08\x01R\x08matchers\x1a\x91\x06\n\tPredicate\x12o\n\x10single_predicate\x18\x01 \x01(\x0b\x32\x42.xds.type.matcher.v3.Matcher.MatcherList.Predicate.SinglePredicateH\x00R\x0fsinglePredicate\x12\x61\n\nor_matcher\x18\x02 \x01(\x0b\x32@.xds.type.matcher.v3.Matcher.MatcherList.Predicate.PredicateListH\x00R\torMatcher\x12\x63\n\x0b\x61nd_matcher\x18\x03 \x01(\x0b\x32@.xds.type.matcher.v3.Matcher.MatcherList.Predicate.PredicateListH\x00R\nandMatcher\x12U\n\x0bnot_matcher\x18\x04 \x01(\x0b\x32\x32.xds.type.matcher.v3.Matcher.MatcherList.PredicateH\x00R\nnotMatcher\x1a\xf3\x01\n\x0fSinglePredicate\x12\x41\n\x05input\x18\x01 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01R\x05input\x12\x45\n\x0bvalue_match\x18\x02 \x01(\x0b\x32\".xds.type.matcher.v3.StringMatcherH\x00R\nvalueMatch\x12\x46\n\x0c\x63ustom_match\x18\x03 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigH\x00R\x0b\x63ustomMatchB\x0e\n\x07matcher\x12\x03\xf8\x42\x01\x1ak\n\rPredicateList\x12Z\n\tpredicate\x18\x01 \x03(\x0b\x32\x32.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\x08\xfa\x42\x05\x92\x01\x02\x08\x02R\tpredicateB\x11\n\nmatch_type\x12\x03\xf8\x42\x01\x1a\xb5\x01\n\x0c\x46ieldMatcher\x12Z\n\tpredicate\x18\x01 \x01(\x0b\x32\x32.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01R\tpredicate\x12I\n\x08on_match\x18\x02 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatchB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01R\x07onMatch\x1a\xa9\x04\n\x0bMatcherTree\x12\x41\n\x05input\x18\x01 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01R\x05input\x12[\n\x0f\x65xact_match_map\x18\x02 \x01(\x0b\x32\x31.xds.type.matcher.v3.Matcher.MatcherTree.MatchMapH\x00R\rexactMatchMap\x12]\n\x10prefix_match_map\x18\x03 \x01(\x0b\x32\x31.xds.type.matcher.v3.Matcher.MatcherTree.MatchMapH\x00R\x0eprefixMatchMap\x12\x46\n\x0c\x63ustom_match\x18\x04 \x01(\x0b\x32!.xds.core.v3.TypedExtensionConfigH\x00R\x0b\x63ustomMatch\x1a\xc0\x01\n\x08MatchMap\x12V\n\x03map\x18\x01 \x03(\x0b\x32:.xds.type.matcher.v3.Matcher.MatcherTree.MatchMap.MapEntryB\x08\xfa\x42\x05\x9a\x01\x02\x08\x01R\x03map\x1a\\\n\x08MapEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12:\n\x05value\x18\x02 \x01(\x0b\x32$.xds.type.matcher.v3.Matcher.OnMatchR\x05value:\x02\x38\x01\x42\x10\n\ttree_type\x12\x03\xf8\x42\x01\x42\x0e\n\x0cmatcher_typeB\\\n\x1e\x63om.github.xds.type.matcher.v3B\x0cMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -60,23 +60,23 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_MATCHER_MATCHERTREE'].fields_by_name['input']._loaded_options = None
   _globals['_MATCHER_MATCHERTREE'].fields_by_name['input']._serialized_options = b'\372B\005\212\001\002\020\001'
   _globals['_MATCHER']._serialized_start=147
-  _globals['_MATCHER']._serialized_end=1961
-  _globals['_MATCHER_ONMATCH']._serialized_start=350
-  _globals['_MATCHER_ONMATCH']._serialized_end=501
-  _globals['_MATCHER_MATCHERLIST']._serialized_start=504
-  _globals['_MATCHER_MATCHERLIST']._serialized_end=1457
-  _globals['_MATCHER_MATCHERLIST_PREDICATE']._serialized_start=603
-  _globals['_MATCHER_MATCHERLIST_PREDICATE']._serialized_end=1293
-  _globals['_MATCHER_MATCHERLIST_PREDICATE_SINGLEPREDICATE']._serialized_start=965
-  _globals['_MATCHER_MATCHERLIST_PREDICATE_SINGLEPREDICATE']._serialized_end=1176
-  _globals['_MATCHER_MATCHERLIST_PREDICATE_PREDICATELIST']._serialized_start=1178
-  _globals['_MATCHER_MATCHERLIST_PREDICATE_PREDICATELIST']._serialized_end=1274
-  _globals['_MATCHER_MATCHERLIST_FIELDMATCHER']._serialized_start=1296
-  _globals['_MATCHER_MATCHERLIST_FIELDMATCHER']._serialized_end=1457
-  _globals['_MATCHER_MATCHERTREE']._serialized_start=1460
-  _globals['_MATCHER_MATCHERTREE']._serialized_end=1945
-  _globals['_MATCHER_MATCHERTREE_MATCHMAP']._serialized_start=1752
-  _globals['_MATCHER_MATCHERTREE_MATCHMAP']._serialized_end=1927
-  _globals['_MATCHER_MATCHERTREE_MATCHMAP_MAPENTRY']._serialized_start=1847
-  _globals['_MATCHER_MATCHERTREE_MATCHMAP_MAPENTRY']._serialized_end=1927
+  _globals['_MATCHER']._serialized_end=2222
+  _globals['_MATCHER_ONMATCH']._serialized_start=387
+  _globals['_MATCHER_ONMATCH']._serialized_end=569
+  _globals['_MATCHER_MATCHERLIST']._serialized_start=572
+  _globals['_MATCHER_MATCHERLIST']._serialized_end=1650
+  _globals['_MATCHER_MATCHERLIST_PREDICATE']._serialized_start=681
+  _globals['_MATCHER_MATCHERLIST_PREDICATE']._serialized_end=1466
+  _globals['_MATCHER_MATCHERLIST_PREDICATE_SINGLEPREDICATE']._serialized_start=1095
+  _globals['_MATCHER_MATCHERLIST_PREDICATE_SINGLEPREDICATE']._serialized_end=1338
+  _globals['_MATCHER_MATCHERLIST_PREDICATE_PREDICATELIST']._serialized_start=1340
+  _globals['_MATCHER_MATCHERLIST_PREDICATE_PREDICATELIST']._serialized_end=1447
+  _globals['_MATCHER_MATCHERLIST_FIELDMATCHER']._serialized_start=1469
+  _globals['_MATCHER_MATCHERLIST_FIELDMATCHER']._serialized_end=1650
+  _globals['_MATCHER_MATCHERTREE']._serialized_start=1653
+  _globals['_MATCHER_MATCHERTREE']._serialized_end=2206
+  _globals['_MATCHER_MATCHERTREE_MATCHMAP']._serialized_start=1996
+  _globals['_MATCHER_MATCHERTREE_MATCHMAP']._serialized_end=2188
+  _globals['_MATCHER_MATCHERTREE_MATCHMAP_MAPENTRY']._serialized_start=2096
+  _globals['_MATCHER_MATCHERTREE_MATCHMAP_MAPENTRY']._serialized_end=2188
 # @@protoc_insertion_point(module_scope)

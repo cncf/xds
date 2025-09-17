@@ -1,0 +1,8 @@
+version: v2
+inputs:
+  - directory: .
+  - module: buf.build/envoyproxy/protoc-gen-validate:v1.0.4
+plugins:
+  # Python protobuf generation (includes validate.proto from module input)
+  - remote: buf.build/protocolbuffers/python:v29.1
+    out: python

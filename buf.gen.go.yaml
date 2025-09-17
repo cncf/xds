@@ -1,0 +1,19 @@
+version: v2
+inputs:
+  - directory: .
+plugins:
+  # Go protobuf generation
+  - remote: buf.build/protocolbuffers/go:v1.33.0
+    out: go
+    opt:
+      - paths=source_relative
+  # Go gRPC generation (for services)
+  - remote: buf.build/grpc/go:v1.3.0
+    out: go
+    opt:
+      - paths=source_relative
+  # Go protoc-gen-validate generation (remote plugin)  
+  - remote: buf.build/bufbuild/validate-go:v1.0.4
+    out: go
+    opt:
+      - paths=source_relative

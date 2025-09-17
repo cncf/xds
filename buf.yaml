@@ -1,0 +1,16 @@
+version: v2
+modules:
+  - path: .
+    name: buf.build/cncf/xds
+    excludes:
+      - "bazel-bin"
+deps:
+  - buf.build/googleapis/googleapis:64926d52febbf298cb82a8f472ade4a3969ba922
+  - buf.build/envoyproxy/protoc-gen-validate:v1.0.4
+  - buf.build/google/cel-spec:v0.15.0
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE

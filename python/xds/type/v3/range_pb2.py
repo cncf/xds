@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17xds/type/v3/range.proto\x12\x0bxds.type.v3\"(\n\nInt64Range\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x03\"(\n\nInt32Range\x12\r\n\x05start\x18\x01 \x01(\x05\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x05\")\n\x0b\x44oubleRange\x12\r\n\x05start\x18\x01 \x01(\x01\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x01\x42J\n\x16\x63om.github.xds.type.v3B\nRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/type/v3b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17xds/type/v3/range.proto\x12\x0bxds.type.v3\"4\n\nInt64Range\x12\x14\n\x05start\x18\x01 \x01(\x03R\x05start\x12\x10\n\x03\x65nd\x18\x02 \x01(\x03R\x03\x65nd\"4\n\nInt32Range\x12\x14\n\x05start\x18\x01 \x01(\x05R\x05start\x12\x10\n\x03\x65nd\x18\x02 \x01(\x05R\x03\x65nd\"5\n\x0b\x44oubleRange\x12\x14\n\x05start\x18\x01 \x01(\x01R\x05start\x12\x10\n\x03\x65nd\x18\x02 \x01(\x01R\x03\x65ndBJ\n\x16\x63om.github.xds.type.v3B\nRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/type/v3b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,9 +33,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\026com.github.xds.type.v3B\nRangeProtoP\001Z\"github.com/cncf/xds/go/xds/type/v3'
   _globals['_INT64RANGE']._serialized_start=40
-  _globals['_INT64RANGE']._serialized_end=80
-  _globals['_INT32RANGE']._serialized_start=82
-  _globals['_INT32RANGE']._serialized_end=122
-  _globals['_DOUBLERANGE']._serialized_start=124
-  _globals['_DOUBLERANGE']._serialized_end=165
+  _globals['_INT64RANGE']._serialized_end=92
+  _globals['_INT32RANGE']._serialized_start=94
+  _globals['_INT32RANGE']._serialized_end=146
+  _globals['_DOUBLERANGE']._serialized_start=148
+  _globals['_DOUBLERANGE']._serialized_end=201
 # @@protoc_insertion_point(module_scope)
