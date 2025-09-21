@@ -12,7 +12,13 @@ bazel_dep(name = "protobuf", version = "29.1", repo_name = "com_google_protobuf"
 bazel_dep(name = "protoc-gen-validate", version = "1.0.4", repo_name = "com_envoyproxy_protoc_gen_validate")
 bazel_dep(name = "re2", version = "2024-05-01", repo_name = "com_googlesource_code_re2")
 bazel_dep(name = "rules_go", version = "0.46.0", repo_name = "io_bazel_rules_go")
-bazel_dep(name = "rules_proto", version = "6.0.0")
+bazel_dep(name = "rules_python", version = "0.25.0")
+
+# Configure Python toolchain for bzlmod
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.11",
+)
 
 switched_rules = use_extension("@com_google_googleapis//:extensions.bzl", "switched_rules")
 switched_rules.use_languages(

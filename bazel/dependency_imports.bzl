@@ -3,19 +3,27 @@ load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_depende
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
 
 # go version for rules_go
 GO_VERSION = "1.20.2"
 
+# Python version for rules_python
+PYTHON_VERSION = "3.11"
+
 def xds_dependency_imports(go_version = GO_VERSION):
-    rules_proto_dependencies()
-    rules_proto_toolchains()
     protobuf_deps()
     go_rules_dependencies()
     go_register_toolchains(go_version = go_version)
     gazelle_dependencies()
     pgv_dependencies()
+
+    # Initialize rules_python for WORKSPACE mode
+    py_repositories()
+    python_register_toolchains(
+        name = "python_3_11",
+        python_version = PYTHON_VERSION,
+    )
 
     # Needed for grpc's @com_github_grpc_grpc//bazel:python_rules.bzl
     # Used in place of calling grpc_deps() because it needs to be called before
@@ -36,6 +44,25 @@ def xds_dependency_imports(go_version = GO_VERSION):
     # These dependencies, like most of the Go in this repository, exist only for the API.
     # These repos also have transient dependencies - `build_external` allows them to use them.
     # TODO(phlax): remove `build_external` and pin all transients
+    go_repository(
+        name = "org_golang_x_mod",
+        importpath = "golang.org/x/mod",
+        sum = "h1:SernR4v+D55NyBH2QiEQrlBAnj1ECL6AGrA5+dPaMY8=",
+        version = "v0.15.0",
+        build_external = "external",
+    )
+    go_repository(
+        name = "org_golang_x_tools",
+        importpath = "golang.org/x/tools",
+        sum = "h1:FvmRgNOcs3kOa+T20R1uhfP9F6HgG2mfxDv1vrx1Htc=",
+        version = "v0.17.0",
+        # Using vendored mode to avoid having to resolve all transitive dependencies manually
+        build_external = "vendored",
+        build_directives = [
+            "gazelle:resolve go golang.org/x/mod/semver @org_golang_x_mod//semver:go_default_library",
+            "gazelle:resolve go golang.org/x/mod/module @org_golang_x_mod//module:go_default_library",
+        ],
+    )
     go_repository(
         name = "com_github_iancoleman_strcase",
         importpath = "github.com/iancoleman/strcase",
@@ -78,6 +105,9 @@ def xds_dependency_imports(go_version = GO_VERSION):
         sum = "h1:/3+/2sWyXeMLzKd1bX+ixWKgEMsULrIivpDsuaF441o=",
         version = "v2.0.3",
         build_external = "external",
+        build_directives = [
+            "gazelle:resolve go golang.org/x/tools/imports @org_golang_x_tools//imports:go_default_library",
+        ],
         # project_url = "https://pkg.go.dev/github.com/lyft/protoc-gen-star",
         # last_update = "2023-01-06"
         # use_category = ["api"],

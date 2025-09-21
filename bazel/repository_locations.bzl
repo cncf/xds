@@ -29,9 +29,9 @@ REPOSITORY_LOCATIONS = dict(
         ],
     ),
     com_google_protobuf = dict(
-        sha256 = "8242327e5df8c80ba49e4165250b8f79a76bd11765facefaaecfca7747dc8da2",
-        strip_prefix = "protobuf-3.21.5",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.21.5.zip"],
+        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
+        strip_prefix = "protobuf-29.1",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz"],
     ),
     dev_cel = dict(
         sha256 = "3ee09eb69dbe77722e9dee23dc48dc2cd9f765869fcf5ffb1226587c81791a0b",
@@ -45,9 +45,9 @@ REPOSITORY_LOCATIONS = dict(
             "https://github.com/bazelbuild/rules_go/releases/download/v0.46.0/rules_go-v0.46.0.zip",
         ],
     ),
-    rules_proto = dict(
-        sha256 = "80d3a4ec17354cccc898bfe32118edd934f851b03029d63ef3fc7c8663a7415c",
-        strip_prefix = "rules_proto-5.3.0-21.5",
-        urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.5.tar.gz"],
+    rules_python = dict(
+        sha256 = "5868e73107a8e85d8f323806e60cad7283f34b32163ea6ff1020cf27abef6036",
+        strip_prefix = "rules_python-0.25.0",
+        urls = ["https://github.com/bazelbuild/rules_python/releases/download/0.25.0/rules_python-0.25.0.tar.gz"],
     ),
 )
