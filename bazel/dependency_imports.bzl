@@ -6,7 +6,7 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
 
 # go version for rules_go
-GO_VERSION = "1.20.2"
+GO_VERSION = "1.24.6"
 
 # Python version for rules_python
 PYTHON_VERSION = "3.11"
@@ -15,7 +15,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
     protobuf_deps()
     go_rules_dependencies()
     go_register_toolchains(go_version = go_version)
-    gazelle_dependencies()
+    gazelle_dependencies(go_sdk = "go_sdk")
     pgv_dependencies()
 
     # Initialize rules_python for WORKSPACE mode

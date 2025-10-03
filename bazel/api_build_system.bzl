@@ -1,8 +1,8 @@
 load("@com_envoyproxy_protoc_gen_validate//bazel:pgv_proto_library.bzl", "pgv_cc_proto_library")
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", _py_proto_library = "py_proto_library")
+load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@io_bazel_rules_go//proto:def.bzl", "go_grpc_library", "go_proto_library")
-load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load(
     "//bazel:external_proto_deps.bzl",
     "EXTERNAL_PROTO_CC_BAZEL_DEP_MAP",

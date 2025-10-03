@@ -3,6 +3,10 @@ load(":repository_locations.bzl", "REPOSITORY_LOCATIONS")
 
 def xds_api_dependencies():
     xds_http_archive(
+        "bazel_skylib",
+        locations = REPOSITORY_LOCATIONS,
+    )
+    xds_http_archive(
         "bazel_gazelle",
         locations = REPOSITORY_LOCATIONS,
     )
@@ -32,6 +36,10 @@ def xds_api_dependencies():
     )
     xds_http_archive(
         "rules_python",
+        locations = REPOSITORY_LOCATIONS,
+    )
+    xds_http_archive(
+        "rules_proto",
         locations = REPOSITORY_LOCATIONS,
     )
 
