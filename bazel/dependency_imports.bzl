@@ -21,7 +21,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
     # Initialize rules_python for WORKSPACE mode
     py_repositories()
     python_register_toolchains(
-        name = "python_3_12",
+        name = "python_%s" % PYTHON_VERSION,
         python_version = PYTHON_VERSION,
     )
 
