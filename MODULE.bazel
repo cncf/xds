@@ -17,7 +17,7 @@ bazel_dep(name = "rules_python", version = "1.6.3")
 # Configure Python toolchain for bzlmod
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
-    python_version = "3.11",
+    python_version = "3.12",
 )
 
 switched_rules = use_extension("@com_google_googleapis//:extensions.bzl", "switched_rules")

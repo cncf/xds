@@ -9,7 +9,7 @@ load("@rules_python//python:repositories.bzl", "py_repositories", "python_regist
 GO_VERSION = "1.24.6"
 
 # Python version for rules_python
-PYTHON_VERSION = "3.11"
+PYTHON_VERSION = "3.12"
 
 def xds_dependency_imports(go_version = GO_VERSION):
     protobuf_deps()
@@ -21,7 +21,7 @@ def xds_dependency_imports(go_version = GO_VERSION):
     # Initialize rules_python for WORKSPACE mode
     py_repositories()
     python_register_toolchains(
-        name = "python_3_11",
+        name = "python_3_12",
         python_version = PYTHON_VERSION,
     )
 
