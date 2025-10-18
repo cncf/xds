@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
 option java_outer_classname = "RegexProto";
@@ -34,13 +34,13 @@ message RegexMatcher {
   message GoogleRE2 {}
 
   oneof engine_type {
-    option (validate.required) = true;
+    option (buf.validate.oneof).required = true;
 
     // Google's RE2 regex engine.
-    GoogleRE2 google_re2 = 1 [ (validate.rules).message = {required : true} ];
+    GoogleRE2 google_re2 = 1 [(buf.validate.field).required = true];
   }
 
   // The regex match string. The string must be supported by the configured
   // engine.
-  string regex = 2 [ (validate.rules).string = {min_len : 1} ];
+  string regex = 2 [ (buf.validate.field).string = {min_len : 1} ];
 }

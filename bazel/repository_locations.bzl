@@ -9,15 +9,15 @@ REPOSITORY_LOCATIONS = dict(
         sha256 = "6e78f0e57de26801f6f564fa7c4a48dc8b36873e416257a92bbb0937eeac8446",
         urls = ["https://github.com/bazelbuild/bazel-skylib/releases/download/1.8.2/bazel-skylib-1.8.2.tar.gz"],
     ),
-    com_envoyproxy_protoc_gen_validate = dict(
-        sha256 = "92e29c2150675ce954c965bcaa559ca944704b75711533cfe03ce541dcf5a1dd",
-        strip_prefix = "protoc-gen-validate-1.0.4",
-        urls = ["https://github.com/envoyproxy/protoc-gen-validate/archive/refs/tags/v1.0.4.tar.gz"],
+    com_github_bufbuild_protovalidate = dict(
+        sha256 = "c4dbec77d6dc7cc660c0dc5bce6d871c807f797c45c75576947bd93f02a2aff1",
+        strip_prefix = "protovalidate-1.0.0",
+        urls = ["https://github.com/bufbuild/protovalidate/archive/refs/tags/v1.0.0.tar.gz"],
     ),
     com_github_grpc_grpc = dict(
-        sha256 = "916f88a34f06b56432611aaa8c55befee96d0a7b7d7457733b9deeacbc016f99",
-        strip_prefix = "grpc-1.59.1",
-        urls = ["https://github.com/grpc/grpc/archive/refs/tags/v1.59.1.tar.gz"],
+        sha256 = "4a8aa99d5e24f80ea6b7ec95463e16af5bd91aa805e26c661ef6491ae3d2d23c",
+        strip_prefix = "grpc-1.72.0",
+        urls = ["https://github.com/grpc/grpc/archive/refs/tags/v1.72.0.tar.gz"],
     ),
     com_google_googleapis = dict(
         # TODO(dio): Consider writing a Starlark macro for importing Google API proto.
@@ -28,9 +28,9 @@ REPOSITORY_LOCATIONS = dict(
         ],
     ),
     com_google_protobuf = dict(
-        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
-        strip_prefix = "protobuf-29.1",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz"],
+        sha256 = "9df0e9e8ebe39f4fbbb9cf7db3d811287fe3616b2f191eb2bf5eaa12539c881f",
+        strip_prefix = "protobuf-30.0",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/v30.0.tar.gz"],
     ),
     dev_cel = dict(
         sha256 = "5cba6b0029e727d1f4d8fd134de4e747cecc0bc293d026017d7edc48058d09f7",

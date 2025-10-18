@@ -10,7 +10,7 @@ import "google/protobuf/wrappers.proto";
 
 import "xds/annotations/v3/status.proto";
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_package = "com.github.xds.type.v3";
 option java_outer_classname = "CelProto";
@@ -69,7 +69,7 @@ message CelExpression {
 message CelExtractString {
   // The CEL expression used to extract a string from the CEL environment.
   // the "subject string") that should be replaced.
-  CelExpression expr_extract = 1 [(validate.rules).message = {required: true}];
+  CelExpression expr_extract = 1 [(buf.validate.field).required = true];
 
   // If CEL expression evaluates to an error, this value is be returned to the caller.
   // If not set, the error is propagated to the caller.
