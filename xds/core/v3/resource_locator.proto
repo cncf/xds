@@ -5,7 +5,7 @@ package xds.core.v3;
 import "xds/annotations/v3/status.proto";
 import "xds/core/v3/context_params.proto";
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_outer_classname = "ResourceLocatorProto";
 option java_multiple_files = true;
@@ -39,7 +39,7 @@ message ResourceLocator {
   }
 
   // URI scheme.
-  Scheme scheme = 1 [(validate.rules).enum = {defined_only: true}];
+  Scheme scheme = 1 [(buf.validate.field).enum = {defined_only: true}];
 
   // Opaque identifier for the resource. Any '/' will not be escaped during URI
   // encoding and will form part of the URI path. This may end
@@ -54,7 +54,7 @@ message ResourceLocator {
 
   // Fully qualified resource type (as in type URL without types.googleapis.com/
   // prefix).
-  string resource_type = 4 [(validate.rules).string = {min_len: 1}];
+  string resource_type = 4 [(buf.validate.field).string = {min_len: 1}];
 
   oneof context_param_specifier {
     // Additional parameters that can be used to select resource variants.
@@ -89,7 +89,7 @@ message ResourceLocator {
   // and reserved characters.
   message Directive {
     oneof directive {
-      option (validate.required) = true;
+      option (buf.validate.oneof).required = true;
 
       // An alternative resource locator for fallback if the resource is
       // unavailable. For example, take the resource locator:
@@ -106,7 +106,7 @@ message ResourceLocator {
       // field specified. When specified, the entry directive allows
       // ResourceLocator to directly reference these inlined resources, e.g.
       // xdstp://.../foo#entry=bar.
-      string entry = 2 [(validate.rules).string = {min_len: 1, pattern: "^[0-9a-zA-Z_\\-\\./~:]+$"}];
+      string entry = 2 [(buf.validate.field).string = {min_len: 1, pattern: "^[0-9a-zA-Z_\\-\\./~:]+$"}];
     }
   }
 

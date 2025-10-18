@@ -7,7 +7,7 @@ option java_multiple_files = true;
 option java_package = "com.github.xds.data.orca.v3";
 option go_package = "github.com/cncf/xds/go/xds/data/orca/v3";
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 // See section `ORCA load report format` of the design document in
 // https://github.com/envoyproxy/envoy/issues/6614.
@@ -17,11 +17,11 @@ message OrcaLoadReport {
   // should be derived from the latest sample or measurement. The value may be
   // larger than 1.0 when the usage exceeds the reporter dependent notion of
   // soft limits.
-  double cpu_utilization = 1 [(validate.rules).double.gte = 0];
+  double cpu_utilization = 1 [(buf.validate.field).double.gte = 0];
 
   // Memory utilization expressed as a fraction of available memory
   // resources. This should be derived from the latest sample or measurement.
-  double mem_utilization = 2 [(validate.rules).double.gte = 0, (validate.rules).double.lte = 1];
+  double mem_utilization = 2 [(buf.validate.field).double.gte = 0, (buf.validate.field).double.lte = 1];
 
   // Total RPS being served by an endpoint. This should cover all services that an endpoint is
   // responsible for.
@@ -35,15 +35,15 @@ message OrcaLoadReport {
   // Resource utilization values. Each value is expressed as a fraction of total resources
   // available, derived from the latest sample or measurement.
   map<string, double> utilization = 5
-      [(validate.rules).map.values.double.gte = 0, (validate.rules).map.values.double.lte = 1];
+      [(buf.validate.field).map.values.double.gte = 0, (buf.validate.field).map.values.double.lte = 1];
 
   // Total RPS being served by an endpoint. This should cover all services that an endpoint is
   // responsible for.
-  double rps_fractional = 6 [(validate.rules).double.gte = 0];
+  double rps_fractional = 6 [(buf.validate.field).double.gte = 0];
 
   // Total EPS (errors/second) being served by an endpoint. This should cover
   // all services that an endpoint is responsible for.
-  double eps = 7 [(validate.rules).double.gte = 0];
+  double eps = 7 [(buf.validate.field).double.gte = 0];
 
   // Application specific opaque metrics.
   map<string, double> named_metrics = 8;
@@ -54,5 +54,5 @@ message OrcaLoadReport {
   // This should be derived from the latest sample or measurement.
   // The value may be larger than 1.0 when the usage exceeds the reporter
   // dependent notion of soft limits.
-  double application_utilization = 9 [(validate.rules).double.gte = 0];
+  double application_utilization = 9 [(buf.validate.field).double.gte = 0];
 }

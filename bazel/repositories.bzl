@@ -11,7 +11,7 @@ def xds_api_dependencies():
         locations = REPOSITORY_LOCATIONS,
     )
     xds_http_archive(
-        "com_envoyproxy_protoc_gen_validate",
+        "com_github_bufbuild_protovalidate",
         locations = REPOSITORY_LOCATIONS,
     )
     xds_http_archive(

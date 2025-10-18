@@ -1,5 +1,5 @@
-load("@com_envoyproxy_protoc_gen_validate//bazel:pgv_proto_library.bzl", "pgv_cc_proto_library")
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", _py_proto_library = "py_proto_library")
+load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
 load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
 load("@io_bazel_rules_go//proto:def.bzl", "go_grpc_library", "go_proto_library")
@@ -25,7 +25,7 @@ _COMMON_PROTO_DEPS = [
     "@com_google_protobuf//:wrappers_proto",
     "@com_google_googleapis//google/api:http_proto",
     "@com_google_googleapis//google/rpc:status_proto",
-    "@com_envoyproxy_protoc_gen_validate//validate:validate_proto",
+    "@com_github_bufbuild_protovalidate//proto/protovalidate/buf/validate:validate_proto",
 ]
 
 def _proto_mapping(dep, proto_dep_map, proto_suffix):
@@ -56,14 +56,8 @@ def _xds_cc_py_proto_library(
         visibility = visibility,
     )
     cc_proto_library_name = name + _CC_PROTO_SUFFIX
-    pgv_cc_proto_library(
+    cc_proto_library(
         name = cc_proto_library_name,
-        linkstatic = linkstatic,
-        cc_deps = [_cc_proto_mapping(dep) for dep in deps] + [
-            "@com_google_googleapis//google/api:http_cc_proto",
-            "@com_google_googleapis//google/api:httpbody_cc_proto",
-            "@com_google_googleapis//google/rpc:status_cc_proto",
-        ],
         deps = [relative_name],
         visibility = ["//visibility:public"],
     )
@@ -100,9 +94,9 @@ def xds_proto_package(
         has_services = has_services,
     )
 
-    compilers = ["@io_bazel_rules_go//proto:go_proto", "@com_envoyproxy_protoc_gen_validate//bazel/go:pgv_plugin_go"]
+    compilers = ["@io_bazel_rules_go//proto:go_proto"]
     if has_services:
-        compilers = ["@io_bazel_rules_go//proto:go_proto", "@io_bazel_rules_go//proto:go_grpc_v2", "@com_envoyproxy_protoc_gen_validate//bazel/go:pgv_plugin_go"]
+        compilers = ["@io_bazel_rules_go//proto:go_proto", "@io_bazel_rules_go//proto:go_grpc_v2"]
 
     # Because RBAC proro depends on googleapis syntax.proto and checked.proto,
     # which share the same go proto library, it causes duplicative dependencies.
@@ -114,7 +108,7 @@ def xds_proto_package(
         proto = name,
         visibility = ["//visibility:public"],
         deps = depset([_go_proto_mapping(dep) for dep in deps] + [
-            "@com_envoyproxy_protoc_gen_validate//validate:go_default_library",
+            "@build_buf_gen_go_bufbuild_protovalidate_protocolbuffers_go//buf/validate",
             "@org_golang_google_protobuf//types/known/anypb:go_default_library",
             "@org_golang_google_protobuf//types/known/durationpb:go_default_library",
             "@org_golang_google_protobuf//types/known/structpb:go_default_library",
