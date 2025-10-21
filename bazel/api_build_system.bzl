@@ -1,4 +1,5 @@
 load("@com_envoyproxy_protoc_gen_validate//bazel:pgv_proto_library.bzl", "pgv_cc_proto_library")
+load("@com_github_grpc_grpc//bazel:cc_grpc_library.bzl", "cc_grpc_library")
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", _py_proto_library = "py_proto_library")
 load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
@@ -41,6 +42,16 @@ def _go_proto_mapping(dep):
 def _cc_proto_mapping(dep):
     return _proto_mapping(dep, EXTERNAL_PROTO_CC_BAZEL_DEP_MAP, _CC_PROTO_SUFFIX)
 
+def _xds_cc_grpc_library(name, proto, deps = []):
+    cc_grpc_library(
+        name = name,
+        srcs = [proto],
+        deps = deps,
+        proto_only = False,
+        grpc_only = True,
+        visibility = ["//visibility:public"],
+    )
+
 def _xds_cc_py_proto_library(
         name,
         visibility = ["//visibility:private"],
@@ -79,8 +90,9 @@ def _xds_cc_py_proto_library(
 
     # Optionally define gRPC services
     if has_services:
-        # TODO: neither C++ or Python service generation is supported today, follow the Envoy example to implementthis.
-        pass
+        cc_grpc_name = name + _CC_GRPC_SUFFIX
+        cc_proto_deps = [cc_proto_library_name] + [_cc_proto_mapping(dep) for dep in deps]
+        _xds_cc_grpc_library(name = cc_grpc_name, proto = relative_name, deps = cc_proto_deps)
 
 def xds_proto_package(
         name = "pkg",
@@ -145,3 +157,4 @@ def udpa_cc_test(name, **kwargs):
 
 def udpa_go_test(name, **kwargs):
     xds_go_test(name, **kwargs)
+
