@@ -10,14 +10,14 @@ REPOSITORY_LOCATIONS = dict(
         urls = ["https://github.com/bazelbuild/bazel-skylib/releases/download/1.8.2/bazel-skylib-1.8.2.tar.gz"],
     ),
     com_envoyproxy_protoc_gen_validate = dict(
-        sha256 = "92e29c2150675ce954c965bcaa559ca944704b75711533cfe03ce541dcf5a1dd",
-        strip_prefix = "protoc-gen-validate-1.0.4",
-        urls = ["https://github.com/envoyproxy/protoc-gen-validate/archive/refs/tags/v1.0.4.tar.gz"],
+        sha256 = "e4718352754df1393b8792b631338aa8562f390e8160783e365454bc11d96328",
+        strip_prefix = "protoc-gen-validate-1.2.1",
+        urls = ["https://github.com/envoyproxy/protoc-gen-validate/archive/refs/tags/v1.2.1.tar.gz"],
     ),
     com_github_grpc_grpc = dict(
-        sha256 = "916f88a34f06b56432611aaa8c55befee96d0a7b7d7457733b9deeacbc016f99",
-        strip_prefix = "grpc-1.59.1",
-        urls = ["https://github.com/grpc/grpc/archive/refs/tags/v1.59.1.tar.gz"],
+        sha256 = "86f0f28b75b1562c82b7fc5d436b4f5f5da6cb8d67f59e9fec5f8aa1fe924037",
+        strip_prefix = "grpc-1.68.0",
+        urls = ["https://github.com/grpc/grpc/archive/refs/tags/v1.68.0.tar.gz"],
     ),
     com_google_googleapis = dict(
         # TODO(dio): Consider writing a Starlark macro for importing Google API proto.
@@ -28,9 +28,9 @@ REPOSITORY_LOCATIONS = dict(
         ],
     ),
     com_google_protobuf = dict(
-        sha256 = "3d32940e975c4ad9b8ba69640e78f5527075bae33ca2890275bf26b853c0962c",
-        strip_prefix = "protobuf-29.1",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/v29.1.tar.gz"],
+        sha256 = "008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e",
+        strip_prefix = "protobuf-29.3",
+        urls = ["https://github.com/protocolbuffers/protobuf/archive/v29.3.tar.gz"],
     ),
     dev_cel = dict(
         sha256 = "5cba6b0029e727d1f4d8fd134de4e747cecc0bc293d026017d7edc48058d09f7",
