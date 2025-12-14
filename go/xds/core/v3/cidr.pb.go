@@ -24,9 +24,13 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// CidrRange specifies an IP Address and a prefix length to construct
+// the subnet mask for a `CIDR <https://tools.ietf.org/html/rfc4632>`_ range.
 type CidrRange struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	AddressPrefix string                  `protobuf:"bytes,1,opt,name=address_prefix,json=addressPrefix,proto3" json:"address_prefix,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// IPv4 or IPv6 address, e.g. “192.0.0.0“ or “2001:db8::“.
+	AddressPrefix string `protobuf:"bytes,1,opt,name=address_prefix,json=addressPrefix,proto3" json:"address_prefix,omitempty"`
+	// Length of prefix, e.g. 0, 32. Defaults to 0 when unset.
 	PrefixLen     *wrapperspb.UInt32Value `protobuf:"bytes,2,opt,name=prefix_len,json=prefixLen,proto3" json:"prefix_len,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -80,7 +84,7 @@ var File_xds_core_v3_cidr_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_cidr_proto_rawDesc = "" +
 	"\n" +
-	"\x16xds/core/v3/cidr.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\"\x82\x01\n" +
+	"\x16xds/core/v3/cidr.proto\x12\vxds.core.v3\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\"\x82\x01\n" +
 	"\tCidrRange\x12.\n" +
 	"\x0eaddress_prefix\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\raddressPrefix\x12E\n" +
 	"\n" +

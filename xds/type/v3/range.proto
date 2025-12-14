@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package xds.type.v3;
 
-option java_package = "com.github.xds.type.v3";
-option java_outer_classname = "RangeProto";
-option java_multiple_files = true;
 option go_package = "github.com/cncf/xds/go/xds/type/v3";
+option java_multiple_files = true;
+option java_outer_classname = "RangeProto";
+option java_package = "com.github.xds.type.v3";
 
 // [#protodoc-title: Number range]
 

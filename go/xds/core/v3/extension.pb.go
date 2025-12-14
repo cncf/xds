@@ -23,10 +23,19 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Message type for extension configuration.
 type TypedExtensionConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	TypedConfig   *anypb.Any             `protobuf:"bytes,2,opt,name=typed_config,json=typedConfig,proto3" json:"typed_config,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The name of an extension. This is not used to select the extension, instead
+	// it serves the role of an opaque identifier.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The typed config for the extension. The type URL will be used to identify
+	// the extension. In the case that the type URL is *xds.type.v3.TypedStruct*
+	// (or, for historical reasons, *udpa.type.v1.TypedStruct*), the inner type
+	// URL of *TypedStruct* will be utilized. See the
+	// :ref:`extension configuration overview
+	// <config_overview_extension_configuration>` for further details.
+	TypedConfig   *anypb.Any `protobuf:"bytes,2,opt,name=typed_config,json=typedConfig,proto3" json:"typed_config,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -79,7 +88,7 @@ var File_xds_core_v3_extension_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_extension_proto_rawDesc = "" +
 	"\n" +
-	"\x1bxds/core/v3/extension.proto\x12\vxds.core.v3\x1a\x17validate/validate.proto\x1a\x19google/protobuf/any.proto\"v\n" +
+	"\x1bxds/core/v3/extension.proto\x12\vxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x17validate/validate.proto\"v\n" +
 	"\x14TypedExtensionConfig\x12\x1b\n" +
 	"\x04name\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x04name\x12A\n" +
 	"\ftyped_config\x18\x02 \x01(\v2\x14.google.protobuf.AnyB\b\xfaB\x05\xa2\x01\x02\b\x01R\vtypedConfigBN\n" +

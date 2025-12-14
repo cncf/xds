@@ -22,12 +22,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// These annotations indicate metadata for the purpose of understanding the
+// security significance of fields.
 type FieldSecurityAnnotation struct {
-	state                           protoimpl.MessageState `protogen:"open.v1"`
-	ConfigureForUntrustedDownstream bool                   `protobuf:"varint,1,opt,name=configure_for_untrusted_downstream,json=configureForUntrustedDownstream,proto3" json:"configure_for_untrusted_downstream,omitempty"`
-	ConfigureForUntrustedUpstream   bool                   `protobuf:"varint,2,opt,name=configure_for_untrusted_upstream,json=configureForUntrustedUpstream,proto3" json:"configure_for_untrusted_upstream,omitempty"`
-	unknownFields                   protoimpl.UnknownFields
-	sizeCache                       protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Field should be set in the presence of untrusted downstreams.
+	ConfigureForUntrustedDownstream bool `protobuf:"varint,1,opt,name=configure_for_untrusted_downstream,json=configureForUntrustedDownstream,proto3" json:"configure_for_untrusted_downstream,omitempty"`
+	// Field should be set in the presence of untrusted upstreams.
+	ConfigureForUntrustedUpstream bool `protobuf:"varint,2,opt,name=configure_for_untrusted_upstream,json=configureForUntrustedUpstream,proto3" json:"configure_for_untrusted_upstream,omitempty"`
+	unknownFields                 protoimpl.UnknownFields
+	sizeCache                     protoimpl.SizeCache
 }
 
 func (x *FieldSecurityAnnotation) Reset() {
@@ -87,6 +91,9 @@ var file_xds_annotations_v3_security_proto_extTypes = []protoimpl.ExtensionInfo{
 
 // Extension fields to descriptorpb.FieldOptions.
 var (
+	// Magic number is the 28 most significant bits in the sha256sum of
+	// "xds.annotations.v3.security".
+	//
 	// optional xds.annotations.v3.FieldSecurityAnnotation security = 99044135;
 	E_Security = &file_xds_annotations_v3_security_proto_extTypes[0]
 )
@@ -95,7 +102,7 @@ var File_xds_annotations_v3_security_proto protoreflect.FileDescriptor
 
 const file_xds_annotations_v3_security_proto_rawDesc = "" +
 	"\n" +
-	"!xds/annotations/v3/security.proto\x12\x12xds.annotations.v3\x1a\x1fxds/annotations/v3/status.proto\x1a google/protobuf/descriptor.proto\"\xaf\x01\n" +
+	"!xds/annotations/v3/security.proto\x12\x12xds.annotations.v3\x1a google/protobuf/descriptor.proto\x1a\x1fxds/annotations/v3/status.proto\"\xaf\x01\n" +
 	"\x17FieldSecurityAnnotation\x12K\n" +
 	"\"configure_for_untrusted_downstream\x18\x01 \x01(\bR\x1fconfigureForUntrustedDownstream\x12G\n" +
 	" configure_for_untrusted_upstream\x18\x02 \x01(\bR\x1dconfigureForUntrustedUpstream:i\n" +

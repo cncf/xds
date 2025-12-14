@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package xds.data.orca.v3;
 
-option java_outer_classname = "OrcaLoadReportProto";
-option java_multiple_files = true;
-option java_package = "com.github.xds.data.orca.v3";
-option go_package = "github.com/cncf/xds/go/xds/data/orca/v3";
-
 import "validate/validate.proto";
+
+option go_package = "github.com/cncf/xds/go/xds/data/orca/v3";
+option java_multiple_files = true;
+option java_outer_classname = "OrcaLoadReportProto";
+option java_package = "com.github.xds.data.orca.v3";
 
 // See section `ORCA load report format` of the design document in
 // https://github.com/envoyproxy/envoy/issues/6614.
@@ -21,7 +21,10 @@ message OrcaLoadReport {
 
   // Memory utilization expressed as a fraction of available memory
   // resources. This should be derived from the latest sample or measurement.
-  double mem_utilization = 2 [(validate.rules).double.gte = 0, (validate.rules).double.lte = 1];
+  double mem_utilization = 2 [
+    (validate.rules).double.gte = 0,
+    (validate.rules).double.lte = 1
+  ];
 
   // Total RPS being served by an endpoint. This should cover all services that an endpoint is
   // responsible for.
@@ -34,8 +37,10 @@ message OrcaLoadReport {
 
   // Resource utilization values. Each value is expressed as a fraction of total resources
   // available, derived from the latest sample or measurement.
-  map<string, double> utilization = 5
-      [(validate.rules).map.values.double.gte = 0, (validate.rules).map.values.double.lte = 1];
+  map<string, double> utilization = 5 [
+    (validate.rules).map.values.double.gte = 0,
+    (validate.rules).map.values.double.lte = 1
+  ];
 
   // Total RPS being served by an endpoint. This should cover all services that an endpoint is
   // responsible for.

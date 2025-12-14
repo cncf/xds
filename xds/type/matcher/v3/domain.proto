@@ -2,16 +2,14 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
+import "validate/validate.proto";
 import "xds/annotations/v3/status.proto";
 import "xds/type/matcher/v3/matcher.proto";
 
-import "validate/validate.proto";
-
-option java_package = "com.github.xds.type.matcher.v3";
-option java_outer_classname = "ServerNameMatcherProto";
-option java_multiple_files = true;
 option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
-
+option java_multiple_files = true;
+option java_outer_classname = "ServerNameMatcherProto";
+option java_package = "com.github.xds.type.matcher.v3";
 option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // [#protodoc-title: Server name matcher]
@@ -26,7 +24,7 @@ message ServerNameMatcher {
   message DomainMatcher {
     // A non-empty set of domain names with optional wildcards, e.g.
     // ``www.example.com``, ``*.com``, or ``*``.
-    repeated string domains = 1 [ (validate.rules).repeated = {min_items : 1} ];
+    repeated string domains = 1 [(validate.rules).repeated = {min_items: 1}];
 
     // Match action to apply when the server name matches any of the domain
     // names in the matcher.

@@ -23,10 +23,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Performs a match by evaluating a `Common Expression Language
+// <https://github.com/google/cel-spec>`_ (CEL) expression against the standardized set of
+// :ref:`HTTP attributes <arch_overview_attributes>` specified via “HttpAttributesCelMatchInput“.
+//
+// .. attention::
+//
+//	The match is ``true``, iff the result of the evaluation is a bool AND true.
+//	In all other cases, the match is ``false``, including but not limited to: non-bool types,
+//	``false``, ``null``, ``int(1)``, etc.
+//	In case CEL expression raises an error, the result of the evaluation is interpreted "no match".
+//
+// Refer to :ref:`Unified Matcher API <envoy_v3_api_msg_.xds.type.matcher.v3.Matcher>` documentation
+// for usage details.
+//
+// [#comment: envoy.matching.matchers.cel_matcher]
 type CelMatcher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ExprMatch     *v3.CelExpression      `protobuf:"bytes,1,opt,name=expr_match,json=exprMatch,proto3" json:"expr_match,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Either parsed or checked representation of the CEL program.
+	ExprMatch *v3.CelExpression `protobuf:"bytes,1,opt,name=expr_match,json=exprMatch,proto3" json:"expr_match,omitempty"`
+	// Free-form description of the CEL AST, e.g. the original expression text, to be
+	// used for debugging assistance.
+	Description   string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -79,7 +97,7 @@ var File_xds_type_matcher_v3_cel_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_cel_proto_rawDesc = "" +
 	"\n" +
-	"\x1dxds/type/matcher/v3/cel.proto\x12\x13xds.type.matcher.v3\x1a\x15xds/type/v3/cel.proto\x1a\x17validate/validate.proto\"s\n" +
+	"\x1dxds/type/matcher/v3/cel.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\x1a\x15xds/type/v3/cel.proto\"s\n" +
 	"\n" +
 	"CelMatcher\x12C\n" +
 	"\n" +

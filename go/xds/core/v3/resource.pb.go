@@ -23,11 +23,17 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// xDS resource wrapper. This encapsulates a xDS resource when appearing in an
+// xDS transport discovery response or when accessed as a filesystem object.
 type Resource struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *ResourceName          `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Resource      *anypb.Any             `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Resource name. This may be omitted for filesystem resources.
+	Name *ResourceName `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The resource's logical version. It is illegal to have the same named xDS
+	// resource name at a given version with different resource payloads.
+	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	// The resource payload, including type URL.
+	Resource      *anypb.Any `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

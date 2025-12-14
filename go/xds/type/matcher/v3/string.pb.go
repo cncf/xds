@@ -23,6 +23,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Specifies the way to match a string.
+// [#next-free-field: 9]
 type StringMatcher struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to MatchPattern:
@@ -33,8 +35,11 @@ type StringMatcher struct {
 	//	*StringMatcher_SafeRegex
 	//	*StringMatcher_Contains
 	//	*StringMatcher_Custom
-	MatchPattern  isStringMatcher_MatchPattern `protobuf_oneof:"match_pattern"`
-	IgnoreCase    bool                         `protobuf:"varint,6,opt,name=ignore_case,json=ignoreCase,proto3" json:"ignore_case,omitempty"`
+	MatchPattern isStringMatcher_MatchPattern `protobuf_oneof:"match_pattern"`
+	// If true, indicates the exact/prefix/suffix matching should be case insensitive. This has no
+	// effect for the safe_regex match.
+	// For example, the matcher *data* will match both input string *Data* and *data* if set to true.
+	IgnoreCase    bool `protobuf:"varint,6,opt,name=ignore_case,json=ignoreCase,proto3" json:"ignore_case,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -142,26 +147,52 @@ type isStringMatcher_MatchPattern interface {
 }
 
 type StringMatcher_Exact struct {
+	// The input string must match exactly the string specified here.
+	//
+	// Examples:
+	//
+	// * *abc* only matches the value *abc*.
 	Exact string `protobuf:"bytes,1,opt,name=exact,proto3,oneof"`
 }
 
 type StringMatcher_Prefix struct {
+	// The input string must have the prefix specified here.
+	// Note: empty prefix is not allowed, please use regex instead.
+	//
+	// Examples:
+	//
+	// * *abc* matches the value *abc.xyz*
 	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3,oneof"`
 }
 
 type StringMatcher_Suffix struct {
+	// The input string must have the suffix specified here.
+	// Note: empty prefix is not allowed, please use regex instead.
+	//
+	// Examples:
+	//
+	// * *abc* matches the value *xyz.abc*
 	Suffix string `protobuf:"bytes,3,opt,name=suffix,proto3,oneof"`
 }
 
 type StringMatcher_SafeRegex struct {
+	// The input string must match the regular expression specified here.
 	SafeRegex *RegexMatcher `protobuf:"bytes,5,opt,name=safe_regex,json=safeRegex,proto3,oneof"`
 }
 
 type StringMatcher_Contains struct {
+	// The input string must have the substring specified here.
+	// Note: empty contains match is not allowed, please use regex instead.
+	//
+	// Examples:
+	//
+	// * *abc* matches the value *xyz.abc.def*
 	Contains string `protobuf:"bytes,7,opt,name=contains,proto3,oneof"`
 }
 
 type StringMatcher_Custom struct {
+	// Use an extension as the matcher type.
+	// [#extension-category: envoy.string_matcher]
 	Custom *v3.TypedExtensionConfig `protobuf:"bytes,8,opt,name=custom,proto3,oneof"`
 }
 
@@ -177,6 +208,7 @@ func (*StringMatcher_Contains) isStringMatcher_MatchPattern() {}
 
 func (*StringMatcher_Custom) isStringMatcher_MatchPattern() {}
 
+// Specifies a list of ways to match a string.
 type ListStringMatcher struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Patterns      []*StringMatcher       `protobuf:"bytes,1,rep,name=patterns,proto3" json:"patterns,omitempty"`
@@ -225,7 +257,7 @@ var File_xds_type_matcher_v3_string_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_string_proto_rawDesc = "" +
 	"\n" +
-	" xds/type/matcher/v3/string.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a\x1fxds/type/matcher/v3/regex.proto\x1a\x17validate/validate.proto\"\xd6\x02\n" +
+	" xds/type/matcher/v3/string.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\x1a\x1bxds/core/v3/extension.proto\x1a\x1fxds/type/matcher/v3/regex.proto\"\xd6\x02\n" +
 	"\rStringMatcher\x12\x16\n" +
 	"\x05exact\x18\x01 \x01(\tH\x00R\x05exact\x12!\n" +
 	"\x06prefix\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\x06prefix\x12!\n" +

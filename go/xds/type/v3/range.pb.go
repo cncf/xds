@@ -21,10 +21,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Specifies the int64 start and end of the range using half-open interval
+// semantics [start, end).
 type Int64Range struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Start         int64                  `protobuf:"varint,1,opt,name=start,proto3" json:"start,omitempty"`
-	End           int64                  `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// start of the range (inclusive)
+	Start int64 `protobuf:"varint,1,opt,name=start,proto3" json:"start,omitempty"`
+	// end of the range (exclusive)
+	End           int64 `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -73,10 +77,14 @@ func (x *Int64Range) GetEnd() int64 {
 	return 0
 }
 
+// Specifies the int32 start and end of the range using half-open interval
+// semantics [start, end).
 type Int32Range struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Start         int32                  `protobuf:"varint,1,opt,name=start,proto3" json:"start,omitempty"`
-	End           int32                  `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// start of the range (inclusive)
+	Start int32 `protobuf:"varint,1,opt,name=start,proto3" json:"start,omitempty"`
+	// end of the range (exclusive)
+	End           int32 `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -125,10 +133,14 @@ func (x *Int32Range) GetEnd() int32 {
 	return 0
 }
 
+// Specifies the double start and end of the range using half-open interval
+// semantics [start, end).
 type DoubleRange struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Start         float64                `protobuf:"fixed64,1,opt,name=start,proto3" json:"start,omitempty"`
-	End           float64                `protobuf:"fixed64,2,opt,name=end,proto3" json:"end,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// start of the range (inclusive)
+	Start float64 `protobuf:"fixed64,1,opt,name=start,proto3" json:"start,omitempty"`
+	// end of the range (exclusive)
+	End           float64 `protobuf:"fixed64,2,opt,name=end,proto3" json:"end,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

@@ -18,6 +18,7 @@ jobs:
       path: $(Agent.TempDirectory)/tmp
 
   - bash: ci/check.sh
+    displayName: 'Run Bazel tests (includes buf linting)'
     env:
       TEST_TMPDIR: $(Agent.TempDirectory)/tmp
 

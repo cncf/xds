@@ -46,6 +46,10 @@ def xds_api_dependencies():
         "rules_cc",
         locations = REPOSITORY_LOCATIONS,
     )
+    xds_http_archive(
+        "rules_buf",
+        locations = REPOSITORY_LOCATIONS,
+    )
 
 # Old name for backward compatibility.
 # TODO(roth): Remove once all callers are updated to use the new name.

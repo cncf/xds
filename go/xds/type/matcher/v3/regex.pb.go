@@ -22,13 +22,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// A regex matcher designed for safety when used with untrusted input.
 type RegexMatcher struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to EngineType:
 	//
 	//	*RegexMatcher_GoogleRe2
-	EngineType    isRegexMatcher_EngineType `protobuf_oneof:"engine_type"`
-	Regex         string                    `protobuf:"bytes,2,opt,name=regex,proto3" json:"regex,omitempty"`
+	EngineType isRegexMatcher_EngineType `protobuf_oneof:"engine_type"`
+	// The regex match string. The string must be supported by the configured
+	// engine.
+	Regex         string `protobuf:"bytes,2,opt,name=regex,proto3" json:"regex,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -91,11 +94,30 @@ type isRegexMatcher_EngineType interface {
 }
 
 type RegexMatcher_GoogleRe2 struct {
+	// Google's RE2 regex engine.
 	GoogleRe2 *RegexMatcher_GoogleRE2 `protobuf:"bytes,1,opt,name=google_re2,json=googleRe2,proto3,oneof"`
 }
 
 func (*RegexMatcher_GoogleRe2) isRegexMatcher_EngineType() {}
 
+// Google's `RE2 <https://github.com/google/re2>`_ regex engine. The regex
+// string must adhere to the documented `syntax
+// <https://github.com/google/re2/wiki/Syntax>`_. The engine is designed to
+// complete execution in linear time as well as limit the amount of memory
+// used.
+//
+// Envoy supports program size checking via runtime. The runtime keys
+// `re2.max_program_size.error_level` and `re2.max_program_size.warn_level`
+// can be set to integers as the maximum program size or complexity that a
+// compiled regex can have before an exception is thrown or a warning is
+// logged, respectively. `re2.max_program_size.error_level` defaults to 100,
+// and `re2.max_program_size.warn_level` has no default if unset (will not
+// check/log a warning).
+//
+// Envoy emits two stats for tracking the program size of regexes: the
+// histogram `re2.program_size`, which records the program size, and the
+// counter `re2.exceeded_warn_level`, which is incremented each time the
+// program size exceeds the warn level threshold.
 type RegexMatcher_GoogleRE2 struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields

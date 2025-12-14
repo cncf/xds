@@ -1,0 +1,46 @@
+version: v2
+modules:
+  - path: .
+    excludes:
+      - bazel-bin
+      - bazel-out
+      - bazel-testlogs
+      - bazel-xds
+deps:
+  - buf.build/envoyproxy/protoc-gen-validate
+  - buf.build/googleapis/googleapis
+  - buf.build/google/cel-spec
+lint:
+  use:
+    - STANDARD
+  ignore_only:
+    # ENUM_VALUE_PREFIX: Legacy enums with established names that cannot be changed for compatibility
+    ENUM_VALUE_PREFIX:
+      - udpa/annotations/status.proto  # PackageVersionStatus enum
+      - xds/annotations/v3/status.proto  # PackageVersionStatus enum
+      - xds/core/v3/resource_locator.proto  # Scheme enum
+    # ENUM_ZERO_VALUE_SUFFIX: Legacy enum zero values that predate _UNSPECIFIED convention
+    ENUM_ZERO_VALUE_SUFFIX:
+      - udpa/annotations/status.proto  # PackageVersionStatus.UNKNOWN
+      - xds/annotations/v3/status.proto  # PackageVersionStatus.UNKNOWN
+      - xds/core/v3/resource_locator.proto  # Scheme.XDSTP
+    # PACKAGE_VERSION_SUFFIX: udpa.annotations package is legacy and predates versioning requirements
+    PACKAGE_VERSION_SUFFIX:
+      - udpa/annotations/migrate.proto
+      - udpa/annotations/security.proto
+      - udpa/annotations/sensitive.proto
+      - udpa/annotations/status.proto
+      - udpa/annotations/versioning.proto
+    # RPC naming: ORCA service uses established naming convention that predates buf standards
+    RPC_REQUEST_RESPONSE_UNIQUE:
+      - udpa/service/orca/v1/orca.proto  # StreamCoreMetrics RPC
+      - xds/service/orca/v3/orca.proto  # StreamCoreMetrics RPC
+    RPC_REQUEST_STANDARD_NAME:
+      - udpa/service/orca/v1/orca.proto  # StreamCoreMetrics RPC
+      - xds/service/orca/v3/orca.proto  # StreamCoreMetrics RPC
+    RPC_RESPONSE_STANDARD_NAME:
+      - udpa/service/orca/v1/orca.proto  # StreamCoreMetrics RPC
+      - xds/service/orca/v3/orca.proto  # StreamCoreMetrics RPC
+breaking:
+  use:
+    - FILE

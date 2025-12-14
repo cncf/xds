@@ -23,8 +23,9 @@ const (
 )
 
 type MigrateAnnotation struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Rename        string                 `protobuf:"bytes,1,opt,name=rename,proto3" json:"rename,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Rename the message/enum/enum value in next version.
+	Rename        string `protobuf:"bytes,1,opt,name=rename,proto3" json:"rename,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -67,9 +68,13 @@ func (x *MigrateAnnotation) GetRename() string {
 }
 
 type FieldMigrateAnnotation struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Rename         string                 `protobuf:"bytes,1,opt,name=rename,proto3" json:"rename,omitempty"`
-	OneofPromotion string                 `protobuf:"bytes,2,opt,name=oneof_promotion,json=oneofPromotion,proto3" json:"oneof_promotion,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Rename the field in next version.
+	Rename string `protobuf:"bytes,1,opt,name=rename,proto3" json:"rename,omitempty"`
+	// Add the field to a named oneof in next version. If this already exists, the
+	// field will join its siblings under the oneof, otherwise a new oneof will be
+	// created with the given name.
+	OneofPromotion string `protobuf:"bytes,2,opt,name=oneof_promotion,json=oneofPromotion,proto3" json:"oneof_promotion,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -119,8 +124,10 @@ func (x *FieldMigrateAnnotation) GetOneofPromotion() string {
 }
 
 type FileMigrateAnnotation struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	MoveToPackage string                 `protobuf:"bytes,2,opt,name=move_to_package,json=moveToPackage,proto3" json:"move_to_package,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Move all types in the file to another package, this implies changing proto
+	// file path.
+	MoveToPackage string `protobuf:"bytes,2,opt,name=move_to_package,json=moveToPackage,proto3" json:"move_to_package,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

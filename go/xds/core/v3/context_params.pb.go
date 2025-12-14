@@ -22,6 +22,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Additional parameters that can be used to select resource variants. These include any
+// global context parameters, per-resource type client feature capabilities and per-resource
+// type functional attributes. All per-resource type attributes will be `xds.resource.`
+// prefixed and some of these are documented below:
+//
+// `xds.resource.listening_address`: The value is "IP:port" (e.g. "10.1.1.3:8080") which is
+//
+//	the listening address of a Listener. Used in a Listener resource query.
 type ContextParams struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Params        map[string]string      `protobuf:"bytes,1,rep,name=params,proto3" json:"params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`

@@ -26,18 +26,31 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Either parsed or checked representation of the `Common Expression Language
+// <https://github.com/google/cel-spec>`_ (CEL) program.
 type CelExpression struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to ExprSpecifier:
 	//
 	//	*CelExpression_ParsedExpr
 	//	*CelExpression_CheckedExpr
-	ExprSpecifier  isCelExpression_ExprSpecifier `protobuf_oneof:"expr_specifier"`
-	CelExprParsed  *expr.ParsedExpr              `protobuf:"bytes,3,opt,name=cel_expr_parsed,json=celExprParsed,proto3" json:"cel_expr_parsed,omitempty"`
-	CelExprChecked *expr.CheckedExpr             `protobuf:"bytes,4,opt,name=cel_expr_checked,json=celExprChecked,proto3" json:"cel_expr_checked,omitempty"`
-	CelExprString  string                        `protobuf:"bytes,5,opt,name=cel_expr_string,json=celExprString,proto3" json:"cel_expr_string,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	ExprSpecifier isCelExpression_ExprSpecifier `protobuf_oneof:"expr_specifier"`
+	// Parsed expression in abstract syntax tree (AST) form.
+	//
+	// If “cel_expr_checked“ is set, this field is not used.
+	CelExprParsed *expr.ParsedExpr `protobuf:"bytes,3,opt,name=cel_expr_parsed,json=celExprParsed,proto3" json:"cel_expr_parsed,omitempty"`
+	// Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
+	//
+	// If set, takes precedence over “cel_expr_parsed“.
+	CelExprChecked *expr.CheckedExpr `protobuf:"bytes,4,opt,name=cel_expr_checked,json=celExprChecked,proto3" json:"cel_expr_checked,omitempty"`
+	// Unparsed expression in string form. For example, “request.headers['x-env'] == 'prod'“ will
+	// get “x-env“ header value and compare it with “prod“.
+	// Check the `Common Expression Language <https://github.com/google/cel-spec>`_ for more details.
+	//
+	// If set, takes precedence over “cel_expr_parsed“ and “cel_expr_checked“.
+	CelExprString string `protobuf:"bytes,5,opt,name=cel_expr_string,json=celExprString,proto3" json:"cel_expr_string,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CelExpression) Reset() {
@@ -123,11 +136,21 @@ type isCelExpression_ExprSpecifier interface {
 }
 
 type CelExpression_ParsedExpr struct {
+	// Parsed expression in abstract syntax tree (AST) form.
+	//
+	// Deprecated -- use “cel_expr_parsed“ field instead.
+	// If “cel_expr_parsed“ or “cel_expr_checked“ is set, this field is not used.
+	//
 	// Deprecated: Marked as deprecated in xds/type/v3/cel.proto.
 	ParsedExpr *v1alpha1.ParsedExpr `protobuf:"bytes,1,opt,name=parsed_expr,json=parsedExpr,proto3,oneof"`
 }
 
 type CelExpression_CheckedExpr struct {
+	// Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
+	//
+	// Deprecated -- use “cel_expr_checked“ field instead.
+	// If “cel_expr_parsed“ or “cel_expr_checked“ is set, this field is not used.
+	//
 	// Deprecated: Marked as deprecated in xds/type/v3/cel.proto.
 	CheckedExpr *v1alpha1.CheckedExpr `protobuf:"bytes,2,opt,name=checked_expr,json=checkedExpr,proto3,oneof"`
 }
@@ -136,9 +159,23 @@ func (*CelExpression_ParsedExpr) isCelExpression_ExprSpecifier() {}
 
 func (*CelExpression_CheckedExpr) isCelExpression_ExprSpecifier() {}
 
+// Extracts a string by evaluating a `Common Expression Language
+// <https://github.com/google/cel-spec>`_ (CEL) expression against the standardized set of
+// :ref:`HTTP attributes <arch_overview_attributes>`.
+//
+// .. attention::
+//
+//	Besides CEL evaluation raising an error explicitly, CEL program returning a type other than
+//	the ``string``, or not returning anything, are considered an error as well.
+//
+// [#comment:TODO(sergiitk): When implemented, add the extension tag.]
 type CelExtractString struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	ExprExtract   *CelExpression          `protobuf:"bytes,1,opt,name=expr_extract,json=exprExtract,proto3" json:"expr_extract,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The CEL expression used to extract a string from the CEL environment.
+	// the "subject string") that should be replaced.
+	ExprExtract *CelExpression `protobuf:"bytes,1,opt,name=expr_extract,json=exprExtract,proto3" json:"expr_extract,omitempty"`
+	// If CEL expression evaluates to an error, this value is be returned to the caller.
+	// If not set, the error is propagated to the caller.
 	DefaultValue  *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -192,7 +229,7 @@ var File_xds_type_v3_cel_proto protoreflect.FileDescriptor
 
 const file_xds_type_v3_cel_proto_rawDesc = "" +
 	"\n" +
-	"\x15xds/type/v3/cel.proto\x12\vxds.type.v3\x1a&google/api/expr/v1alpha1/checked.proto\x1a%google/api/expr/v1alpha1/syntax.proto\x1a\x16cel/expr/checked.proto\x1a\x15cel/expr/syntax.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\x17validate/validate.proto\"\xe5\x02\n" +
+	"\x15xds/type/v3/cel.proto\x12\vxds.type.v3\x1a\x16cel/expr/checked.proto\x1a\x15cel/expr/syntax.proto\x1a&google/api/expr/v1alpha1/checked.proto\x1a%google/api/expr/v1alpha1/syntax.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\"\xe5\x02\n" +
 	"\rCelExpression\x12K\n" +
 	"\vparsed_expr\x18\x01 \x01(\v2$.google.api.expr.v1alpha1.ParsedExprB\x02\x18\x01H\x00R\n" +
 	"parsedExpr\x12N\n" +

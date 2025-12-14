@@ -23,8 +23,11 @@ const (
 )
 
 type VersioningAnnotation struct {
-	state               protoimpl.MessageState `protogen:"open.v1"`
-	PreviousMessageType string                 `protobuf:"bytes,1,opt,name=previous_message_type,json=previousMessageType,proto3" json:"previous_message_type,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Track the previous message type. E.g. this message might be
+	// xds.foo.v3alpha.Foo and it was previously xds.bar.v2.Bar. This
+	// information is consumed by UDPA via proto descriptors.
+	PreviousMessageType string `protobuf:"bytes,1,opt,name=previous_message_type,json=previousMessageType,proto3" json:"previous_message_type,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -79,6 +82,9 @@ var file_xds_annotations_v3_versioning_proto_extTypes = []protoimpl.ExtensionInf
 
 // Extension fields to descriptorpb.MessageOptions.
 var (
+	// Magic number is the 28 most significant bits in the sha256sum of
+	// "xds.annotations.v3.versioning".
+	//
 	// optional xds.annotations.v3.VersioningAnnotation versioning = 92389011;
 	E_Versioning = &file_xds_annotations_v3_versioning_proto_extTypes[0]
 )

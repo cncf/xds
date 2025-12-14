@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
-option java_package = "com.github.xds.type.matcher.v3";
-option java_outer_classname = "HttpInputsProto";
-option java_multiple_files = true;
 option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
+option java_multiple_files = true;
+option java_outer_classname = "HttpInputsProto";
+option java_package = "com.github.xds.type.matcher.v3";
 
 // [#protodoc-title: Common HTTP Inputs]
 
@@ -19,5 +19,4 @@ option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
 // for usage details.
 //
 // [#comment: envoy.matching.inputs.cel_data_input]
-message HttpAttributesCelMatchInput {
-}
+message HttpAttributesCelMatchInput {}

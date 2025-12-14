@@ -22,12 +22,12 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from xds.annotations.v3 import status_pb2 as xds_dot_annotations_dot_v3_dot_status__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from validate import validate_pb2 as validate_dot_validate__pb2
+from xds.annotations.v3 import status_pb2 as xds_dot_annotations_dot_v3_dot_status__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16xds/core/v3/cidr.proto\x12\x0bxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\"h\n\tCidrRange\x12\x1f\n\x0e\x61\x64\x64ress_prefix\x18\x01 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01\x12:\n\nprefix_len\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueB\x08\xfa\x42\x05*\x03\x18\x80\x01\x42V\n\x16\x63om.github.xds.core.v3B\x0e\x43idrRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16xds/core/v3/cidr.proto\x12\x0bxds.core.v3\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\"h\n\tCidrRange\x12\x1f\n\x0e\x61\x64\x64ress_prefix\x18\x01 \x01(\tB\x07\xfa\x42\x04r\x02\x10\x01\x12:\n\nprefix_len\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueB\x08\xfa\x42\x05*\x03\x18\x80\x01\x42V\n\x16\x63om.github.xds.core.v3B\x0e\x43idrRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3\xd2\xc6\xa4\xe1\x06\x02\x08\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)

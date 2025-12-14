@@ -23,12 +23,29 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// xDS resource name. This has a canonical xdstp:// URI representation:
+//
+//	xdstp://{authority}/{type_url}/{id}?{context_params}
+//
+// where context_params take the form of URI query parameters.
+//
+// A xDS resource name fully identifies a network resource for transport
+// purposes. xDS resource names in this form appear only in discovery
+// request/response messages used with the xDS transport.
 type ResourceName struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Authority     string                 `protobuf:"bytes,2,opt,name=authority,proto3" json:"authority,omitempty"`
-	ResourceType  string                 `protobuf:"bytes,3,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
-	Context       *ContextParams         `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Opaque identifier for the resource. Any '/' will not be escaped during URI
+	// encoding and will form part of the URI path.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Logical authority for resource (not necessarily transport network address).
+	// Authorities are opaque in the xDS API, data-plane load balancers will map
+	// them to concrete network transports such as an xDS management server.
+	Authority string `protobuf:"bytes,2,opt,name=authority,proto3" json:"authority,omitempty"`
+	// Fully qualified resource type (as in type URL without types.googleapis.com/
+	// prefix).
+	ResourceType string `protobuf:"bytes,3,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
+	// Additional parameters that can be used to select resource variants.
+	Context       *ContextParams `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -95,7 +112,7 @@ var File_xds_core_v3_resource_name_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_resource_name_proto_rawDesc = "" +
 	"\n" +
-	"\x1fxds/core/v3/resource_name.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a xds/core/v3/context_params.proto\x1a\x17validate/validate.proto\"\xa0\x01\n" +
+	"\x1fxds/core/v3/resource_name.proto\x12\vxds.core.v3\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\x1a xds/core/v3/context_params.proto\"\xa0\x01\n" +
 	"\fResourceName\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1c\n" +
 	"\tauthority\x18\x02 \x01(\tR\tauthority\x12,\n" +

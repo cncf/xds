@@ -24,8 +24,10 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Matches a specific IP address against a set of possibly overlapping subnets using a trie.
 type IPMatcher struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Match IP address by CIDR ranges.
 	RangeMatchers []*IPMatcher_IPRangeMatcher `protobuf:"bytes,1,rep,name=range_matchers,json=rangeMatchers,proto3" json:"range_matchers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -68,11 +70,32 @@ func (x *IPMatcher) GetRangeMatchers() []*IPMatcher_IPRangeMatcher {
 	return nil
 }
 
+// Specifies a list of IP address ranges and a match action.
 type IPMatcher_IPRangeMatcher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ranges        []*v3.CidrRange        `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
-	OnMatch       *Matcher_OnMatch       `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
-	Exclusive     bool                   `protobuf:"varint,3,opt,name=exclusive,proto3" json:"exclusive,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A non-empty set of CIDR ranges.
+	Ranges []*v3.CidrRange `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
+	// Match action to apply when the IP address is within one of the CIDR ranges.
+	OnMatch *Matcher_OnMatch `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
+	// Indicates whether this match option should be considered if there is a
+	// more specific matcher. Exclusive matchers are not selected whenever a
+	// more specific matcher exists (e.g. matcher with a longer prefix) even
+	// when the more specific matcher fails its nested match condition.
+	// Non-exclusive matchers are considered if the more specific matcher
+	// exists but its nested match condition does not entirely match.
+	// Non-exclusive matchers are selected in the order of their specificity
+	// first (longest prefix first), then the order of declaration next.
+	//
+	// For example, consider two range matchers: an exclusive matcher *X* on
+	// “0.0.0.0/0“ and a matcher *Y* on “192.0.0.0/2“ with a nested match
+	// condition *Z*. For the input IP “192.168.0.1“ matcher *Y* is the most
+	// specific. If its nested match condition *Z* does not accept the input,
+	// then the less specific matcher *X* does not apply either despite the
+	// input being within the range, because matcher *X* is exclusive.
+	//
+	// The opposite is true if matcher *X* is not marked as exclusive. In that
+	// case matcher *X* always matches whenever matcher "*Y* rejects the input.
+	Exclusive     bool `protobuf:"varint,3,opt,name=exclusive,proto3" json:"exclusive,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -132,7 +155,7 @@ var File_xds_type_matcher_v3_ip_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_ip_proto_rawDesc = "" +
 	"\n" +
-	"\x1cxds/type/matcher/v3/ip.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x16xds/core/v3/cidr.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\x8d\x02\n" +
+	"\x1cxds/type/matcher/v3/ip.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\x16xds/core/v3/cidr.proto\x1a!xds/type/matcher/v3/matcher.proto\"\x8d\x02\n" +
 	"\tIPMatcher\x12T\n" +
 	"\x0erange_matchers\x18\x01 \x03(\v2-.xds.type.matcher.v3.IPMatcher.IPRangeMatcherR\rrangeMatchers\x1a\xa9\x01\n" +
 	"\x0eIPRangeMatcher\x128\n" +

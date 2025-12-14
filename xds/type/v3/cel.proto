@@ -2,21 +2,18 @@ syntax = "proto3";
 
 package xds.type.v3;
 
-import "google/api/expr/v1alpha1/checked.proto";
-import "google/api/expr/v1alpha1/syntax.proto";
 import "cel/expr/checked.proto";
 import "cel/expr/syntax.proto";
+import "google/api/expr/v1alpha1/checked.proto";
+import "google/api/expr/v1alpha1/syntax.proto";
 import "google/protobuf/wrappers.proto";
-
+import "validate/validate.proto";
 import "xds/annotations/v3/status.proto";
 
-import "validate/validate.proto";
-
-option java_package = "com.github.xds.type.v3";
-option java_outer_classname = "CelProto";
-option java_multiple_files = true;
 option go_package = "github.com/cncf/xds/go/xds/type/v3";
-
+option java_multiple_files = true;
+option java_outer_classname = "CelProto";
+option java_package = "com.github.xds.type.v3";
 option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // [#protodoc-title: Common Expression Language (CEL)]
@@ -29,13 +26,13 @@ message CelExpression {
     //
     // Deprecated -- use ``cel_expr_parsed`` field instead.
     // If ``cel_expr_parsed`` or ``cel_expr_checked`` is set, this field is not used.
-    google.api.expr.v1alpha1.ParsedExpr parsed_expr = 1  [deprecated = true];
+    google.api.expr.v1alpha1.ParsedExpr parsed_expr = 1 [deprecated = true];
 
     // Parsed expression in abstract syntax tree (AST) form that has been successfully type checked.
     //
     // Deprecated -- use ``cel_expr_checked`` field instead.
     // If ``cel_expr_parsed`` or ``cel_expr_checked`` is set, this field is not used.
-    google.api.expr.v1alpha1.CheckedExpr checked_expr = 2  [deprecated = true];
+    google.api.expr.v1alpha1.CheckedExpr checked_expr = 2 [deprecated = true];
   }
 
   // Parsed expression in abstract syntax tree (AST) form.

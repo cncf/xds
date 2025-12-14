@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package xds.type.v3;
 
-option java_outer_classname = "TypedStructProto";
-option java_multiple_files = true;
-option java_package = "com.github.xds.type.v3";
-option go_package = "github.com/cncf/xds/go/xds/type/v3";
-
 import "google/protobuf/struct.proto";
+
+option go_package = "github.com/cncf/xds/go/xds/type/v3";
+option java_multiple_files = true;
+option java_outer_classname = "TypedStructProto";
+option java_package = "com.github.xds.type.v3";
 
 // A TypedStruct contains an arbitrary JSON serialized protocol buffer message with a URL that
 // describes the type of the serialized message. This is very similar to google.protobuf.Any,

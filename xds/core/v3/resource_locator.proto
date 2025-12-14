@@ -2,16 +2,14 @@ syntax = "proto3";
 
 package xds.core.v3;
 
+import "validate/validate.proto";
 import "xds/annotations/v3/status.proto";
 import "xds/core/v3/context_params.proto";
 
-import "validate/validate.proto";
-
-option java_outer_classname = "ResourceLocatorProto";
-option java_multiple_files = true;
-option java_package = "com.github.xds.core.v3";
 option go_package = "github.com/cncf/xds/go/xds/core/v3";
-
+option java_multiple_files = true;
+option java_outer_classname = "ResourceLocatorProto";
+option java_package = "com.github.xds.core.v3";
 option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // xDS resource locators identify a xDS resource name and instruct the
@@ -106,7 +104,10 @@ message ResourceLocator {
       // field specified. When specified, the entry directive allows
       // ResourceLocator to directly reference these inlined resources, e.g.
       // xdstp://.../foo#entry=bar.
-      string entry = 2 [(validate.rules).string = {min_len: 1, pattern: "^[0-9a-zA-Z_\\-\\./~:]+$"}];
+      string entry = 2 [(validate.rules).string = {
+        min_len: 1
+        pattern: "^[0-9a-zA-Z_\\-\\./~:]+$"
+      }];
     }
   }
 

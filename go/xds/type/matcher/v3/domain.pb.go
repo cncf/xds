@@ -23,8 +23,19 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Matches a fully qualified server name against a set of domain
+// names with optional wildcards.
 type ServerNameMatcher struct {
-	state          protoimpl.MessageState             `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Match a server name by multiple domain matchers. Each domain, exact or
+	// wildcard, must appear at most once across all the domain matchers.
+	//
+	// The server name will be matched against all wildcard domains starting from
+	// the longest suffix, i.e. “www.example.com“ input will be first matched
+	// against “www.example.com“, then “*.example.com“, then “*.com“, then
+	// “*“, until the associated matcher action accepts the input. Note that
+	// wildcards must be on a dot border, and values like “*w.example.com“ are
+	// invalid.
 	DomainMatchers []*ServerNameMatcher_DomainMatcher `protobuf:"bytes,1,rep,name=domain_matchers,json=domainMatchers,proto3" json:"domain_matchers,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -67,10 +78,18 @@ func (x *ServerNameMatcher) GetDomainMatchers() []*ServerNameMatcher_DomainMatch
 	return nil
 }
 
+// Specifies a set of exact and wildcard domains and a match action. The
+// wildcard symbol “*“ must appear at most once as the left-most part of
+// the domain on a dot border. The wildcard matches one or more non-empty
+// domain parts.
 type ServerNameMatcher_DomainMatcher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Domains       []string               `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
-	OnMatch       *Matcher_OnMatch       `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A non-empty set of domain names with optional wildcards, e.g.
+	// “www.example.com“, “*.com“, or “*“.
+	Domains []string `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	// Match action to apply when the server name matches any of the domain
+	// names in the matcher.
+	OnMatch       *Matcher_OnMatch `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -123,7 +142,7 @@ var File_xds_type_matcher_v3_domain_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_domain_proto_rawDesc = "" +
 	"\n" +
-	" xds/type/matcher/v3/domain.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\xe8\x01\n" +
+	" xds/type/matcher/v3/domain.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\x1a!xds/type/matcher/v3/matcher.proto\"\xe8\x01\n" +
 	"\x11ServerNameMatcher\x12]\n" +
 	"\x0fdomain_matchers\x18\x01 \x03(\v24.xds.type.matcher.v3.ServerNameMatcher.DomainMatcherR\x0edomainMatchers\x1at\n" +
 	"\rDomainMatcher\x12\"\n" +

@@ -23,6 +23,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// xDS authority information.
 type Authority struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -71,7 +72,7 @@ var File_xds_core_v3_authority_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_authority_proto_rawDesc = "" +
 	"\n" +
-	"\x1bxds/core/v3/authority.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x17validate/validate.proto\"(\n" +
+	"\x1bxds/core/v3/authority.proto\x12\vxds.core.v3\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\"(\n" +
 	"\tAuthority\x12\x1b\n" +
 	"\x04name\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x04nameBV\xd2Ƥ\xe1\x06\x02\b\x01\n" +
 	"\x16com.github.xds.core.v3B\x0eAuthorityProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3b\x06proto3"

@@ -22,11 +22,11 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from xds.data.orca.v3 import orca_load_report_pb2 as xds_dot_data_dot_orca_dot_v3_dot_orca__load__report__pb2
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
+from xds.data.orca.v3 import orca_load_report_pb2 as xds_dot_data_dot_orca_dot_v3_dot_orca__load__report__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1exds/service/orca/v3/orca.proto\x12\x13xds.service.orca.v3\x1a\'xds/data/orca/v3/orca_load_report.proto\x1a\x1egoogle/protobuf/duration.proto\"g\n\x15OrcaLoadReportRequest\x12\x32\n\x0freport_interval\x18\x01 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1a\n\x12request_cost_names\x18\x02 \x03(\t2u\n\x0eOpenRcaService\x12\x63\n\x11StreamCoreMetrics\x12*.xds.service.orca.v3.OrcaLoadReportRequest\x1a .xds.data.orca.v3.OrcaLoadReport0\x01\x42Y\n\x1e\x63om.github.xds.service.orca.v3B\tOrcaProtoP\x01Z*github.com/cncf/xds/go/xds/service/orca/v3b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1exds/service/orca/v3/orca.proto\x12\x13xds.service.orca.v3\x1a\x1egoogle/protobuf/duration.proto\x1a\'xds/data/orca/v3/orca_load_report.proto\"g\n\x15OrcaLoadReportRequest\x12\x32\n\x0freport_interval\x18\x01 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1a\n\x12request_cost_names\x18\x02 \x03(\t2u\n\x0eOpenRcaService\x12\x63\n\x11StreamCoreMetrics\x12*.xds.service.orca.v3.OrcaLoadReportRequest\x1a .xds.data.orca.v3.OrcaLoadReport0\x01\x42Y\n\x1e\x63om.github.xds.service.orca.v3B\tOrcaProtoP\x01Z*github.com/cncf/xds/go/xds/service/orca/v3b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)

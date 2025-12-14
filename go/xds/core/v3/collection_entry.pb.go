@@ -24,6 +24,15 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// xDS collection resource wrapper. This encapsulates a xDS resource when
+// appearing inside a list collection resource. List collection resources are
+// regular Resource messages of type:
+//
+// .. code-block:: proto
+//
+//	message <T>Collection {
+//	  repeated CollectionEntry resources = 1;
+//	}
 type CollectionEntry struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to ResourceSpecifier:
@@ -95,10 +104,12 @@ type isCollectionEntry_ResourceSpecifier interface {
 }
 
 type CollectionEntry_Locator struct {
+	// A resource locator describing how the member resource is to be located.
 	Locator *ResourceLocator `protobuf:"bytes,1,opt,name=locator,proto3,oneof"`
 }
 
 type CollectionEntry_InlineEntry_ struct {
+	// The resource is inlined in the list collection.
 	InlineEntry *CollectionEntry_InlineEntry `protobuf:"bytes,2,opt,name=inline_entry,json=inlineEntry,proto3,oneof"`
 }
 
@@ -106,11 +117,19 @@ func (*CollectionEntry_Locator) isCollectionEntry_ResourceSpecifier() {}
 
 func (*CollectionEntry_InlineEntry_) isCollectionEntry_ResourceSpecifier() {}
 
+// Inlined resource entry.
 type CollectionEntry_InlineEntry struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Resource      *anypb.Any             `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional name to describe the inlined resource. Resource names must match
+	// “[a-zA-Z0-9_-\./]+“ (TODO(htuch): turn this into a PGV constraint once
+	// finalized, probably should be a RFC3986 pchar). This name allows
+	// reference via the #entry directive in ResourceLocator.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The resource's logical version. It is illegal to have the same named xDS
+	// resource name at a given version with different resource payloads.
+	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	// The resource payload, including type URL.
+	Resource      *anypb.Any `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -170,7 +189,7 @@ var File_xds_core_v3_collection_entry_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_collection_entry_proto_rawDesc = "" +
 	"\n" +
-	"\"xds/core/v3/collection_entry.proto\x12\vxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\"xds/core/v3/resource_locator.proto\x1a\x17validate/validate.proto\"\xc3\x02\n" +
+	"\"xds/core/v3/collection_entry.proto\x12\vxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x17validate/validate.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\"xds/core/v3/resource_locator.proto\"\xc3\x02\n" +
 	"\x0fCollectionEntry\x128\n" +
 	"\alocator\x18\x01 \x01(\v2\x1c.xds.core.v3.ResourceLocatorH\x00R\alocator\x12M\n" +
 	"\finline_entry\x18\x02 \x01(\v2(.xds.core.v3.CollectionEntry.InlineEntryH\x00R\vinlineEntry\x1a\x8b\x01\n" +

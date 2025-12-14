@@ -23,8 +23,12 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Specifies a set of ranges for matching an int64 number and the associated
+// match actions.
 type Int64RangeMatcher struct {
-	state         protoimpl.MessageState            `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Match a number by a list of number ranges. If multiple ranges contain the
+	// input number, then the first action in this list is taken.
 	RangeMatchers []*Int64RangeMatcher_RangeMatcher `protobuf:"bytes,1,rep,name=range_matchers,json=rangeMatchers,proto3" json:"range_matchers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -67,8 +71,12 @@ func (x *Int64RangeMatcher) GetRangeMatchers() []*Int64RangeMatcher_RangeMatcher
 	return nil
 }
 
+// Specifies a set of ranges for matching an int32 number and the associated
+// match actions.
 type Int32RangeMatcher struct {
-	state         protoimpl.MessageState            `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Match a number by a list of number ranges. If multiple ranges contain the
+	// input number, then the first action in this list is taken.
 	RangeMatchers []*Int32RangeMatcher_RangeMatcher `protobuf:"bytes,1,rep,name=range_matchers,json=rangeMatchers,proto3" json:"range_matchers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -111,8 +119,12 @@ func (x *Int32RangeMatcher) GetRangeMatchers() []*Int32RangeMatcher_RangeMatcher
 	return nil
 }
 
+// Specifies a set of ranges for matching a double number and the associated
+// match actions.
 type DoubleRangeMatcher struct {
-	state         protoimpl.MessageState             `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Match a number by a list of number ranges. If multiple ranges contain the
+	// input number, then the first action in this list is taken.
 	RangeMatchers []*DoubleRangeMatcher_RangeMatcher `protobuf:"bytes,1,rep,name=range_matchers,json=rangeMatchers,proto3" json:"range_matchers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -155,10 +167,13 @@ func (x *DoubleRangeMatcher) GetRangeMatchers() []*DoubleRangeMatcher_RangeMatch
 	return nil
 }
 
+// Specifies a list of number ranges and a match action.
 type Int64RangeMatcher_RangeMatcher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ranges        []*v3.Int64Range       `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
-	OnMatch       *Matcher_OnMatch       `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A non-empty set of int64 ranges.
+	Ranges []*v3.Int64Range `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
+	// Match action to apply when the input number is within one of the ranges.
+	OnMatch       *Matcher_OnMatch `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -207,10 +222,13 @@ func (x *Int64RangeMatcher_RangeMatcher) GetOnMatch() *Matcher_OnMatch {
 	return nil
 }
 
+// Specifies a list of number ranges and a match action.
 type Int32RangeMatcher_RangeMatcher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ranges        []*v3.Int32Range       `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
-	OnMatch       *Matcher_OnMatch       `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A non-empty set of int32 ranges.
+	Ranges []*v3.Int32Range `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
+	// Match action to apply when the input number is within one of the ranges.
+	OnMatch       *Matcher_OnMatch `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -259,10 +277,13 @@ func (x *Int32RangeMatcher_RangeMatcher) GetOnMatch() *Matcher_OnMatch {
 	return nil
 }
 
+// Specifies a list of number ranges and a match action.
 type DoubleRangeMatcher_RangeMatcher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ranges        []*v3.DoubleRange      `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
-	OnMatch       *Matcher_OnMatch       `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A non-empty set of double ranges.
+	Ranges []*v3.DoubleRange `protobuf:"bytes,1,rep,name=ranges,proto3" json:"ranges,omitempty"`
+	// Match action to apply when the input number is within one of the ranges.
+	OnMatch       *Matcher_OnMatch `protobuf:"bytes,2,opt,name=on_match,json=onMatch,proto3" json:"on_match,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -315,7 +336,7 @@ var File_xds_type_matcher_v3_range_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_range_proto_rawDesc = "" +
 	"\n" +
-	"\x1fxds/type/matcher/v3/range.proto\x12\x13xds.type.matcher.v3\x1a\x17xds/type/v3/range.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\xfc\x01\n" +
+	"\x1fxds/type/matcher/v3/range.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17xds/type/v3/range.proto\"\xfc\x01\n" +
 	"\x11Int64RangeMatcher\x12Z\n" +
 	"\x0erange_matchers\x18\x01 \x03(\v23.xds.type.matcher.v3.Int64RangeMatcher.RangeMatcherR\rrangeMatchers\x1a\x8a\x01\n" +
 	"\fRangeMatcher\x129\n" +

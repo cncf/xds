@@ -22,11 +22,11 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from xds.type.v3 import cel_pb2 as xds_dot_type_dot_v3_dot_cel__pb2
 from validate import validate_pb2 as validate_dot_validate__pb2
+from xds.type.v3 import cel_pb2 as xds_dot_type_dot_v3_dot_cel__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dxds/type/matcher/v3/cel.proto\x12\x13xds.type.matcher.v3\x1a\x15xds/type/v3/cel.proto\x1a\x17validate/validate.proto\"[\n\nCelMatcher\x12\x38\n\nexpr_match\x18\x01 \x01(\x0b\x32\x1a.xds.type.v3.CelExpressionB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\tBX\n\x1e\x63om.github.xds.type.matcher.v3B\x08\x43\x65lProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dxds/type/matcher/v3/cel.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\x1a\x15xds/type/v3/cel.proto\"[\n\nCelMatcher\x12\x38\n\nexpr_match\x18\x01 \x01(\x0b\x32\x1a.xds.type.v3.CelExpressionB\x08\xfa\x42\x05\x8a\x01\x02\x10\x01\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\tBX\n\x1e\x63om.github.xds.type.matcher.v3B\x08\x43\x65lProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)

@@ -3,6 +3,7 @@ load("@com_envoyproxy_protoc_gen_validate//bazel:repositories.bzl", "pgv_depende
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@rules_buf//buf:repositories.bzl", "rules_buf_dependencies", "rules_buf_toolchains")
 load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
 
 # go version for rules_go
@@ -17,6 +18,10 @@ def xds_dependency_imports(go_version = GO_VERSION):
     go_register_toolchains(go_version = go_version)
     gazelle_dependencies(go_sdk = "go_sdk")
     pgv_dependencies()
+
+    # Initialize rules_buf for WORKSPACE mode
+    rules_buf_dependencies()
+    rules_buf_toolchains(version = "v1.47.2")
 
     # Initialize rules_python for WORKSPACE mode
     py_repositories()

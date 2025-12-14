@@ -25,9 +25,14 @@ const (
 type PackageVersionStatus int32
 
 const (
-	PackageVersionStatus_UNKNOWN                      PackageVersionStatus = 0
-	PackageVersionStatus_FROZEN                       PackageVersionStatus = 1
-	PackageVersionStatus_ACTIVE                       PackageVersionStatus = 2
+	// Unknown package version status.
+	PackageVersionStatus_UNKNOWN PackageVersionStatus = 0
+	// This version of the package is frozen.
+	PackageVersionStatus_FROZEN PackageVersionStatus = 1
+	// This version of the package is the active development version.
+	PackageVersionStatus_ACTIVE PackageVersionStatus = 2
+	// This version of the package is the candidate for the next major version. It
+	// is typically machine generated from the active development version.
 	PackageVersionStatus_NEXT_MAJOR_VERSION_CANDIDATE PackageVersionStatus = 3
 )
 
@@ -75,8 +80,9 @@ func (PackageVersionStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type FileStatusAnnotation struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	WorkInProgress bool                   `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The entity is work-in-progress and subject to breaking changes.
+	WorkInProgress bool `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -119,8 +125,9 @@ func (x *FileStatusAnnotation) GetWorkInProgress() bool {
 }
 
 type MessageStatusAnnotation struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	WorkInProgress bool                   `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The entity is work-in-progress and subject to breaking changes.
+	WorkInProgress bool `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -163,8 +170,9 @@ func (x *MessageStatusAnnotation) GetWorkInProgress() bool {
 }
 
 type FieldStatusAnnotation struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	WorkInProgress bool                   `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The entity is work-in-progress and subject to breaking changes.
+	WorkInProgress bool `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -207,9 +215,11 @@ func (x *FieldStatusAnnotation) GetWorkInProgress() bool {
 }
 
 type StatusAnnotation struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	WorkInProgress       bool                   `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
-	PackageVersionStatus PackageVersionStatus   `protobuf:"varint,2,opt,name=package_version_status,json=packageVersionStatus,proto3,enum=xds.annotations.v3.PackageVersionStatus" json:"package_version_status,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The entity is work-in-progress and subject to breaking changes.
+	WorkInProgress bool `protobuf:"varint,1,opt,name=work_in_progress,json=workInProgress,proto3" json:"work_in_progress,omitempty"`
+	// The entity belongs to a package with the given version status.
+	PackageVersionStatus PackageVersionStatus `protobuf:"varint,2,opt,name=package_version_status,json=packageVersionStatus,proto3,enum=xds.annotations.v3.PackageVersionStatus" json:"package_version_status,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }

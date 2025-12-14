@@ -24,9 +24,13 @@ const (
 )
 
 type OrcaLoadReportRequest struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	ReportInterval   *durationpb.Duration   `protobuf:"bytes,1,opt,name=report_interval,json=reportInterval,proto3" json:"report_interval,omitempty"`
-	RequestCostNames []string               `protobuf:"bytes,2,rep,name=request_cost_names,json=requestCostNames,proto3" json:"request_cost_names,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Interval for generating Open RCA core metric responses.
+	ReportInterval *durationpb.Duration `protobuf:"bytes,1,opt,name=report_interval,json=reportInterval,proto3" json:"report_interval,omitempty"`
+	// Request costs to collect. If this is empty, all known requests costs tracked by
+	// the load reporting agent will be returned. This provides an opportunity for
+	// the client to selectively obtain a subset of tracked costs.
+	RequestCostNames []string `protobuf:"bytes,2,rep,name=request_cost_names,json=requestCostNames,proto3" json:"request_cost_names,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -79,7 +83,7 @@ var File_xds_service_orca_v3_orca_proto protoreflect.FileDescriptor
 
 const file_xds_service_orca_v3_orca_proto_rawDesc = "" +
 	"\n" +
-	"\x1exds/service/orca/v3/orca.proto\x12\x13xds.service.orca.v3\x1a'xds/data/orca/v3/orca_load_report.proto\x1a\x1egoogle/protobuf/duration.proto\"\x89\x01\n" +
+	"\x1exds/service/orca/v3/orca.proto\x12\x13xds.service.orca.v3\x1a\x1egoogle/protobuf/duration.proto\x1a'xds/data/orca/v3/orca_load_report.proto\"\x89\x01\n" +
 	"\x15OrcaLoadReportRequest\x12B\n" +
 	"\x0freport_interval\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x0ereportInterval\x12,\n" +
 	"\x12request_cost_names\x18\x02 \x03(\tR\x10requestCostNames2u\n" +
