@@ -37,6 +37,21 @@ https://github.com/envoyproxy/envoy/tree/main/api. Our long-term goal is to
 move the entire API to this repository, this will be done opportunistically over
 time as we generalize parts of the API to be less client-specific.
 
+## Language Bindings
+
+This repository provides xDS protocol buffer bindings for multiple languages with unified versioning:
+
+- **Python**: Available on [PyPI](https://pypi.org/project/cncf-xds/) - `pip install cncf-xds`
+- **Go**: Available as a Go module - `go get github.com/cncf/xds/go`
+- **Bazel**: Available on [Bazel Central Registry](https://registry.bazel.build/) - Add to `MODULE.bazel`:
+  ```starlark
+  bazel_dep(name = "xds", version = "X.Y.Z")
+  ```
+
+All language bindings share the same version number and are released together.
+
+For versioning and release information, see [VERSIONING.md](VERSIONING.md).
+
 # Mailing list and meetings
 
 We have an open mailing list [xds-wg@lists.cncf.io](https://lists.cncf.io/g/xds-wg/) for communication and announcements. We also meet

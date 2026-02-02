@@ -1,3 +1,14 @@
 bazel-*
 MODULE.bazel.lock
 __pycache__/
+
+# Python build artifacts
+python/dist/
+python/build/
+python/*.egg-info/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
