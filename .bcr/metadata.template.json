@@ -1,0 +1,19 @@
+{
+  "homepage": "https://github.com/cncf/xds",
+  "maintainers": [
+    {
+      "name": "Adi Peleg",
+      "github_user_id": 4787431,
+      "github": "adisuissa"
+    },
+    {
+      "github_user_id": 454682,
+      "github": "phlax"
+    }
+  ],
+  "repository": [
+    "github:cncf/xds"
+  ],
+  "versions": [],
+  "yanked_versions": {}
+}
