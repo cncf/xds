@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: bazel
+    directory: /
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: gomod
+    directory: /go
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: pip
+    directory: /python
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+    schedule:
+      interval: "weekly"
