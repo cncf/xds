@@ -1,0 +1,5 @@
+{
+  "integrity": "",
+  "strip_prefix": "xds-{VERSION}",
+  "url": "https://github.com/cncf/xds/archive/{TAG}.tar.gz"
+}
