@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -264,20 +264,20 @@ var File_xds_core_v3_resource_locator_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_resource_locator_proto_rawDesc = "" +
 	"\n" +
-	"\"xds/core/v3/resource_locator.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a xds/core/v3/context_params.proto\x1a\x17validate/validate.proto\"\x8e\x04\n" +
+	"\"xds/core/v3/resource_locator.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a xds/core/v3/context_params.proto\x1a\x1bbuf/validate/validate.proto\"\x90\x04\n" +
 	"\x0fResourceLocator\x12E\n" +
-	"\x06scheme\x18\x01 \x01(\x0e2#.xds.core.v3.ResourceLocator.SchemeB\b\xfaB\x05\x82\x01\x02\x10\x01R\x06scheme\x12\x0e\n" +
+	"\x06scheme\x18\x01 \x01(\x0e2#.xds.core.v3.ResourceLocator.SchemeB\b\xbaH\x05\x82\x01\x02\x10\x01R\x06scheme\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\x12\x1c\n" +
 	"\tauthority\x18\x03 \x01(\tR\tauthority\x12,\n" +
-	"\rresource_type\x18\x04 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\fresourceType\x12A\n" +
+	"\rresource_type\x18\x04 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\fresourceType\x12A\n" +
 	"\rexact_context\x18\x05 \x01(\v2\x1a.xds.core.v3.ContextParamsH\x00R\fexactContext\x12F\n" +
 	"\n" +
 	"directives\x18\x06 \x03(\v2&.xds.core.v3.ResourceLocator.DirectiveR\n" +
-	"directives\x1a\x88\x01\n" +
+	"directives\x1a\x8a\x01\n" +
 	"\tDirective\x120\n" +
 	"\x03alt\x18\x01 \x01(\v2\x1c.xds.core.v3.ResourceLocatorH\x00R\x03alt\x127\n" +
-	"\x05entry\x18\x02 \x01(\tB\x1f\xfaB\x1cr\x1a\x10\x012\x16^[0-9a-zA-Z_\\-\\./~:]+$H\x00R\x05entryB\x10\n" +
-	"\tdirective\x12\x03\xf8B\x01\"'\n" +
+	"\x05entry\x18\x02 \x01(\tB\x1f\xbaH\x1cr\x1a\x10\x012\x16^[0-9a-zA-Z_\\-\\./~:]+$H\x00R\x05entryB\x12\n" +
+	"\tdirective\x12\x05\xbaH\x02\b\x01\"'\n" +
 	"\x06Scheme\x12\t\n" +
 	"\x05XDSTP\x10\x00\x12\b\n" +
 	"\x04HTTP\x10\x01\x12\b\n" +

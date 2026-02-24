@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	v3 "github.com/cncf/xds/go/xds/type/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -79,11 +79,11 @@ var File_xds_type_matcher_v3_cel_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_cel_proto_rawDesc = "" +
 	"\n" +
-	"\x1dxds/type/matcher/v3/cel.proto\x12\x13xds.type.matcher.v3\x1a\x15xds/type/v3/cel.proto\x1a\x17validate/validate.proto\"s\n" +
+	"\x1dxds/type/matcher/v3/cel.proto\x12\x13xds.type.matcher.v3\x1a\x15xds/type/v3/cel.proto\x1a\x1bbuf/validate/validate.proto\"q\n" +
 	"\n" +
-	"CelMatcher\x12C\n" +
+	"CelMatcher\x12A\n" +
 	"\n" +
-	"expr_match\x18\x01 \x01(\v2\x1a.xds.type.v3.CelExpressionB\b\xfaB\x05\x8a\x01\x02\x10\x01R\texprMatch\x12 \n" +
+	"expr_match\x18\x01 \x01(\v2\x1a.xds.type.v3.CelExpressionB\x06\xbaH\x03\xc8\x01\x01R\texprMatch\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescriptionBX\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\bCelProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"
 

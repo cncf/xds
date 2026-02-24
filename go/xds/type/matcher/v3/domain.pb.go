@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -123,11 +123,11 @@ var File_xds_type_matcher_v3_domain_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_domain_proto_rawDesc = "" +
 	"\n" +
-	" xds/type/matcher/v3/domain.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\xe8\x01\n" +
+	" xds/type/matcher/v3/domain.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x1bbuf/validate/validate.proto\"\xe8\x01\n" +
 	"\x11ServerNameMatcher\x12]\n" +
 	"\x0fdomain_matchers\x18\x01 \x03(\v24.xds.type.matcher.v3.ServerNameMatcher.DomainMatcherR\x0edomainMatchers\x1at\n" +
 	"\rDomainMatcher\x12\"\n" +
-	"\adomains\x18\x01 \x03(\tB\b\xfaB\x05\x92\x01\x02\b\x01R\adomains\x12?\n" +
+	"\adomains\x18\x01 \x03(\tB\b\xbaH\x05\x92\x01\x02\b\x01R\adomains\x12?\n" +
 	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\aonMatchBn\xd2Ƥ\xe1\x06\x02\b\x01\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\x16ServerNameMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"
 

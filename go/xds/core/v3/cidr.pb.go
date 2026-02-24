@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
@@ -80,11 +80,11 @@ var File_xds_core_v3_cidr_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_cidr_proto_rawDesc = "" +
 	"\n" +
-	"\x16xds/core/v3/cidr.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x17validate/validate.proto\"\x82\x01\n" +
+	"\x16xds/core/v3/cidr.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1bbuf/validate/validate.proto\"\x82\x01\n" +
 	"\tCidrRange\x12.\n" +
-	"\x0eaddress_prefix\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\raddressPrefix\x12E\n" +
+	"\x0eaddress_prefix\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\raddressPrefix\x12E\n" +
 	"\n" +
-	"prefix_len\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueB\b\xfaB\x05*\x03\x18\x80\x01R\tprefixLenBN\n" +
+	"prefix_len\x18\x02 \x01(\v2\x1c.google.protobuf.UInt32ValueB\b\xbaH\x05*\x03\x18\x80\x01R\tprefixLenBN\n" +
 	"\x16com.github.xds.core.v3B\x0eCidrRangeProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3b\x06proto3"
 
 var (

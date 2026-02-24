@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -170,15 +170,15 @@ var File_xds_core_v3_collection_entry_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_collection_entry_proto_rawDesc = "" +
 	"\n" +
-	"\"xds/core/v3/collection_entry.proto\x12\vxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\"xds/core/v3/resource_locator.proto\x1a\x17validate/validate.proto\"\xc3\x02\n" +
+	"\"xds/core/v3/collection_entry.proto\x12\vxds.core.v3\x1a\x19google/protobuf/any.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\"xds/core/v3/resource_locator.proto\x1a\x1bbuf/validate/validate.proto\"\xc5\x02\n" +
 	"\x0fCollectionEntry\x128\n" +
 	"\alocator\x18\x01 \x01(\v2\x1c.xds.core.v3.ResourceLocatorH\x00R\alocator\x12M\n" +
 	"\finline_entry\x18\x02 \x01(\v2(.xds.core.v3.CollectionEntry.InlineEntryH\x00R\vinlineEntry\x1a\x8b\x01\n" +
 	"\vInlineEntry\x120\n" +
-	"\x04name\x18\x01 \x01(\tB\x1c\xfaB\x19r\x172\x15^[0-9a-zA-Z_\\-\\.~:]+$R\x04name\x12\x18\n" +
+	"\x04name\x18\x01 \x01(\tB\x1c\xbaH\x19r\x172\x15^[0-9a-zA-Z_\\-\\.~:]+$R\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x120\n" +
-	"\bresource\x18\x03 \x01(\v2\x14.google.protobuf.AnyR\bresourceB\x19\n" +
-	"\x12resource_specifier\x12\x03\xf8B\x01B\\\xd2Ƥ\xe1\x06\x02\b\x01\n" +
+	"\bresource\x18\x03 \x01(\v2\x14.google.protobuf.AnyR\bresourceB\x1b\n" +
+	"\x12resource_specifier\x12\x05\xbaH\x02\b\x01B\\\xd2Ƥ\xe1\x06\x02\b\x01\n" +
 	"\x16com.github.xds.core.v3B\x14CollectionEntryProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3b\x06proto3"
 
 var (

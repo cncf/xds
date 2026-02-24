@@ -7,9 +7,9 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	expr "cel.dev/expr"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	v1alpha1 "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -192,7 +192,7 @@ var File_xds_type_v3_cel_proto protoreflect.FileDescriptor
 
 const file_xds_type_v3_cel_proto_rawDesc = "" +
 	"\n" +
-	"\x15xds/type/v3/cel.proto\x12\vxds.type.v3\x1a&google/api/expr/v1alpha1/checked.proto\x1a%google/api/expr/v1alpha1/syntax.proto\x1a\x16cel/expr/checked.proto\x1a\x15cel/expr/syntax.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\x17validate/validate.proto\"\xe5\x02\n" +
+	"\x15xds/type/v3/cel.proto\x12\vxds.type.v3\x1a&google/api/expr/v1alpha1/checked.proto\x1a%google/api/expr/v1alpha1/syntax.proto\x1a\x16cel/expr/checked.proto\x1a\x15cel/expr/syntax.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fxds/annotations/v3/status.proto\x1a\x1bbuf/validate/validate.proto\"\xe5\x02\n" +
 	"\rCelExpression\x12K\n" +
 	"\vparsed_expr\x18\x01 \x01(\v2$.google.api.expr.v1alpha1.ParsedExprB\x02\x18\x01H\x00R\n" +
 	"parsedExpr\x12N\n" +
@@ -200,9 +200,9 @@ const file_xds_type_v3_cel_proto_rawDesc = "" +
 	"\x0fcel_expr_parsed\x18\x03 \x01(\v2\x14.cel.expr.ParsedExprR\rcelExprParsed\x12?\n" +
 	"\x10cel_expr_checked\x18\x04 \x01(\v2\x15.cel.expr.CheckedExprR\x0ecelExprChecked\x12&\n" +
 	"\x0fcel_expr_string\x18\x05 \x01(\tR\rcelExprStringB\x10\n" +
-	"\x0eexpr_specifier\"\x9e\x01\n" +
-	"\x10CelExtractString\x12G\n" +
-	"\fexpr_extract\x18\x01 \x01(\v2\x1a.xds.type.v3.CelExpressionB\b\xfaB\x05\x8a\x01\x02\x10\x01R\vexprExtract\x12A\n" +
+	"\x0eexpr_specifier\"\x9c\x01\n" +
+	"\x10CelExtractString\x12E\n" +
+	"\fexpr_extract\x18\x01 \x01(\v2\x1a.xds.type.v3.CelExpressionB\x06\xbaH\x03\xc8\x01\x01R\vexprExtract\x12A\n" +
 	"\rdefault_value\x18\x02 \x01(\v2\x1c.google.protobuf.StringValueR\fdefaultValueBP\xd2Ƥ\xe1\x06\x02\b\x01\n" +
 	"\x16com.github.xds.type.v3B\bCelProtoP\x01Z\"github.com/cncf/xds/go/xds/type/v3b\x06proto3"
 
