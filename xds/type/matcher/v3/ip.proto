@@ -6,7 +6,7 @@ import "xds/annotations/v3/status.proto";
 import "xds/core/v3/cidr.proto";
 import "xds/type/matcher/v3/matcher.proto";
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
 option java_outer_classname = "IPMatcherProto";
@@ -22,7 +22,7 @@ message IPMatcher {
   // Specifies a list of IP address ranges and a match action.
   message IPRangeMatcher {
     // A non-empty set of CIDR ranges.
-    repeated core.v3.CidrRange ranges = 1 [(validate.rules).repeated = {min_items: 1}];
+    repeated core.v3.CidrRange ranges = 1 [(buf.validate.field).repeated = {min_items: 1}];
 
     // Match action to apply when the IP address is within one of the CIDR ranges.
     Matcher.OnMatch on_match = 2;

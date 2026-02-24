@@ -7,7 +7,7 @@
 package v3
 
 import (
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -79,10 +79,10 @@ var File_xds_core_v3_extension_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_extension_proto_rawDesc = "" +
 	"\n" +
-	"\x1bxds/core/v3/extension.proto\x12\vxds.core.v3\x1a\x17validate/validate.proto\x1a\x19google/protobuf/any.proto\"v\n" +
+	"\x1bxds/core/v3/extension.proto\x12\vxds.core.v3\x1a\x1bbuf/validate/validate.proto\x1a\x19google/protobuf/any.proto\"t\n" +
 	"\x14TypedExtensionConfig\x12\x1b\n" +
-	"\x04name\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x04name\x12A\n" +
-	"\ftyped_config\x18\x02 \x01(\v2\x14.google.protobuf.AnyB\b\xfaB\x05\xa2\x01\x02\b\x01R\vtypedConfigBN\n" +
+	"\x04name\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x04name\x12?\n" +
+	"\ftyped_config\x18\x02 \x01(\v2\x14.google.protobuf.AnyB\x06\xbaH\x03\xc8\x01\x01R\vtypedConfigBN\n" +
 	"\x16com.github.xds.core.v3B\x0eExtensionProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3b\x06proto3"
 
 var (

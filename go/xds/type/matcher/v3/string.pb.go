@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	v3 "github.com/cncf/xds/go/xds/core/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -225,20 +225,20 @@ var File_xds_type_matcher_v3_string_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_string_proto_rawDesc = "" +
 	"\n" +
-	" xds/type/matcher/v3/string.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a\x1fxds/type/matcher/v3/regex.proto\x1a\x17validate/validate.proto\"\xd6\x02\n" +
+	" xds/type/matcher/v3/string.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a\x1fxds/type/matcher/v3/regex.proto\x1a\x1bbuf/validate/validate.proto\"\xce\x02\n" +
 	"\rStringMatcher\x12\x16\n" +
 	"\x05exact\x18\x01 \x01(\tH\x00R\x05exact\x12!\n" +
-	"\x06prefix\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\x06prefix\x12!\n" +
-	"\x06suffix\x18\x03 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\x06suffix\x12L\n" +
+	"\x06prefix\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01H\x00R\x06prefix\x12!\n" +
+	"\x06suffix\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01H\x00R\x06suffix\x12B\n" +
 	"\n" +
-	"safe_regex\x18\x05 \x01(\v2!.xds.type.matcher.v3.RegexMatcherB\b\xfaB\x05\x8a\x01\x02\x10\x01H\x00R\tsafeRegex\x12%\n" +
-	"\bcontains\x18\a \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\bcontains\x12;\n" +
+	"safe_regex\x18\x05 \x01(\v2!.xds.type.matcher.v3.RegexMatcherH\x00R\tsafeRegex\x12%\n" +
+	"\bcontains\x18\a \x01(\tB\a\xbaH\x04r\x02\x10\x01H\x00R\bcontains\x12;\n" +
 	"\x06custom\x18\b \x01(\v2!.xds.core.v3.TypedExtensionConfigH\x00R\x06custom\x12\x1f\n" +
 	"\vignore_case\x18\x06 \x01(\bR\n" +
-	"ignoreCaseB\x14\n" +
-	"\rmatch_pattern\x12\x03\xf8B\x01\"]\n" +
+	"ignoreCaseB\x16\n" +
+	"\rmatch_pattern\x12\x05\xbaH\x02\b\x01\"]\n" +
 	"\x11ListStringMatcher\x12H\n" +
-	"\bpatterns\x18\x01 \x03(\v2\".xds.type.matcher.v3.StringMatcherB\b\xfaB\x05\x92\x01\x02\b\x01R\bpatternsB[\n" +
+	"\bpatterns\x18\x01 \x03(\v2\".xds.type.matcher.v3.StringMatcherB\b\xbaH\x05\x92\x01\x02\b\x01R\bpatternsB[\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\vStringProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"
 
 var (

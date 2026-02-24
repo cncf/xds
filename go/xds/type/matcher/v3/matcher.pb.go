@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	v3 "github.com/cncf/xds/go/xds/core/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -703,18 +703,18 @@ var File_xds_type_matcher_v3_matcher_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_matcher_proto_rawDesc = "" +
 	"\n" +
-	"!xds/type/matcher/v3/matcher.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a xds/type/matcher/v3/string.proto\x1a\x17validate/validate.proto\"\x9b\x10\n" +
+	"!xds/type/matcher/v3/matcher.proto\x12\x13xds.type.matcher.v3\x1a\x1bxds/core/v3/extension.proto\x1a xds/type/matcher/v3/string.proto\x1a\x1bbuf/validate/validate.proto\"\x9b\x10\n" +
 	"\aMatcher\x12M\n" +
 	"\fmatcher_list\x18\x01 \x01(\v2(.xds.type.matcher.v3.Matcher.MatcherListH\x00R\vmatcherList\x12M\n" +
 	"\fmatcher_tree\x18\x02 \x01(\v2(.xds.type.matcher.v3.Matcher.MatcherTreeH\x00R\vmatcherTree\x12D\n" +
-	"\von_no_match\x18\x03 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\tonNoMatch\x1a\xb6\x01\n" +
+	"\von_no_match\x18\x03 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\tonNoMatch\x1a\xb8\x01\n" +
 	"\aOnMatch\x128\n" +
 	"\amatcher\x18\x01 \x01(\v2\x1c.xds.type.matcher.v3.MatcherH\x00R\amatcher\x12;\n" +
 	"\x06action\x18\x02 \x01(\v2!.xds.core.v3.TypedExtensionConfigH\x00R\x06action\x12#\n" +
-	"\rkeep_matching\x18\x03 \x01(\bR\fkeepMatchingB\x0f\n" +
-	"\bon_match\x12\x03\xf8B\x01\x1a\xb6\b\n" +
+	"\rkeep_matching\x18\x03 \x01(\bR\fkeepMatchingB\x11\n" +
+	"\bon_match\x12\x05\xbaH\x02\b\x01\x1a\xb4\b\n" +
 	"\vMatcherList\x12[\n" +
-	"\bmatchers\x18\x01 \x03(\v25.xds.type.matcher.v3.Matcher.MatcherList.FieldMatcherB\b\xfaB\x05\x92\x01\x02\b\x01R\bmatchers\x1a\x91\x06\n" +
+	"\bmatchers\x18\x01 \x03(\v25.xds.type.matcher.v3.Matcher.MatcherList.FieldMatcherB\b\xbaH\x05\x92\x01\x02\b\x01R\bmatchers\x1a\x93\x06\n" +
 	"\tPredicate\x12o\n" +
 	"\x10single_predicate\x18\x01 \x01(\v2B.xds.type.matcher.v3.Matcher.MatcherList.Predicate.SinglePredicateH\x00R\x0fsinglePredicate\x12a\n" +
 	"\n" +
@@ -723,30 +723,30 @@ const file_xds_type_matcher_v3_matcher_proto_rawDesc = "" +
 	"andMatcher\x12U\n" +
 	"\vnot_matcher\x18\x04 \x01(\v22.xds.type.matcher.v3.Matcher.MatcherList.PredicateH\x00R\n" +
 	"notMatcher\x1a\xf3\x01\n" +
-	"\x0fSinglePredicate\x12A\n" +
-	"\x05input\x18\x01 \x01(\v2!.xds.core.v3.TypedExtensionConfigB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05input\x12E\n" +
+	"\x0fSinglePredicate\x12?\n" +
+	"\x05input\x18\x01 \x01(\v2!.xds.core.v3.TypedExtensionConfigB\x06\xbaH\x03\xc8\x01\x01R\x05input\x12E\n" +
 	"\vvalue_match\x18\x02 \x01(\v2\".xds.type.matcher.v3.StringMatcherH\x00R\n" +
 	"valueMatch\x12F\n" +
-	"\fcustom_match\x18\x03 \x01(\v2!.xds.core.v3.TypedExtensionConfigH\x00R\vcustomMatchB\x0e\n" +
-	"\amatcher\x12\x03\xf8B\x01\x1ak\n" +
+	"\fcustom_match\x18\x03 \x01(\v2!.xds.core.v3.TypedExtensionConfigH\x00R\vcustomMatchB\x10\n" +
+	"\amatcher\x12\x05\xbaH\x02\b\x01\x1ak\n" +
 	"\rPredicateList\x12Z\n" +
-	"\tpredicate\x18\x01 \x03(\v22.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\b\xfaB\x05\x92\x01\x02\b\x02R\tpredicateB\x11\n" +
+	"\tpredicate\x18\x01 \x03(\v22.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\b\xbaH\x05\x92\x01\x02\b\x02R\tpredicateB\x13\n" +
 	"\n" +
-	"match_type\x12\x03\xf8B\x01\x1a\xb5\x01\n" +
-	"\fFieldMatcher\x12Z\n" +
-	"\tpredicate\x18\x01 \x01(\v22.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\b\xfaB\x05\x8a\x01\x02\x10\x01R\tpredicate\x12I\n" +
-	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchB\b\xfaB\x05\x8a\x01\x02\x10\x01R\aonMatch\x1a\xa9\x04\n" +
-	"\vMatcherTree\x12A\n" +
-	"\x05input\x18\x01 \x01(\v2!.xds.core.v3.TypedExtensionConfigB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05input\x12[\n" +
+	"match_type\x12\x05\xbaH\x02\b\x01\x1a\xb1\x01\n" +
+	"\fFieldMatcher\x12X\n" +
+	"\tpredicate\x18\x01 \x01(\v22.xds.type.matcher.v3.Matcher.MatcherList.PredicateB\x06\xbaH\x03\xc8\x01\x01R\tpredicate\x12G\n" +
+	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchB\x06\xbaH\x03\xc8\x01\x01R\aonMatch\x1a\xa9\x04\n" +
+	"\vMatcherTree\x12?\n" +
+	"\x05input\x18\x01 \x01(\v2!.xds.core.v3.TypedExtensionConfigB\x06\xbaH\x03\xc8\x01\x01R\x05input\x12[\n" +
 	"\x0fexact_match_map\x18\x02 \x01(\v21.xds.type.matcher.v3.Matcher.MatcherTree.MatchMapH\x00R\rexactMatchMap\x12]\n" +
 	"\x10prefix_match_map\x18\x03 \x01(\v21.xds.type.matcher.v3.Matcher.MatcherTree.MatchMapH\x00R\x0eprefixMatchMap\x12F\n" +
 	"\fcustom_match\x18\x04 \x01(\v2!.xds.core.v3.TypedExtensionConfigH\x00R\vcustomMatch\x1a\xc0\x01\n" +
 	"\bMatchMap\x12V\n" +
-	"\x03map\x18\x01 \x03(\v2:.xds.type.matcher.v3.Matcher.MatcherTree.MatchMap.MapEntryB\b\xfaB\x05\x9a\x01\x02\b\x01R\x03map\x1a\\\n" +
+	"\x03map\x18\x01 \x03(\v2:.xds.type.matcher.v3.Matcher.MatcherTree.MatchMap.MapEntryB\b\xbaH\x05\x9a\x01\x02\b\x01R\x03map\x1a\\\n" +
 	"\bMapEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12:\n" +
-	"\x05value\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\x05value:\x028\x01B\x10\n" +
-	"\ttree_type\x12\x03\xf8B\x01B\x0e\n" +
+	"\x05value\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\x05value:\x028\x01B\x12\n" +
+	"\ttree_type\x12\x05\xbaH\x02\b\x01B\x0e\n" +
 	"\fmatcher_typeB\\\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\fMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"
 

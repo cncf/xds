@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	v3 "github.com/cncf/xds/go/xds/type/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -315,21 +315,21 @@ var File_xds_type_matcher_v3_range_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_range_proto_rawDesc = "" +
 	"\n" +
-	"\x1fxds/type/matcher/v3/range.proto\x12\x13xds.type.matcher.v3\x1a\x17xds/type/v3/range.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\xfc\x01\n" +
+	"\x1fxds/type/matcher/v3/range.proto\x12\x13xds.type.matcher.v3\x1a\x17xds/type/v3/range.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x1bbuf/validate/validate.proto\"\xfc\x01\n" +
 	"\x11Int64RangeMatcher\x12Z\n" +
 	"\x0erange_matchers\x18\x01 \x03(\v23.xds.type.matcher.v3.Int64RangeMatcher.RangeMatcherR\rrangeMatchers\x1a\x8a\x01\n" +
 	"\fRangeMatcher\x129\n" +
-	"\x06ranges\x18\x01 \x03(\v2\x17.xds.type.v3.Int64RangeB\b\xfaB\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
+	"\x06ranges\x18\x01 \x03(\v2\x17.xds.type.v3.Int64RangeB\b\xbaH\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
 	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\aonMatch\"\xfc\x01\n" +
 	"\x11Int32RangeMatcher\x12Z\n" +
 	"\x0erange_matchers\x18\x01 \x03(\v23.xds.type.matcher.v3.Int32RangeMatcher.RangeMatcherR\rrangeMatchers\x1a\x8a\x01\n" +
 	"\fRangeMatcher\x129\n" +
-	"\x06ranges\x18\x01 \x03(\v2\x17.xds.type.v3.Int32RangeB\b\xfaB\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
+	"\x06ranges\x18\x01 \x03(\v2\x17.xds.type.v3.Int32RangeB\b\xbaH\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
 	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\aonMatch\"\xff\x01\n" +
 	"\x12DoubleRangeMatcher\x12[\n" +
 	"\x0erange_matchers\x18\x01 \x03(\v24.xds.type.matcher.v3.DoubleRangeMatcher.RangeMatcherR\rrangeMatchers\x1a\x8b\x01\n" +
 	"\fRangeMatcher\x12:\n" +
-	"\x06ranges\x18\x01 \x03(\v2\x18.xds.type.v3.DoubleRangeB\b\xfaB\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
+	"\x06ranges\x18\x01 \x03(\v2\x18.xds.type.v3.DoubleRangeB\b\xbaH\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
 	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\aonMatchBZ\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\n" +
 	"RangeProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"

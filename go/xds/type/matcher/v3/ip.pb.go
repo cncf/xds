@@ -7,9 +7,9 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
 	v3 "github.com/cncf/xds/go/xds/core/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -132,11 +132,11 @@ var File_xds_type_matcher_v3_ip_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_ip_proto_rawDesc = "" +
 	"\n" +
-	"\x1cxds/type/matcher/v3/ip.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x16xds/core/v3/cidr.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x17validate/validate.proto\"\x8d\x02\n" +
+	"\x1cxds/type/matcher/v3/ip.proto\x12\x13xds.type.matcher.v3\x1a\x1fxds/annotations/v3/status.proto\x1a\x16xds/core/v3/cidr.proto\x1a!xds/type/matcher/v3/matcher.proto\x1a\x1bbuf/validate/validate.proto\"\x8d\x02\n" +
 	"\tIPMatcher\x12T\n" +
 	"\x0erange_matchers\x18\x01 \x03(\v2-.xds.type.matcher.v3.IPMatcher.IPRangeMatcherR\rrangeMatchers\x1a\xa9\x01\n" +
 	"\x0eIPRangeMatcher\x128\n" +
-	"\x06ranges\x18\x01 \x03(\v2\x16.xds.core.v3.CidrRangeB\b\xfaB\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
+	"\x06ranges\x18\x01 \x03(\v2\x16.xds.core.v3.CidrRangeB\b\xbaH\x05\x92\x01\x02\b\x01R\x06ranges\x12?\n" +
 	"\bon_match\x18\x02 \x01(\v2$.xds.type.matcher.v3.Matcher.OnMatchR\aonMatch\x12\x1c\n" +
 	"\texclusive\x18\x03 \x01(\bR\texclusiveBf\xd2Ƥ\xe1\x06\x02\b\x01\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\x0eIPMatcherProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"

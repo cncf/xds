@@ -7,8 +7,8 @@
 package v3
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	_ "github.com/cncf/xds/go/xds/annotations/v3"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -95,11 +95,11 @@ var File_xds_core_v3_resource_name_proto protoreflect.FileDescriptor
 
 const file_xds_core_v3_resource_name_proto_rawDesc = "" +
 	"\n" +
-	"\x1fxds/core/v3/resource_name.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a xds/core/v3/context_params.proto\x1a\x17validate/validate.proto\"\xa0\x01\n" +
+	"\x1fxds/core/v3/resource_name.proto\x12\vxds.core.v3\x1a\x1fxds/annotations/v3/status.proto\x1a xds/core/v3/context_params.proto\x1a\x1bbuf/validate/validate.proto\"\xa0\x01\n" +
 	"\fResourceName\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1c\n" +
 	"\tauthority\x18\x02 \x01(\tR\tauthority\x12,\n" +
-	"\rresource_type\x18\x03 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\fresourceType\x124\n" +
+	"\rresource_type\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\fresourceType\x124\n" +
 	"\acontext\x18\x04 \x01(\v2\x1a.xds.core.v3.ContextParamsR\acontextBY\xd2Ƥ\xe1\x06\x02\b\x01\n" +
 	"\x16com.github.xds.core.v3B\x11ResourceNameProtoP\x01Z\"github.com/cncf/xds/go/xds/core/v3b\x06proto3"
 

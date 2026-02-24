@@ -3,7 +3,7 @@ syntax = "proto3";
 package xds.type.matcher.v3;
 
 import "xds/type/v3/cel.proto";
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
 option java_outer_classname = "CelProto";
@@ -29,7 +29,7 @@ option go_package = "github.com/cncf/xds/go/xds/type/matcher/v3";
 // [#comment: envoy.matching.matchers.cel_matcher]
 message CelMatcher {
   // Either parsed or checked representation of the CEL program.
-  type.v3.CelExpression expr_match = 1 [(validate.rules).message = {required: true}];
+  type.v3.CelExpression expr_match = 1 [(buf.validate.field).required = true];
 
   // Free-form description of the CEL AST, e.g. the original expression text, to be
   // used for debugging assistance.

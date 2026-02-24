@@ -7,7 +7,7 @@
 package v3
 
 import (
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -136,13 +136,13 @@ var File_xds_type_matcher_v3_regex_proto protoreflect.FileDescriptor
 
 const file_xds_type_matcher_v3_regex_proto_rawDesc = "" +
 	"\n" +
-	"\x1fxds/type/matcher/v3/regex.proto\x12\x13xds.type.matcher.v3\x1a\x17validate/validate.proto\"\xa6\x01\n" +
-	"\fRegexMatcher\x12V\n" +
+	"\x1fxds/type/matcher/v3/regex.proto\x12\x13xds.type.matcher.v3\x1a\x1bbuf/validate/validate.proto\"\x9e\x01\n" +
+	"\fRegexMatcher\x12L\n" +
 	"\n" +
-	"google_re2\x18\x01 \x01(\v2+.xds.type.matcher.v3.RegexMatcher.GoogleRE2B\b\xfaB\x05\x8a\x01\x02\x10\x01H\x00R\tgoogleRe2\x12\x1d\n" +
-	"\x05regex\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x05regex\x1a\v\n" +
-	"\tGoogleRE2B\x12\n" +
-	"\vengine_type\x12\x03\xf8B\x01BZ\n" +
+	"google_re2\x18\x01 \x01(\v2+.xds.type.matcher.v3.RegexMatcher.GoogleRE2H\x00R\tgoogleRe2\x12\x1d\n" +
+	"\x05regex\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x05regex\x1a\v\n" +
+	"\tGoogleRE2B\x14\n" +
+	"\vengine_type\x12\x05\xbaH\x02\b\x01BZ\n" +
 	"\x1ecom.github.xds.type.matcher.v3B\n" +
 	"RegexProtoP\x01Z*github.com/cncf/xds/go/xds/type/matcher/v3b\x06proto3"
 

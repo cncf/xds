@@ -5,7 +5,7 @@ package xds.core.v3;
 import "xds/annotations/v3/status.proto";
 import "xds/core/v3/context_params.proto";
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_outer_classname = "ResourceNameProto";
 option java_multiple_files = true;
@@ -35,7 +35,7 @@ message ResourceName {
 
   // Fully qualified resource type (as in type URL without types.googleapis.com/
   // prefix).
-  string resource_type = 3 [(validate.rules).string = {min_len: 1}];
+  string resource_type = 3 [(buf.validate.field).string = {min_len: 1}];
 
   // Additional parameters that can be used to select resource variants.
   ContextParams context = 4;

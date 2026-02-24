@@ -5,7 +5,7 @@ package xds.type.matcher.v3;
 import "xds/core/v3/extension.proto";
 import "xds/type/matcher/v3/string.proto";
 
-import "validate/validate.proto";
+import "buf/validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
 option java_outer_classname = "MatcherProto";
@@ -23,7 +23,7 @@ message Matcher {
   // What to do if a match is successful.
   message OnMatch {
     oneof on_match {
-      option (validate.required) = true;
+      option (buf.validate.oneof).required = true;
 
       // Nested matcher to evaluate.
       // If the nested matcher does not match and does not specify
@@ -55,10 +55,10 @@ message Matcher {
       message SinglePredicate {
         // Protocol-specific specification of input field to match on.
         // [#extension-category: envoy.matching.common_inputs]
-        core.v3.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
+        core.v3.TypedExtensionConfig input = 1 [(buf.validate.field).required = true];
 
         oneof matcher {
-          option (validate.required) = true;
+          option (buf.validate.oneof).required = true;
 
           // Built-in string matcher.
           type.matcher.v3.StringMatcher value_match = 2;
@@ -71,11 +71,11 @@ message Matcher {
 
       // A list of two or more matchers. Used to allow using a list within a oneof.
       message PredicateList {
-        repeated Predicate predicate = 1 [(validate.rules).repeated = {min_items: 2}];
+        repeated Predicate predicate = 1 [(buf.validate.field).repeated = {min_items: 2}];
       }
 
       oneof match_type {
-        option (validate.required) = true;
+        option (buf.validate.oneof).required = true;
 
         // A single predicate to evaluate.
         SinglePredicate single_predicate = 1;
@@ -94,30 +94,30 @@ message Matcher {
     // An individual matcher.
     message FieldMatcher {
       // Determines if the match succeeds.
-      Predicate predicate = 1 [(validate.rules).message = {required: true}];
+      Predicate predicate = 1 [(buf.validate.field).required = true];
 
       // What to do if the match succeeds.
-      OnMatch on_match = 2 [(validate.rules).message = {required: true}];
+      OnMatch on_match = 2 [(buf.validate.field).required = true];
     }
 
     // A list of matchers. First match wins.
-    repeated FieldMatcher matchers = 1 [(validate.rules).repeated = {min_items: 1}];
+    repeated FieldMatcher matchers = 1 [(buf.validate.field).repeated = {min_items: 1}];
   }
 
   message MatcherTree {
     // A map of configured matchers. Used to allow using a map within a oneof.
     message MatchMap {
-      map<string, OnMatch> map = 1 [(validate.rules).map = {min_pairs: 1}];
+      map<string, OnMatch> map = 1 [(buf.validate.field).map = {min_pairs: 1}];
     }
 
     // Protocol-specific specification of input field to match on.
-    core.v3.TypedExtensionConfig input = 1 [(validate.rules).message = {required: true}];
+    core.v3.TypedExtensionConfig input = 1 [(buf.validate.field).required = true];
 
     // Exact or prefix match maps in which to look up the input value.
     // If the lookup succeeds, the match is considered successful, and
     // the corresponding OnMatch is used.
     oneof tree_type {
-      option (validate.required) = true;
+      option (buf.validate.oneof).required = true;
 
       MatchMap exact_match_map = 2;
 
