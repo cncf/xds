@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
+import "xds/annotations/v3/security.proto";
 import "xds/core/v3/extension.proto";
 import "xds/type/matcher/v3/string.proto";
 
@@ -107,7 +108,10 @@ message Matcher {
   message MatcherTree {
     // A map of configured matchers. Used to allow using a map within a oneof.
     message MatchMap {
-      map<string, OnMatch> map = 1 [(validate.rules).map = {min_pairs: 1}];
+      map<string, OnMatch> map = 1 [
+        (validate.rules).map = {min_pairs: 1},
+        (xds.annotations.v3.security).configure_for_untrusted_downstream = true
+      ];
     }
 
     // Protocol-specific specification of input field to match on.

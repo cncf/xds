@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package xds.type.v3;
 
+import "validate/validate.proto";
+
 option java_package = "com.github.xds.type.v3";
 option java_outer_classname = "RangeProto";
 option java_multiple_files = true;
@@ -16,7 +18,7 @@ message Int64Range {
   int64 start = 1;
 
   // end of the range (exclusive)
-  int64 end = 2;
+  int64 end = 2 [(validate.rules).int64 = {gt_field: "start"}];
 }
 
 // Specifies the int32 start and end of the range using half-open interval
@@ -26,7 +28,7 @@ message Int32Range {
   int32 start = 1;
 
   // end of the range (exclusive)
-  int32 end = 2;
+  int32 end = 2 [(validate.rules).int32 = {gt_field: "start"}];
 }
 
 // Specifies the double start and end of the range using half-open interval
@@ -36,5 +38,5 @@ message DoubleRange {
   double start = 1;
 
   // end of the range (exclusive)
-  double end = 2;
+  double end = 2 [(validate.rules).double = {gt_field: "start"}];
 }

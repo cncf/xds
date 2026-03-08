@@ -15,8 +15,8 @@ option (xds.annotations.v3.file_status).work_in_progress = true;
 
 // xDS authority information.
 message Authority {
-  string name = 1 [(validate.rules).string = {min_len: 1}];
-
+string name = 1 [(validate.rules).string = {min_len: 1, pattern: "^[0-9a-zA-Z_\\-\\.~:]+$"}];
+  
   // .. space reserved for additional authority addressing information, e.g. for
   // resource signing, items such as CA trust chain, cert pinning may be added.
 }

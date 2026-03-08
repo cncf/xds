@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package xds.type.matcher.v3;
 
+import "xds/annotations/v3/security.proto";
 import "validate/validate.proto";
 
 option java_package = "com.github.xds.type.matcher.v3";
@@ -42,5 +43,8 @@ message RegexMatcher {
 
   // The regex match string. The string must be supported by the configured
   // engine.
-  string regex = 2 [ (validate.rules).string = {min_len : 1} ];
+  string regex = 2 [
+    (validate.rules).string = {min_len : 1},
+    (xds.annotations.v3.security).configure_for_untrusted_downstream = true
+  ];
 }
