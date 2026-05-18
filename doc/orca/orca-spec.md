@@ -1,7 +1,7 @@
 ORCA Specification
 ====
 
-Last Updated: Oct 24, 2024
+Last Updated: May 18, 2026
 
 Harvey Tuch, Mark Roth, Misha Efimov, Andres Guedez
 
@@ -21,43 +21,38 @@ not possible to tell which upfront) and where these dimensions do not slot withi
 categories (e.g. the resource may be “number of free threads in a pool”, disk IOPS, etc.).
 
 This document provides a specification for an open standard for request cost aggregation and
-reporting by backends and the corresponding aggregation of such reports by L7 load balancers (such
-as Envoy) on the data plane. Within scope is the wire format, backend report collection mechanism
-and aggregation at query cost delivery time. Outside of the scope of this document are the LB
-algorithms for working with aggregated data and the mechanics of how new balancing decisions are
-delivered to data plane load balancers.
+reporting by backends and the corresponding utilization of such reports by data plane load balancers (such
+as Envoy or gRPC). Within scope is the wire format, backend report collection mechanisms,
+and backend-to-load-balancer propagation. Outside of the scope of this document are the specific LB
+algorithms for working with aggregated data (such as client-side Weighted Round Robin) and the mechanics of
+how those balancing decisions are delivered or calculated unless specified.
 
 # Background
 
-Data plane load balancers (DPLBs), for example an Envoy proxy or gRPC-LB client,
-receive HTTP or gRPC requests from clients, make LB decisions and proxy the request and
-corresponding response to/from backends. These load balancing (LB) decisions are driven by LB
-assignments delivered by the control plane load balancer (CPLB) via EDS in the Universal Data Plane
-API (UDPA).
+Data plane load balancers (DPLBs), for example an Envoy proxy or gRPC client,
+receive HTTP or gRPC requests from clients, make LB decisions, and proxy the request and
+corresponding response to/from backends. To make optimal load balancing decisions—such as
+Weighted Round Robin (WRR)—the DPLB needs to have real-time utilization or query cost metrics
+reported by either the endpoint or the runtime infrastructure that the backend is executing on.
 
-The control plane can provide globally optimal decisions via greater visibility than possible in any
-single DPLB instance.  DPLB’s share their load information with the control plane via LRS and in
-return receive EDS assignments. It is the role of the CPLB to make intelligent load balancing
-decisions as part of this control system.
+There are two primary models for using these metrics:
 
-Inputs to the CPLB decision making may include LRS load reports and known capacities for localities
-and/or endpoints. This may be, in the simplest case, a metric such as QPS. The DPLB reports total
-queries at regular time intervals via LRS, with aggregate counts attributed at locality or endpoint
-granularity.
+1. **Direct Endpoint-to-Client Load Balancing (e.g., Client-side WRR)**:
+   The DPLB directly parses load reports returned by individual backends in responses or
+   out-of-band queries. It calculates routing weights based on these metrics locally and instantly
+   adjusts traffic distribution among the endpoints.
 
-When capacity is defined with units such as CPU, memory or application-specific criteria, the DPLB
-needs to have utilization or cost reported by either the endpoint or via the runtime infrastructure
-that the backend is executing on.
+2. **Central Control Plane Integration (e.g., xDS / LRS)**:
+   In a centrally managed system, DPLBs aggregate load information gathered from backends
+   and report it back to a central control plane load balancer (CPLB) via LRS (Load Reporting Service).
+   The CPLB, with its global visibility, leverages this data to make globally optimal locality
+   or endpoint capacity allocations, delivering updated routing assignments back to DPLBs via
+   EDS (Endpoint Discovery Service).
 
-We assume a model below where the CPLB requires from the data plane load balancer: Fixed, periodic,
-load report intervals.  Total queries binned by source × destination locality delivered every (1).
-Aggregate cost (in the same units as capacity) for the queries included in (2) by source ×
-destination locality.
-
-Backends providing reports are typically VMs or containers. Since these are implemented and deployed
-independent of the DPLB, an open protocol for load reporting from backend to DPLB is desirable. We
-refer to this reporting standard and OSS reference patterns and implementations as Open Request Cost
-Aggregation (ORCA).
+Since backends (typically VMs or containers) are implemented and deployed independently of
+the DPLB, a standardized, open protocol for load reporting from backend to DPLB is crucial.
+We refer to this reporting standard and its open-source reference patterns as **Open Request Cost
+Aggregation (ORCA)**.
 
 # Specification
 
@@ -148,6 +143,17 @@ message OrcaLoadReport {
 
 # Reporting
 
+## Choosing a Reporting Model
+
+When integrating ORCA, DPLB operators and application developers must choose between **Inline Per-Request Reporting** and **Out-of-Band (OOB) Reporting**.
+
+* **Inline Per-Request Reporting (Recommended)**:
+  * This is the recommended model for the vast majority of applications. By attaching load reports directly to response headers or trailers, load balancers receive fresh, immediate feedback for every request, which is crucial for highly responsive load balancing decisions.
+  * *Query Cost Reporting*: This is the only model that makes sense for application-defined *query cost* metrics, as query cost is inherently tied to specific, individual requests.
+* **Out-of-Band (OOB) Reporting**:
+  * OOB reporting should be considered only for traffic patterns where per-request reports are not delivered frequently enough to keep load balancing weights fresh. Examples include clients with very sparse or bursty traffic, or applications serving mostly long-running, persistent streams.
+  * *Resource Utilization*: While OOB is excellent for tracking slowly-changing background utilization (e.g., CPU, memory, generic application load), it is not suitable for query-specific costs.
+
 ## Inline Per-Request Format
 
 With inline (per-request) reporting, load reports will be
@@ -216,10 +222,6 @@ message OrcaLoadReportRequest {
 The definition for this service can be found at
 https://github.com/cncf/xds/blob/main/xds/service/orca/v3/orca.proto.
 
-Alternatively, an HTTP endpoint can be exposed by the load reporting server. A GET or HEAD request
-to this endpoint will return a response with the `endpoint-load-metrics` header that contains the
-load report in one of the formats listed above.
-
 # ORCA Integration Considerations
 
 ## Sidecar
@@ -229,11 +231,11 @@ at response completion.
 
 ![Sidecar Integration Diagram](./orca-spec-sidecar.jpg)
 
-The advantage of a sidecar model is that the application requires no modification as in the example
-service A above. A disadvantage of this approach is that it requires changes to how DPLB operators
-operationally manage their backends, introducing a binary that will require upgrades and version
-management. This might not be a concern in a service mesh architecture where a sidecar can be taken
-as given.
+The advantage of a sidecar model is that the application requires no modification (as in the example of Service A above) to report generic, host-level metrics like CPU or memory utilization, which the sidecar can determine/gather from the runtime environment.
+
+However, a significant limitation of the sidecar model is that it cannot natively report application-specific custom metrics or query costs (e.g., database records accessed, cache misses, or internal queue depths) without explicit application-level cooperation. To report application-specific metrics in a sidecar model, the application must still integrate with a metrics/observability library (as shown in Service B above) to expose those metrics to the sidecar.
+
+A disadvantage of this approach is that it requires changes to how DPLB operators operationally manage their backends, introducing a binary that will require upgrades and version management. This might not be a concern in a service mesh architecture where a sidecar can be taken as given.
 
 Service B above links with an observability library such as OpenTelemetry that provides support for
 custom metrics. This enables the sidecar to collect additional telemetry data for the ORCA reports.
@@ -259,9 +261,17 @@ application will then be responsible for including this in its response.
 # Known DPLB Implementations
 
 ## gRPC
-TODO: [Repository]()
 
-[Design](https://github.com/grpc/proposal/blob/master/A51-custom-backend-metrics.md)
+### Repositories
+* **gRPC C-core**: [grpc/grpc](https://github.com/grpc/grpc)
+* **gRPC Java**: [grpc/grpc-java](https://github.com/grpc/grpc-java)
+* **gRPC Go**: [grpc/grpc-go](https://github.com/grpc/grpc-go)
+
+### Designs & gRFCs
+* [gRFC A51: Custom Backend Metrics](https://github.com/grpc/proposal/blob/master/A51-custom-backend-metrics.md)
+* [gRFC A58: Client-Side Weighted Round Robin Load Balancing Policy](https://github.com/grpc/proposal/blob/master/A58-client-side-weighted-round-robin-lb-policy.md)
+* [gRFC A64: xDS LRS Custom Metrics Support](https://github.com/grpc/proposal/blob/master/A64-lrs-custom-metrics.md)
+* [gRFC A85: Changes to xDS LRS Custom Metrics Support](https://github.com/grpc/proposal/blob/master/A85-lrs-custom-metrics-changes.md) (Implemented/Pending rollout config)
 
 ## Envoy
 
@@ -269,10 +279,16 @@ TODO: [Repository]()
 
 [Design](http://docs/document/d/1gb_2pcNnEzTgo1EJ6w1Ol7O-EH-O_Ysu5o215N9MTAg?tab=t.0#heading=h.do9yfa1wlpk8)
 
+# Possible Future Improvements
+
+## HTTP GET/HEAD Out-of-Band Endpoint
+Alternatively, an HTTP endpoint could be exposed by the load reporting server. A GET or HEAD request to this endpoint would return a response with the `endpoint-load-metrics` header that contains the load report in one of the formats listed above.
+
 # Change History
 
 |Date|Description|
 |----|-----------|
+|May 18, 2026|Addressed PR #105 review comments.|
 |Oct 25, 2024|Updated specification in this document.|
 |April 16, 2019|Original [specification](https://docs.google.com/document/d/1NSnK3346BkBo1JUU3I9I5NYYnaJZQPt8_Z_XCBCI3uA/edit?tab=t.0) proposed to the Envoy community.|
 
